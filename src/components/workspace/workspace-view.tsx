@@ -22,7 +22,7 @@ import { apiPatch } from "@/lib/client/api";
 import { cn, formatDeadline, formatMinutes } from "@/lib/utils";
 import type { WorkspaceDetail } from "@/server/workspace/service";
 import type { ChecklistItem } from "@/server/workspace/service";
-import type { TaskAnalysis } from "@/server/ai/intelligence/schemas";
+import { parseTaskAnalysis } from "@/server/ai/intelligence/normalize";
 
 const SUGGESTIONS = ["Explain this assignment", "Break this into steps", "Help me understand the rubric", "What should I do first?", "Check my work", "Give me practice questions"];
 
@@ -35,7 +35,7 @@ function toMessages(ws: WorkspaceDetail): ChatMessage[] {
 export function WorkspaceView({ workspace }: { workspace: WorkspaceDetail }) {
   const router = useRouter();
   const task = workspace.task;
-  const analysis = (task.aiAnalysis as TaskAnalysis | null) ?? null;
+  const analysis = parseTaskAnalysis(task.aiAnalysis);
   const rubric = (task.rubric as { criterion: string; points?: number; description?: string }[] | null) ?? null;
 
   const [draft, setDraft] = React.useState(workspace.draft);

@@ -84,7 +84,7 @@ describe.skipIf(!dbAvailable)("documents + retrieval (integration)", () => {
   });
 
   it("rejects files whose bytes do not match their declared type", async () => {
-    await expect(uploadDocument(userId, { fileName: "evil.pdf", browserMimeType: "application/pdf", data: Buffer.from("MZ not a pdf") })).rejects.toThrow(/does not match|UNSUPPORTED|valid/i);
+    await expect(uploadDocument(userId, { fileName: "evil.pdf", browserMimeType: "application/pdf", data: Buffer.from("MZ not a pdf") })).rejects.toThrow(/do(es)? not match|unsupported/i);
   });
 });
 

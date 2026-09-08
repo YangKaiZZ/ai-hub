@@ -328,10 +328,14 @@ async function main() {
               taskType: t.type,
               difficulty: t.importance >= 4 ? "hard" : "medium",
               estimatedMinutes: t.est,
+              importance: t.importance,
               summary: t.description,
               requiredMaterials: ["Course slides", "Case study PDF"],
-              recommendedSteps: ["Re-read the brief", "Outline the deliverable", "Draft", "Review against rubric"],
+              rubricRequirements: t.rubric?.map((r) => r.criterion) ?? ["Address every part of the brief"],
               importantDates: [],
+              recommendedSteps: ["Re-read the brief", "Outline the deliverable", "Draft the hardest section first", "Review against the rubric"],
+              keyConcepts: t.course === "CS135" ? ["Entities & relationships", "Normalization"] : t.course === "MATH146" ? ["Chain rule", "Derivative rules"] : t.course === "CS124" ? ["Inheritance", "Encapsulation"] : ["Integration patterns", "Interface contracts"],
+              risks: [`Starting late for a task estimated at ${t.est} minutes`],
             }
           : undefined,
         calendarEvents: {

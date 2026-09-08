@@ -16,7 +16,7 @@ import { formatDate, formatDeadline, formatMinutes } from "@/lib/utils";
 import { listCourseOptions } from "@/server/courses/service";
 import { getTask } from "@/server/tasks/service";
 import { openWorkspaceForTask } from "@/server/workspace/service";
-import type { TaskAnalysis } from "@/server/ai/intelligence/schemas";
+import { parseTaskAnalysis } from "@/server/ai/intelligence/normalize";
 
 export const metadata: Metadata = { title: "Task" };
 
@@ -45,7 +45,7 @@ export default async function TaskDetailPage({
   }
 
   const courses = await listCourseOptions(user.id);
-  const analysis = (task.aiAnalysis as TaskAnalysis | null) ?? null;
+  const analysis = parseTaskAnalysis(task.aiAnalysis);
   const rubric = (task.rubric as { criterion: string; points?: number; description?: string }[] | null) ?? null;
 
   return (

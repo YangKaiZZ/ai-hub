@@ -45,18 +45,32 @@ export function TutorView({ conversations, active, courses, documents, tasks, in
   const [mode, setMode] = React.useState<"LEARNING" | "GUIDED" | "REVIEW">(active?.assistanceMode ?? "GUIDED");
   const [contextOpen, setContextOpen] = React.useState(false);
 
+  // A conversation created on the fly keeps streaming in this component; we only
+  // update the URL immediately and sync server state once the stream has settled.
+  const [createdId, setCreatedId] = React.useState<string | null>(null);
+  const conversationId = active?.id ?? createdId;
+
   const target = React.useMemo(
     () =>
-      active
-        ? { conversationId: active.id }
+      conversationId
+        ? { conversationId }
         : { create: { kind, courseId: courseId === NONE ? null : courseId, taskId: taskId === NONE ? null : taskId, documentIds: docIds, assistanceMode: mode } },
-    [active, kind, courseId, taskId, docIds, mode],
+    [conversationId, kind, courseId, taskId, docIds, mode],
   );
 
   const chat = useChatStream(toMessages(active), target, (id) => {
-    router.replace(`/tutor?c=${id}`);
-    router.refresh();
+    setCreatedId(id);
+    window.history.replaceState(null, "", `/tutor?c=${id}`);
   });
+
+  const needsSync = React.useRef(false);
+  React.useEffect(() => {
+    if (createdId && chat.streaming) needsSync.current = true;
+    if (createdId && !chat.streaming && needsSync.current) {
+      needsSync.current = false;
+      router.refresh();
+    }
+  }, [createdId, chat.streaming, router]);
 
   // Persist context changes on an existing conversation.
   async function persistContext(patch: Record<string, unknown>) {
