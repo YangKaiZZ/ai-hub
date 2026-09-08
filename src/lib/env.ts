@@ -14,6 +14,8 @@ const schema = z.object({
     .regex(/^[0-9a-fA-F]{64}$/, "INTEGRATION_ENCRYPTION_KEY must be 64 hex chars (32 bytes)"),
 
   DATABASE_URL: z.string().min(1),
+  /** pg pool size. Set to 1 for single-connection embedded servers (e.g. `prisma dev`). */
+  DATABASE_POOL_MAX: z.coerce.number().int().min(1).max(100).default(10),
 
   AI_PROVIDER: z.enum(["anthropic", "mock"]).default("mock"),
   ANTHROPIC_API_KEY: z.string().optional(),

@@ -1,3 +1,4 @@
+import "dotenv/config";
 import "@testing-library/jest-dom/vitest";
 
 // Tests never talk to real external services.
