@@ -65,6 +65,8 @@ Then edit `.env`:
 | `STORAGE_PROVIDER` / `STORAGE_LOCAL_DIR` | `local` + directory for uploads (default `./storage`) |
 | `MAX_UPLOAD_MB` | Upload size limit (default 25) |
 | `LMS_MOCK_MODE` | `true` = LMS providers return demo data; `false` = live APIs |
+| `DATABASE_POOL_MAX` | pg pool size (default 10) |
+| `RATE_LIMIT_DISABLED` | `true` turns off API rate limits for local dev/e2e; ignored in production |
 | `EMAIL_PROVIDER` | `console` logs password-reset links to the server console |
 
 In development, if `AI_PROVIDER=anthropic` but no key is present, the app falls back to the mock provider so every screen keeps working.

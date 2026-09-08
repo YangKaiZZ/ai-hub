@@ -46,7 +46,7 @@ Security is a first-class requirement. This document lists the controls in place
 - `src/proxy.ts` re-applies baseline headers and redirects unauthenticated requests away from protected routes.
 
 ## Rate limiting
-`src/lib/rate-limit.ts` — per-IP for login/signup/password reset, per-user for AI, uploads and LMS sync. In-memory store by default; implement `RateLimitStore` with Redis for multi-instance deployments.
+`src/lib/rate-limit.ts` — per-IP for login/signup/password reset, per-user for AI, uploads and LMS sync. In-memory store by default; implement `RateLimitStore` with Redis for multi-instance deployments. `RATE_LIMIT_DISABLED=true` switches limits off for local development and e2e runs only — the flag is ignored when `NODE_ENV=production`.
 
 ## CSRF
 State-changing requests are JSON `fetch` calls with `SameSite=Lax` cookies; browsers do not attach the session cookie to cross-site POSTs of `application/json`. Forms are not submitted cross-origin (`form-action 'self'` in CSP).

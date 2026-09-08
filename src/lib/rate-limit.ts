@@ -1,3 +1,4 @@
+import { env } from "@/lib/env";
 import { RateLimitError } from "@/lib/errors";
 
 /**
@@ -49,8 +50,9 @@ export interface RateLimitPolicy {
 }
 
 export const RATE_LIMITS = {
-  login: { name: "login", limit: 10, windowMs: 15 * 60_000 },
-  signup: { name: "signup", limit: 5, windowMs: 60 * 60_000 },
+  // Generous enough for shared campus IPs; tight enough to blunt credential stuffing.
+  login: { name: "login", limit: 20, windowMs: 15 * 60_000 },
+  signup: { name: "signup", limit: 30, windowMs: 60 * 60_000 },
   passwordReset: { name: "password-reset", limit: 5, windowMs: 60 * 60_000 },
   ai: { name: "ai", limit: 40, windowMs: 60_000 },
   upload: { name: "upload", limit: 20, windowMs: 10 * 60_000 },
@@ -60,6 +62,7 @@ export const RATE_LIMITS = {
 
 /** Throws RateLimitError when the policy is exceeded for the given identifier. */
 export async function enforceRateLimit(policy: RateLimitPolicy, identifier: string): Promise<void> {
+  if (env.RATE_LIMIT_DISABLED && env.NODE_ENV !== "production") return;
   const { count, resetAt } = await store.hit(`${policy.name}:${identifier}`, policy.windowMs);
   if (count > policy.limit) {
     throw new RateLimitError(Math.max(1, Math.ceil((resetAt - Date.now()) / 1000)));

@@ -5,15 +5,27 @@ import { expect, test, type Page } from "@playwright/test";
  *   signup → onboarding → dashboard → create task → open workspace → upload document → ask AI
  * Each run uses a unique email so it can be re-run without cleanup.
  */
-const unique = Date.now().toString(36);
-const email = `e2e+${unique}@test.aihub.local`;
 const password = "Password123";
+
+/** Stable per run and per project (desktop/mobile), even if a worker restarts. */
+function email() {
+  const run = process.env.E2E_RUN_ID ?? "local";
+  return `e2e+${run}-${test.info().project.name}@test.aihub.local`;
+}
+
+async function login(page: Page) {
+  await page.goto("/login");
+  await page.getByLabel("Email").fill(email());
+  await page.getByLabel("Password").fill(password);
+  await page.getByRole("button", { name: "Sign in" }).click();
+  await expect(page).toHaveURL(/\/dashboard/);
+}
 
 async function signupAndOnboard(page: Page) {
   await page.goto("/signup");
   await page.getByLabel("First name").fill("Eve");
   await page.getByLabel("Last name").fill("Tester");
-  await page.getByLabel("Email").fill(email);
+  await page.getByLabel("Email").fill(email());
   await page.getByLabel("Password").fill(password);
   await page.getByRole("button", { name: "Create account" }).click();
 
@@ -50,11 +62,7 @@ test.describe.serial("student journey", () => {
   });
 
   test("create a task, analyze it and open its workspace", async ({ page }) => {
-    await page.goto("/login");
-    await page.getByLabel("Email").fill(email);
-    await page.getByLabel("Password").fill(password);
-    await page.getByRole("button", { name: "Sign in" }).click();
-    await expect(page).toHaveURL(/\/dashboard/);
+    await login(page);
 
     await page.goto("/tasks?new=1");
     await page.getByLabel("Title").fill("ERD Design Project");
@@ -78,12 +86,10 @@ test.describe.serial("student journey", () => {
   });
 
   test("upload a document and find it in resources", async ({ page }) => {
-    await page.goto("/login");
-    await page.getByLabel("Email").fill(email);
-    await page.getByLabel("Password").fill(password);
-    await page.getByRole("button", { name: "Sign in" }).click();
+    await login(page);
 
     await page.goto("/resources");
+    await expect(page.getByRole("button", { name: /upload documents/i })).toBeVisible();
     const input = page.locator('input[type="file"]').first();
     await input.setInputFiles({ name: "week4-notes.txt", mimeType: "text/plain", buffer: Buffer.from("Derivatives of exponential functions. The chain rule extends this to e^{g(x)}.\n\nLogarithmic differentiation helps with products and powers.") });
     await expect(page.getByText(/indexed \d+ section/i)).toBeVisible({ timeout: 30_000 });
@@ -96,13 +102,10 @@ test.describe.serial("student journey", () => {
   });
 
   test("tutor conversation streams a reply", async ({ page }) => {
-    await page.goto("/login");
-    await page.getByLabel("Email").fill(email);
-    await page.getByLabel("Password").fill(password);
-    await page.getByRole("button", { name: "Sign in" }).click();
+    await login(page);
 
     await page.goto("/tutor");
-    await page.getByLabel("Message").fill("I don't understand the chain rule.");
+    await page.getByRole("textbox", { name: "Message" }).fill("I don't understand the chain rule.");
     await page.getByRole("button", { name: "Send message" }).click();
     await expect(page.getByText(/demo response|chain rule/i).first()).toBeVisible({ timeout: 30_000 });
     await expect(page).toHaveURL(/\/tutor\?c=/);
@@ -111,10 +114,6 @@ test.describe.serial("student journey", () => {
 
 test("responsive: mobile navigation renders", async ({ page, isMobile }) => {
   test.skip(!isMobile, "mobile project only");
-  await page.goto("/login");
-  await page.getByLabel("Email").fill(email);
-  await page.getByLabel("Password").fill(password);
-  await page.getByRole("button", { name: "Sign in" }).click();
-  await expect(page).toHaveURL(/\/dashboard/);
+  await login(page);
   await expect(page.getByRole("navigation", { name: "Quick navigation" })).toBeVisible();
 });

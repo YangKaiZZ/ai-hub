@@ -32,6 +32,12 @@ const schema = z.object({
     .default("true")
     .transform((v) => v === "true" || v === "1"),
 
+  /** Disable API rate limiting (local development / e2e only — never in production). */
+  RATE_LIMIT_DISABLED: z
+    .string()
+    .default("false")
+    .transform((v) => v === "true" || v === "1"),
+
   EMAIL_PROVIDER: z.enum(["console"]).default("console"),
   EMAIL_FROM: z.string().default("AI Hub <no-reply@aihub.local>"),
 });

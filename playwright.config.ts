@@ -1,6 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const baseURL = process.env.E2E_BASE_URL ?? "http://localhost:3000";
+// One id per run, shared by every worker/project, so a restarted worker keeps the same test account.
+process.env.E2E_RUN_ID ??= Date.now().toString(36);
 
 export default defineConfig({
   testDir: "./e2e",
@@ -21,7 +23,7 @@ export default defineConfig({
         url: baseURL,
         reuseExistingServer: true,
         timeout: 120_000,
-        env: { AI_PROVIDER: "mock", LMS_MOCK_MODE: "true" },
+        env: { AI_PROVIDER: "mock", LMS_MOCK_MODE: "true", RATE_LIMIT_DISABLED: "true" },
       },
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },
