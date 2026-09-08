@@ -1,0 +1,48 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: aihub-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: aihub
+      POSTGRES_PASSWORD: aihub
+      POSTGRES_DB: aihub
+    ports:
+      - "5432:5432"
+    volumes:
+      - aihub-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aihub -d aihub"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aihub-app
+    profiles: ["prod"]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://aihub:aihub@db:5432/aihub?schema=public
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      SESSION_SECRET: ${SESSION_SECRET}
+      INTEGRATION_ENCRYPTION_KEY: ${INTEGRATION_ENCRYPTION_KEY}
+      AI_PROVIDER: ${AI_PROVIDER:-mock}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      AI_MODEL: ${AI_MODEL:-claude-opus-5}
+      STORAGE_PROVIDER: local
+      STORAGE_LOCAL_DIR: /data/storage
+      LMS_MOCK_MODE: ${LMS_MOCK_MODE:-true}
+    volumes:
+      - aihub-storage:/data/storage
+    ports:
+      - "3000:3000"
+
+volumes:
+  aihub-pgdata:
+  aihub-storage:

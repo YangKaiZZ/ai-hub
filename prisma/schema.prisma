@@ -1,0 +1,867 @@
+// AI Hub — PostgreSQL schema (Prisma 7)
+// Conventions: UUID primary keys, createdAt/updatedAt on every aggregate,
+// soft deletion (deletedAt) on user-facing aggregates, indexes on every
+// foreign key used for per-user isolation queries.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────────────────────
+// Identity & access
+// ─────────────────────────────────────────────────────────────
+
+enum UserRole {
+  STUDENT
+  ADMIN
+}
+
+model User {
+  id                    String    @id @default(uuid()) @db.Uuid
+  email                 String    @unique
+  emailVerifiedAt       DateTime?
+  passwordHash          String?
+  firstName             String
+  lastName              String?
+  avatarUrl             String?
+  role                  UserRole  @default(STUDENT)
+  timezone              String    @default("UTC")
+  institutionId         String?   @db.Uuid
+  onboardingCompletedAt DateTime?
+  onboardingStep        Int       @default(0)
+  lastActiveAt          DateTime?
+  deletedAt             DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  institution    Institution?          @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  preference     UserPreference?
+  accounts       Account[]
+  sessions       Session[]
+  resetTokens    PasswordResetToken[]
+  courses        Course[]
+  enrollments    Enrollment[]
+  terms          Term[]
+  tasks          Task[]
+  workspaces     AssignmentWorkspace[]
+  documents      Document[]
+  resources      Resource[]
+  grades         Grade[]
+  calendarEvents CalendarEvent[]
+  studyPlans     StudyPlan[]
+  studySessions  StudySession[]
+  conversations  AIConversation[]
+  integrations   Integration[]
+  notifications  Notification[]
+  aiUsage        AIUsageLog[]
+
+  @@index([institutionId])
+  @@index([deletedAt])
+}
+
+/// OAuth / external identity providers (Google, Microsoft, ...). Never stores passwords.
+model Account {
+  id                String    @id @default(uuid()) @db.Uuid
+  userId            String    @db.Uuid
+  provider          String
+  providerAccountId String
+  accessToken       String?
+  refreshToken      String?
+  expiresAt         DateTime?
+  scope             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+/// Database-backed sessions. The cookie holds an opaque token; we store its SHA-256 hash.
+model Session {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @db.Uuid
+  tokenHash  String   @unique
+  expiresAt  DateTime
+  userAgent  String?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model UserPreference {
+  id                    String         @id @default(uuid()) @db.Uuid
+  userId                String         @unique @db.Uuid
+  theme                 String         @default("system")
+  weekStartsOn          Int            @default(1)
+  defaultAssistanceMode AssistanceMode @default(GUIDED)
+  /// { newTask, deadlineApproaching, overdue, aiRecommendation, studySession, gradeUpdate, system } -> { inApp, email }
+  notificationSettings  Json           @default("{}")
+  /// { preferredStartHour, preferredEndHour, sessionMinutes, breakMinutes, studyDays[], dailyMaxMinutes }
+  studyPreferences      Json           @default("{}")
+  /// Overrides for the priority engine: { deadlineWeight, workloadWeight, importanceWeight, overdueBoost }
+  priorityRules         Json           @default("{}")
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ─────────────────────────────────────────────────────────────
+// Institutions & academic structure
+// ─────────────────────────────────────────────────────────────
+
+enum InstitutionType {
+  UNIVERSITY
+  COLLEGE
+  HIGH_SCHOOL
+  BOOTCAMP
+  ONLINE
+  OTHER
+}
+
+model Institution {
+  id            String               @id @default(uuid()) @db.Uuid
+  name          String
+  slug          String               @unique
+  shortName     String?
+  type          InstitutionType      @default(UNIVERSITY)
+  country       String?
+  city          String?
+  website       String?
+  emailDomains  String[]             @default([])
+  timezone      String               @default("UTC")
+  /// { scale: "percentage" | "gpa4" | "gpa5" | "letter", passingGrade, bands: [{min, label}] }
+  gradingConfig Json                 @default("{}")
+  /// { system: "semester" | "trimester" | "quarter" | "term", termsPerYear }
+  termConfig    Json                 @default("{}")
+  defaultLms    IntegrationProvider?
+  isVerified    Boolean              @default(false)
+  isUserCreated Boolean              @default(false)
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  users   User[]
+  courses Course[]
+  terms   Term[]
+
+  @@index([name])
+}
+
+model Term {
+  id            String   @id @default(uuid()) @db.Uuid
+  userId        String   @db.Uuid
+  institutionId String?  @db.Uuid
+  name          String
+  startDate     DateTime
+  endDate       DateTime
+  isCurrent     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution Institution? @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  courses     Course[]
+
+  @@index([userId])
+}
+
+enum DataSource {
+  MANUAL
+  LMS
+  CALENDAR
+  CSV
+  EMAIL
+  API
+  EXTENSION
+}
+
+model Course {
+  id              String     @id @default(uuid()) @db.Uuid
+  userId          String     @db.Uuid
+  institutionId   String?    @db.Uuid
+  termId          String?    @db.Uuid
+  name            String
+  code            String?
+  description     String?
+  instructor      String?
+  instructorEmail String?
+  color           String     @default("violet")
+  icon            String     @default("book-open")
+  credits         Float?
+  targetGrade     Float?
+  isActive        Boolean    @default(true)
+  source          DataSource @default(MANUAL)
+  externalId      String?
+  externalUrl     String?
+  deletedAt       DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution     Institution?     @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  term            Term?            @relation(fields: [termId], references: [id], onDelete: SetNull)
+  enrollments     Enrollment[]
+  tasks           Task[]
+  documents       Document[]
+  resources       Resource[]
+  gradeCategories GradeCategory[]
+  grades          Grade[]
+  calendarEvents  CalendarEvent[]
+  studySessions   StudySession[]
+  conversations   AIConversation[]
+  announcements   Announcement[]
+
+  @@unique([userId, source, externalId])
+  @@index([userId, isActive])
+  @@index([userId, deletedAt])
+  @@index([termId])
+}
+
+enum EnrollmentRole {
+  STUDENT
+  TEACHING_ASSISTANT
+  OBSERVER
+}
+
+model Enrollment {
+  id         String         @id @default(uuid()) @db.Uuid
+  userId     String         @db.Uuid
+  courseId   String         @db.Uuid
+  role       EnrollmentRole @default(STUDENT)
+  enrolledAt DateTime       @default(now())
+  droppedAt  DateTime?
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+}
+
+model Announcement {
+  id          String     @id @default(uuid()) @db.Uuid
+  courseId    String     @db.Uuid
+  title       String
+  body        String
+  postedAt    DateTime   @default(now())
+  source      DataSource @default(MANUAL)
+  externalId  String?
+  externalUrl String?
+  createdAt   DateTime   @default(now())
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, source, externalId])
+  @@index([courseId, postedAt])
+}
+
+// ─────────────────────────────────────────────────────────────
+// Tasks & workspaces
+// ─────────────────────────────────────────────────────────────
+
+enum TaskStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum TaskType {
+  ASSIGNMENT
+  PROJECT
+  QUIZ
+  EXAM
+  READING
+  LAB
+  DISCUSSION
+  PRESENTATION
+  OTHER
+}
+
+model Task {
+  id               String       @id @default(uuid()) @db.Uuid
+  userId           String       @db.Uuid
+  courseId         String?      @db.Uuid
+  title            String
+  description      String?
+  instructions     String?
+  /// [{ criterion, points, description }]
+  rubric           Json?
+  type             TaskType     @default(ASSIGNMENT)
+  status           TaskStatus   @default(NOT_STARTED)
+  priority         TaskPriority @default(MEDIUM)
+  /// 0-100 computed by the priority engine; user overrides set priorityLocked.
+  priorityScore    Float        @default(50)
+  priorityLocked   Boolean      @default(false)
+  /// 1-5, user-set or AI-suggested
+  importance       Int          @default(3)
+  /// 0-100
+  progress         Int          @default(0)
+  estimatedMinutes Int?
+  dueDate          DateTime?
+  startDate        DateTime?
+  completedAt      DateTime?
+  instructor       String?
+  source           DataSource   @default(MANUAL)
+  externalId       String?
+  externalUrl      String?
+  /// Raw payload from the ingestion source, retained for re-analysis / debugging.
+  rawData          Json?
+  /// Output of TaskIntelligenceService (type, difficulty, estimate, materials, steps...).
+  aiAnalysis       Json?
+  aiAnalyzedAt     DateTime?
+  deletedAt        DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  user           User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course         Course?              @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  attachments    TaskAttachment[]
+  workspace      AssignmentWorkspace?
+  grades         Grade[]
+  calendarEvents CalendarEvent[]
+  studySessions  StudySession[]
+  conversations  AIConversation[]
+
+  @@unique([userId, source, externalId])
+  @@index([userId, status, dueDate])
+  @@index([userId, deletedAt])
+  @@index([courseId])
+  @@index([dueDate])
+}
+
+model TaskAttachment {
+  id         String   @id @default(uuid()) @db.Uuid
+  taskId     String   @db.Uuid
+  documentId String?  @db.Uuid
+  name       String
+  url        String?
+  mimeType   String?
+  sizeBytes  Int?
+  createdAt  DateTime @default(now())
+
+  task     Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  document Document? @relation(fields: [documentId], references: [id], onDelete: SetNull)
+
+  @@index([taskId])
+}
+
+enum AssistanceMode {
+  LEARNING
+  GUIDED
+  REVIEW
+}
+
+model AssignmentWorkspace {
+  id             String         @id @default(uuid()) @db.Uuid
+  taskId         String         @unique @db.Uuid
+  userId         String         @db.Uuid
+  assistanceMode AssistanceMode @default(GUIDED)
+  /// The student's own work (draft). Never auto-submitted anywhere.
+  draft          String         @default("")
+  notes          String         @default("")
+  /// [{ id, text, done, source: "ai" | "user" }]
+  checklist      Json           @default("[]")
+  /// AI-generated overview of the assignment for the Overview tab.
+  aiOverview     String?
+  lastOpenedAt   DateTime?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  task     Task               @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user     User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages WorkspaceMessage[]
+
+  @@index([userId])
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+  TOOL
+}
+
+model WorkspaceMessage {
+  id           String      @id @default(uuid()) @db.Uuid
+  workspaceId  String      @db.Uuid
+  role         MessageRole
+  content      String
+  /// [{ documentId, chunkId, title, snippet }]
+  sources      Json?
+  inputTokens  Int?
+  outputTokens Int?
+  model        String?
+  createdAt    DateTime    @default(now())
+
+  workspace AssignmentWorkspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, createdAt])
+}
+
+// ─────────────────────────────────────────────────────────────
+// Documents, chunks (RAG), resources
+// ─────────────────────────────────────────────────────────────
+
+enum DocumentStatus {
+  UPLOADED
+  PROCESSING
+  READY
+  FAILED
+}
+
+model Document {
+  id          String         @id @default(uuid()) @db.Uuid
+  userId      String         @db.Uuid
+  courseId    String?        @db.Uuid
+  name        String
+  mimeType    String
+  sizeBytes   Int
+  /// Key in the StorageProvider (local disk / S3 / ...).
+  storageKey  String
+  status      DocumentStatus @default(UPLOADED)
+  pageCount   Int?
+  textLength  Int?
+  chunkCount  Int            @default(0)
+  summary     String?
+  error       String?
+  processedAt DateTime?
+  deletedAt   DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course      Course?          @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  chunks      DocumentChunk[]
+  attachments TaskAttachment[]
+  resources   Resource[]
+
+  @@index([userId, status])
+  @@index([userId, deletedAt])
+  @@index([courseId])
+}
+
+model DocumentChunk {
+  id         String   @id @default(uuid()) @db.Uuid
+  documentId String   @db.Uuid
+  index      Int
+  content    String
+  tokenCount Int
+  page       Int?
+  /// Embedding vector from the EmbeddingProvider. Stored as float[] so the
+  /// schema works without pgvector; a `search_vector` tsvector column is added
+  /// by migration for full-text search.
+  embedding  Float[]  @default([])
+  createdAt  DateTime @default(now())
+
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, index])
+}
+
+enum ResourceType {
+  NOTE
+  DOCUMENT
+  LINK
+  STUDY_GUIDE
+  FLASHCARD_SET
+  AI_SUMMARY
+  LECTURE
+}
+
+model Resource {
+  id         String       @id @default(uuid()) @db.Uuid
+  userId     String       @db.Uuid
+  courseId   String?      @db.Uuid
+  documentId String?      @db.Uuid
+  type       ResourceType @default(NOTE)
+  title      String
+  /// Markdown body for notes/guides/summaries; JSON string of cards for flashcard sets.
+  content    String?
+  url        String?
+  tags       String[]     @default([])
+  isPinned   Boolean      @default(false)
+  deletedAt  DateTime?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course   Course?   @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  document Document? @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+  @@index([userId, deletedAt])
+  @@index([courseId])
+}
+
+// ─────────────────────────────────────────────────────────────
+// Grades
+// ─────────────────────────────────────────────────────────────
+
+model GradeCategory {
+  id         String   @id @default(uuid()) @db.Uuid
+  courseId   String   @db.Uuid
+  name       String
+  /// Percentage weight (0-100). Weights within a course should sum to 100.
+  weight     Float
+  dropLowest Int      @default(0)
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  course Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  grades Grade[]
+
+  @@index([courseId])
+}
+
+model Grade {
+  id         String     @id @default(uuid()) @db.Uuid
+  userId     String     @db.Uuid
+  courseId   String     @db.Uuid
+  categoryId String?    @db.Uuid
+  taskId     String?    @db.Uuid
+  title      String
+  score      Float
+  maxScore   Float
+  gradedAt   DateTime   @default(now())
+  notes      String?
+  source     DataSource @default(MANUAL)
+  externalId String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course   Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  category GradeCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  task     Task?          @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  @@index([userId, courseId])
+  @@index([categoryId])
+}
+
+// ─────────────────────────────────────────────────────────────
+// Calendar & study planning
+// ─────────────────────────────────────────────────────────────
+
+enum CalendarEventType {
+  ASSIGNMENT
+  EXAM
+  PROJECT
+  CLASS
+  STUDY_SESSION
+  PERSONAL
+  OTHER
+}
+
+model CalendarEvent {
+  id             String            @id @default(uuid()) @db.Uuid
+  userId         String            @db.Uuid
+  courseId       String?           @db.Uuid
+  taskId         String?           @db.Uuid
+  studySessionId String?           @unique @db.Uuid
+  title          String
+  description    String?
+  type           CalendarEventType @default(PERSONAL)
+  startAt        DateTime
+  endAt          DateTime?
+  allDay         Boolean           @default(false)
+  location       String?
+  source         DataSource        @default(MANUAL)
+  externalId     String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course       Course?       @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  task         Task?         @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  studySession StudySession? @relation(fields: [studySessionId], references: [id], onDelete: Cascade)
+
+  @@index([userId, startAt])
+  @@index([taskId])
+}
+
+enum StudyPlanStatus {
+  PROPOSED
+  ACTIVE
+  COMPLETED
+  DISCARDED
+}
+
+model StudyPlan {
+  id          String          @id @default(uuid()) @db.Uuid
+  userId      String          @db.Uuid
+  title       String
+  startDate   DateTime
+  endDate     DateTime
+  status      StudyPlanStatus @default(PROPOSED)
+  /// Snapshot of inputs used to generate the plan (availability, deadlines, subjects...).
+  inputs      Json            @default("{}")
+  /// Student-facing explanation of why the plan looks the way it does.
+  rationale   String?
+  confirmedAt DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessions StudySession[]
+
+  @@index([userId, status])
+}
+
+enum StudySessionType {
+  REVIEW
+  PRACTICE
+  ASSIGNMENT_WORK
+  FLASHCARDS
+  READING
+  BREAK
+}
+
+model StudySession {
+  id          String           @id @default(uuid()) @db.Uuid
+  userId      String           @db.Uuid
+  planId      String?          @db.Uuid
+  courseId    String?          @db.Uuid
+  taskId      String?          @db.Uuid
+  title       String
+  type        StudySessionType @default(REVIEW)
+  startAt     DateTime
+  endAt       DateTime
+  completedAt DateTime?
+  notes       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan          StudyPlan?     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  course        Course?        @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  task          Task?          @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  calendarEvent CalendarEvent?
+
+  @@index([userId, startAt])
+  @@index([planId])
+}
+
+// ─────────────────────────────────────────────────────────────
+// AI conversations & usage
+// ─────────────────────────────────────────────────────────────
+
+enum ConversationKind {
+  TUTOR
+  AGENT
+  WORKSPACE
+}
+
+model AIConversation {
+  id                 String           @id @default(uuid()) @db.Uuid
+  userId             String           @db.Uuid
+  courseId           String?          @db.Uuid
+  taskId             String?          @db.Uuid
+  kind               ConversationKind @default(TUTOR)
+  title              String
+  subject            String?
+  assistanceMode     AssistanceMode   @default(GUIDED)
+  /// Document IDs pinned into the context of this conversation.
+  contextDocumentIds String[]         @default([])
+  deletedAt          DateTime?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course   Course?     @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  task     Task?       @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  messages AIMessage[]
+
+  @@index([userId, kind, updatedAt])
+  @@index([userId, deletedAt])
+}
+
+model AIMessage {
+  id             String      @id @default(uuid()) @db.Uuid
+  conversationId String      @db.Uuid
+  role           MessageRole
+  content        String
+  /// Structured content blocks (tool calls/results) when present.
+  blocks         Json?
+  /// [{ documentId, chunkId, title, snippet, page }]
+  sources        Json?
+  /// Tool invocations made while producing this message: [{ name, input, summary }]
+  toolCalls      Json?
+  inputTokens    Int?
+  outputTokens   Int?
+  model          String?
+  createdAt      DateTime    @default(now())
+
+  conversation AIConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+}
+
+model AIUsageLog {
+  id              String   @id @default(uuid()) @db.Uuid
+  userId          String?  @db.Uuid
+  feature         String
+  provider        String
+  model           String
+  inputTokens     Int
+  outputTokens    Int
+  cacheReadTokens Int      @default(0)
+  latencyMs       Int?
+  success         Boolean  @default(true)
+  errorCode       String?
+  createdAt       DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([feature, createdAt])
+}
+
+// ─────────────────────────────────────────────────────────────
+// Integrations (LMS)
+// ─────────────────────────────────────────────────────────────
+
+enum IntegrationProvider {
+  CANVAS
+  MOODLE
+  BLACKBOARD
+  GENERIC
+}
+
+enum IntegrationStatus {
+  CONNECTED
+  DISCONNECTED
+  ERROR
+  PENDING
+}
+
+model Integration {
+  id                    String              @id @default(uuid()) @db.Uuid
+  userId                String              @db.Uuid
+  provider              IntegrationProvider
+  status                IntegrationStatus   @default(PENDING)
+  baseUrl               String?
+  externalUserId        String?
+  /// Encrypted with INTEGRATION_ENCRYPTION_KEY (AES-256-GCM). Never a raw password.
+  accessTokenEncrypted  String?
+  refreshTokenEncrypted String?
+  tokenExpiresAt        DateTime?
+  scopes                String[]            @default([])
+  isMock                Boolean             @default(false)
+  settings              Json                @default("{}")
+  lastSyncedAt          DateTime?
+  lastError             String?
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  syncLogs SyncLog[]
+
+  @@unique([userId, provider, baseUrl])
+  @@index([userId])
+}
+
+enum SyncStatus {
+  RUNNING
+  SUCCESS
+  PARTIAL
+  FAILED
+}
+
+model SyncLog {
+  id              String     @id @default(uuid()) @db.Uuid
+  integrationId   String     @db.Uuid
+  status          SyncStatus @default(RUNNING)
+  startedAt       DateTime   @default(now())
+  finishedAt      DateTime?
+  coursesImported Int        @default(0)
+  tasksImported   Int        @default(0)
+  tasksUpdated    Int        @default(0)
+  gradesImported  Int        @default(0)
+  error           String?
+
+  integration Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
+  @@index([integrationId, startedAt])
+}
+
+// ─────────────────────────────────────────────────────────────
+// Notifications & system
+// ─────────────────────────────────────────────────────────────
+
+enum NotificationType {
+  NEW_TASK
+  DEADLINE_APPROACHING
+  OVERDUE_TASK
+  AI_RECOMMENDATION
+  STUDY_SESSION
+  GRADE_UPDATE
+  SYSTEM
+}
+
+model Notification {
+  id        String           @id @default(uuid()) @db.Uuid
+  userId    String           @db.Uuid
+  type      NotificationType
+  title     String
+  body      String?
+  /// Deep-link payload, e.g. { taskId } or { href }
+  data      Json?
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, readAt, createdAt])
+}
+
+enum SystemEventLevel {
+  INFO
+  WARN
+  ERROR
+}
+
+/// Lightweight operational log surfaced in the admin area (never contains secrets).
+model SystemEvent {
+  id        String           @id @default(uuid()) @db.Uuid
+  level     SystemEventLevel @default(INFO)
+  area      String
+  message   String
+  context   Json?
+  createdAt DateTime         @default(now())
+
+  @@index([level, createdAt])
+}
