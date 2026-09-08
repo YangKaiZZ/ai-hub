@@ -20,7 +20,8 @@ export class MockProvider implements AIProvider {
   }
 
   async complete(options: BaseOptions) {
-    const last = options.messages.at(-1)?.content ?? "";
+    const raw = options.messages.at(-1)?.content ?? "";
+    const last = options.feature === "document-summary" ? raw : studentMessage(raw);
     const text = options.feature === "document-summary" ? composeSummary(last) : composeTutorReply(last, options.system);
     return { text, usage: this.usage(options.system + last, text), model: this.model };
   }
@@ -32,7 +33,7 @@ export class MockProvider implements AIProvider {
   }
 
   async *stream(options: StreamOptions): AsyncGenerator<StreamEvent, void, void> {
-    const last = options.messages.at(-1)?.content ?? "";
+    const last = studentMessage(options.messages.at(-1)?.content ?? "");
     const tools = options.tools ?? [];
     let text: string;
 
@@ -65,6 +66,14 @@ export class MockProvider implements AIProvider {
   async healthcheck() {
     return { ok: true, detail: "mock provider" };
   }
+}
+
+/** The real request wraps context in tags; the mock should react to the student's own words only. */
+function studentMessage(content: string): string {
+  return content
+    .replace(/<student_context>[\s\S]*?<\/student_context>/g, "")
+    .replace(/<sources>[\s\S]*?<\/sources>/g, "")
+    .trim();
 }
 
 function chunkText(text: string): string[] {

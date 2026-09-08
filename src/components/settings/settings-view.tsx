@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { AlertTriangle, Check, KeyRound, Link2, Loader2, LogOut, Plug, RefreshCw, Trash2, Unplug } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -30,14 +30,12 @@ interface Props {
   settings: SettingsData;
   providers: ProviderInfo[];
   integrations: Array<SettingsData["integrations"][number] & { syncLogs?: { id: string; status: string; startedAt: Date; tasksImported: number; tasksUpdated: number; coursesImported: number; error: string | null }[] }>;
-  currentSessionHint?: string;
+  initialTab?: "profile" | "preferences" | "notifications" | "integrations" | "security";
 }
 
-export function SettingsView({ settings, providers, integrations }: Props) {
-  const params = useSearchParams();
-  const tab = params.get("tab") ?? "profile";
+export function SettingsView({ settings, providers, integrations, initialTab = "profile" }: Props) {
   return (
-    <Tabs defaultValue={tab}>
+    <Tabs defaultValue={initialTab}>
       <TabsList variant="underline" className="w-full">
         <TabsTrigger value="profile">Profile</TabsTrigger>
         <TabsTrigger value="preferences">Preferences</TabsTrigger>
