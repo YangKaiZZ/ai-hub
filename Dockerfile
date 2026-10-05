@@ -9,6 +9,19 @@ COPY prisma.config.ts ./
 RUN npm ci --ignore-scripts
 
 COPY . .
+
+# `next build` imports every route to collect page data, and those imports pull
+# in src/lib/env.ts, which refuses to load without a valid configuration. These
+# are placeholders that exist only to get past that validation at build time.
+#
+# They are confined to this stage and never reach the runtime image, which is a
+# separate FROM and takes its configuration from the environment. Nothing here
+# is baked into the output: the app reads none of these values on the client.
+ENV DATABASE_URL="postgresql://build:build@localhost:5432/build?schema=public" \
+    SESSION_SECRET="build-time-placeholder-not-a-real-secret-0000" \
+    INTEGRATION_ENCRYPTION_KEY="0000000000000000000000000000000000000000000000000000000000000000" \
+    AI_PROVIDER="mock"
+
 RUN npx prisma generate && npm run build
 
 # ── Runtime stage ──────────────────────────────────────────────
