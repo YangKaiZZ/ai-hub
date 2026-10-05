@@ -1,0 +1,50 @@
+# Without this file the whole working tree is uploaded as build context:
+# node_modules, .next and .git make that hundreds of megabytes, every build.
+# Worse, `COPY . .` then drops host-built native modules on top of the clean
+# `npm ci` the image just did.
+
+# Dependencies and build output — the image builds its own.
+node_modules
+**/node_modules
+.next
+out
+src/generated
+
+# Version control and local tooling
+.git
+.gitignore
+.github
+.vscode
+.idea
+.claude
+
+# Secrets and local state. deploy/.env lives on the server, never in an image.
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+
+# Uploaded files and database dumps
+storage
+deploy/backups
+backups
+
+# Tests and their artefacts: not run inside the runtime image.
+tests
+e2e
+playwright-report
+test-results
+coverage
+
+# Deployment descriptors: read by Docker and the server, not by the app.
+deploy
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Noise
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
