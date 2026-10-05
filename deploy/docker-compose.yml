@@ -1,0 +1,82 @@
+# Production stack for a single VPS.
+#
+# This is separate from the docker-compose.yml at the repo root, which only
+# runs a throwaway Postgres for local development.
+#
+# HTTPS is not handled here. The app joins the external `edge` network and the
+# Caddy that already fronts this server reverse-proxies to `aihub-app:3000`.
+# See README.md in this folder.
+name: ai-hub
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: "3"
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: aihub-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: aihub
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in deploy/.env}
+      POSTGRES_DB: aihub
+    # No ports: the database is reachable only from the app container.
+    volumes:
+      - aihub-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aihub -d aihub"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    logging: *logging
+
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: aihub-app
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://aihub:${POSTGRES_PASSWORD}@db:5432/aihub?schema=public
+      DATABASE_POOL_MAX: ${DATABASE_POOL_MAX:-10}
+      NEXT_PUBLIC_APP_URL: https://${DOMAIN:?Set DOMAIN in deploy/.env}
+      SESSION_SECRET: ${SESSION_SECRET:?Set SESSION_SECRET in deploy/.env}
+      INTEGRATION_ENCRYPTION_KEY: ${INTEGRATION_ENCRYPTION_KEY:?Set INTEGRATION_ENCRYPTION_KEY in deploy/.env}
+
+      AI_PROVIDER: ${AI_PROVIDER:-mock}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-chat}
+      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      AI_MODEL: ${AI_MODEL:-claude-opus-5}
+
+      STORAGE_PROVIDER: local
+      STORAGE_LOCAL_DIR: /data/storage
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-25}
+      LMS_MOCK_MODE: ${LMS_MOCK_MODE:-true}
+      # Seeds the demo student on first boot only; the seed is idempotent.
+      SEED_DEMO: ${SEED_DEMO:-false}
+    volumes:
+      - aihub-storage:/data/storage
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - default
+      - edge
+    logging: *logging
+
+volumes:
+  aihub-pgdata:
+  aihub-storage:
+
+networks:
+  # Shared with the Caddy that terminates TLS for this server.
+  # Create it once: docker network create edge
+  edge:
+    external: true

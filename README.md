@@ -26,7 +26,7 @@ Demo login after seeding: `andrew@demo.aihub.local` / `Password123` (admin: `adm
 | Styling | Tailwind CSS 4, Radix UI primitives, Lucide icons — custom design system in `src/components/ui` |
 | Database | PostgreSQL + Prisma 7 (`@prisma/adapter-pg`) |
 | Auth | Email/password (bcrypt), DB-backed sessions, OAuth-ready schema, RBAC |
-| AI | `@anthropic-ai/sdk` (Claude Opus 5 by default) behind an `AIProvider` interface; offline `MockProvider` |
+| AI | One `AIProvider` interface, three implementations: Anthropic (`@anthropic-ai/sdk`), DeepSeek (OpenAI-compatible), and an offline `MockProvider` |
 | Search/RAG | Postgres full-text search + local embeddings, hybrid retriever with source attribution |
 | Storage | `StorageProvider` interface (local disk implementation) |
 | Tests | Vitest (unit + integration), Playwright (e2e) |
@@ -59,8 +59,9 @@ Then edit `.env`:
 | `DATABASE_URL` | Postgres connection string |
 | `SESSION_SECRET` | ≥ 32 random chars (`node -e "console.log(require('crypto').randomBytes(48).toString('base64'))"`) |
 | `INTEGRATION_ENCRYPTION_KEY` | 64 hex chars (`node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) — encrypts LMS tokens |
-| `AI_PROVIDER` | `anthropic` (needs `ANTHROPIC_API_KEY`) or `mock` (offline, default in tests) |
+| `AI_PROVIDER` | `anthropic`, `deepseek`, or `mock` (offline, default in tests) |
 | `AI_MODEL` | Claude model id, default `claude-opus-5` |
+| `DEEPSEEK_API_KEY` / `DEEPSEEK_MODEL` | Needed when `AI_PROVIDER=deepseek`; model defaults to `deepseek-chat` |
 | `EMBEDDING_PROVIDER` | `local` (offline feature-hashing embeddings) |
 | `STORAGE_PROVIDER` / `STORAGE_LOCAL_DIR` | `local` + directory for uploads (default `./storage`) |
 | `MAX_UPLOAD_MB` | Upload size limit (default 25) |
@@ -69,7 +70,7 @@ Then edit `.env`:
 | `RATE_LIMIT_DISABLED` | `true` turns off API rate limits for local dev/e2e; ignored in production |
 | `EMAIL_PROVIDER` | `console` logs password-reset links to the server console |
 
-In development, if `AI_PROVIDER=anthropic` but no key is present, the app falls back to the mock provider so every screen keeps working.
+In development, if the chosen provider has no key, the app falls back to the mock provider so every screen keeps working. In production the missing key is a startup error instead.
 
 ### 3. Database
 ```bash
@@ -121,12 +122,26 @@ docs/                   architecture, database, integrations, AI system, securit
 ---
 
 ## AI provider setup
-1. Get an API key from the Anthropic Console.
-2. Set `AI_PROVIDER=anthropic` and `ANTHROPIC_API_KEY=...` in `.env`.
-3. (Optional) choose `AI_MODEL` — `claude-opus-5` (default), `claude-sonnet-5`, …
-4. Restart the server. The admin page shows provider health and usage.
 
-Without a key, `AI_PROVIDER=mock` keeps tutoring, task analysis, planning and RAG fully exercisable with deterministic demo output (labelled as such in the UI).
+Everything the app asks of a model goes through `AIProvider` in
+`src/server/ai/provider/`: a plain completion, a schema-validated structured
+call, and a streaming call with tools. Swapping vendors means adding one file.
+
+**DeepSeek** — set `AI_PROVIDER=deepseek` and `DEEPSEEK_API_KEY=...`. Keep
+`DEEPSEEK_MODEL=deepseek-chat`: it supports tool calling, which the study agent
+needs. `deepseek-reasoner` cannot call tools, so the provider drops them and the
+tutor answers without reading your tasks.
+
+**Anthropic** — set `AI_PROVIDER=anthropic` and `ANTHROPIC_API_KEY=...`, and
+optionally `AI_MODEL` (`claude-opus-5` by default). This path also uses prompt
+caching and strict schema-enforced output.
+
+**Mock** — `AI_PROVIDER=mock` needs no key and keeps tutoring, task analysis,
+planning and RAG fully exercisable with deterministic output, labelled as demo
+in the UI. It is the default in tests.
+
+Restart after changing any of these. The admin page shows provider health and
+token usage.
 
 ## Storage setup
 Uploads go to `STORAGE_LOCAL_DIR` (git-ignored) through the `StorageProvider` interface. To move to S3/GCS, implement the interface in `src/server/storage/` and register it in `storage/index.ts`; document records store only opaque keys.
@@ -146,12 +161,15 @@ npm run test:e2e               # signup → onboarding → dashboard → task �
 
 ## Deployment
 
-### Docker
+### Docker, on your own machine
 ```bash
 cp .env.example .env   # set SESSION_SECRET, INTEGRATION_ENCRYPTION_KEY, AI keys
 docker compose --profile prod up --build
 ```
 The `app` image runs migrations on start (`scripts/docker-start.sh`), serves on port 3000, stores uploads in a named volume, and exposes `GET /api/health` for probes. Set `SEED_DEMO=true` to seed demo data on first boot.
+
+### A real server, behind HTTPS
+[`deploy/`](deploy/README.md) is the production stack: the app plus its own Postgres, no database port exposed, TLS from a Caddy that already fronts the host, and Cloudflare in front of that. The runbook there covers DNS, secrets, the first deploy, updates, backups and restores.
 
 ### Any Node host
 ```bash

@@ -46,13 +46,16 @@ Security is a first-class requirement. This document lists the controls in place
 - `src/proxy.ts` re-applies baseline headers and redirects unauthenticated requests away from protected routes.
 
 ## Rate limiting
-`src/lib/rate-limit.ts` — per-IP for login/signup/password reset, per-user for AI, uploads and LMS sync. In-memory store by default; implement `RateLimitStore` with Redis for multi-instance deployments. `RATE_LIMIT_DISABLED=true` switches limits off for local development and e2e runs only — the flag is ignored when `NODE_ENV=production`.
+`src/lib/rate-limit.ts` — per-IP for login/signup/password reset, per-user for AI, uploads and LMS sync. `clientIdentifier()` prefers `CF-Connecting-IP`, which Cloudflare overwrites on every proxied request, over `X-Forwarded-For`, which a client can prepend to. Both are forgeable by anyone who reaches the origin directly, so a Cloudflare deployment must also firewall the origin to Cloudflare's ranges (see `deploy/README.md`). In-memory store by default; implement `RateLimitStore` with Redis for multi-instance deployments. `RATE_LIMIT_DISABLED=true` switches limits off for local development and e2e runs only — the flag is ignored when `NODE_ENV=production`.
 
 ## CSRF
 State-changing requests are JSON `fetch` calls with `SameSite=Lax` cookies; browsers do not attach the session cookie to cross-site POSTs of `application/json`. Forms are not submitted cross-origin (`form-action 'self'` in CSP).
 
 ## Error handling
 `route()` converts every thrown error into `{ ok: false, error: { code, message } }` with a user-safe message. Server errors are logged (redacted) and recorded as `SystemEvent`s for the admin dashboard. The client error boundary shows a friendly page with a digest reference.
+
+## Production deployment
+`deploy/` runs the app and its Postgres as one Compose stack. The database publishes no port and is reachable only from the app container; TLS terminates at a Caddy that already fronts the host, with Cloudflare in front of that on Full (strict). Secrets come from `deploy/.env`, which is git-ignored, and Compose refuses to start if any of `SESSION_SECRET`, `INTEGRATION_ENCRYPTION_KEY`, `POSTGRES_PASSWORD` or `DOMAIN` is missing rather than falling back to a default.
 
 ## Operational checklist
 - Rotate `SESSION_SECRET` and `INTEGRATION_ENCRYPTION_KEY` per environment; rotating the encryption key invalidates stored LMS tokens (users reconnect).

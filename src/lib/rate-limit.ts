@@ -69,7 +69,17 @@ export async function enforceRateLimit(policy: RateLimitPolicy, identifier: stri
   }
 }
 
+/**
+ * The caller's IP, as seen through whatever sits in front of us.
+ *
+ * `CF-Connecting-IP` wins when present: Cloudflare overwrites it on every
+ * proxied request, whereas `X-Forwarded-For` is a list the client can prepend
+ * entries to. Neither is trustworthy if the origin is reachable directly, so a
+ * Cloudflare deployment should also firewall the origin to Cloudflare's ranges.
+ */
 export function clientIdentifier(req: Request): string {
+  const cloudflare = req.headers.get("cf-connecting-ip")?.trim();
+  if (cloudflare) return cloudflare;
   const fwd = req.headers.get("x-forwarded-for");
   return fwd?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "local";
 }

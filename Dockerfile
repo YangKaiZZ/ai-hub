@@ -25,8 +25,12 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
-COPY --from=builder /app/src/generated ./src/generated
 COPY --from=builder /app/scripts ./scripts
+# The seed is run with tsx against the TypeScript sources and imports the app's
+# own services, so it needs src/ and the tsconfig that resolves the "@/" alias.
+# The server itself runs from .next and does not read these.
+COPY --from=builder /app/src ./src
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
 RUN mkdir -p /data/storage && chown -R aihub:aihub /data /app
 USER aihub
