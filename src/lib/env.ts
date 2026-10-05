@@ -17,9 +17,13 @@ const schema = z.object({
   /** pg pool size. Set to 1 for single-connection embedded servers (e.g. `prisma dev`). */
   DATABASE_POOL_MAX: z.coerce.number().int().min(1).max(100).default(10),
 
-  AI_PROVIDER: z.enum(["anthropic", "mock"]).default("mock"),
+  AI_PROVIDER: z.enum(["anthropic", "deepseek", "mock"]).default("mock"),
   ANTHROPIC_API_KEY: z.string().optional(),
   AI_MODEL: z.string().default("claude-opus-5"),
+  /** DeepSeek speaks the OpenAI chat protocol; only the key, model and base URL differ. */
+  DEEPSEEK_API_KEY: z.string().optional(),
+  DEEPSEEK_MODEL: z.string().default("deepseek-chat"),
+  DEEPSEEK_BASE_URL: z.string().url().default("https://api.deepseek.com"),
   AI_FAST_MODEL: z.string().default("claude-haiku-4-5"),
   EMBEDDING_PROVIDER: z.enum(["local"]).default("local"),
 
@@ -51,9 +55,11 @@ function load(): Env {
     throw new Error(`Invalid environment configuration:\n${issues}`);
   }
   const value = parsed.data;
-  if (value.AI_PROVIDER === "anthropic" && !value.ANTHROPIC_API_KEY) {
+  const keyFor = { anthropic: value.ANTHROPIC_API_KEY, deepseek: value.DEEPSEEK_API_KEY, mock: "n/a" } as const;
+  if (!keyFor[value.AI_PROVIDER]) {
+    const needed = value.AI_PROVIDER === "anthropic" ? "ANTHROPIC_API_KEY" : "DEEPSEEK_API_KEY";
     if (value.NODE_ENV === "production") {
-      throw new Error("AI_PROVIDER=anthropic requires ANTHROPIC_API_KEY in production");
+      throw new Error(`AI_PROVIDER=${value.AI_PROVIDER} requires ${needed} in production`);
     }
     // In development fall back to the mock provider so the app stays usable offline.
     return { ...value, AI_PROVIDER: "mock" };

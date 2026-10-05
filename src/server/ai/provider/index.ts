@@ -2,6 +2,7 @@ import { env } from "@/lib/env";
 import { db } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { AnthropicProvider } from "@/server/ai/provider/anthropic";
+import { DeepSeekProvider } from "@/server/ai/provider/deepseek";
 import { MockProvider } from "@/server/ai/provider/mock";
 import type { AIProvider, AIUsage } from "@/server/ai/provider/types";
 
@@ -12,6 +13,8 @@ export function getAIProvider(): AIProvider {
   if (provider) return provider;
   if (env.AI_PROVIDER === "anthropic" && env.ANTHROPIC_API_KEY) {
     provider = new AnthropicProvider({ apiKey: env.ANTHROPIC_API_KEY, model: env.AI_MODEL });
+  } else if (env.AI_PROVIDER === "deepseek" && env.DEEPSEEK_API_KEY) {
+    provider = new DeepSeekProvider({ apiKey: env.DEEPSEEK_API_KEY, model: env.DEEPSEEK_MODEL, baseUrl: env.DEEPSEEK_BASE_URL });
   } else {
     provider = new MockProvider();
   }
