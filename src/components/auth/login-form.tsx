@@ -7,8 +7,9 @@ import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { AuthLink } from "@/components/auth/auth-form-shell";
 import { ApiClientError, apiPost } from "@/lib/client/api";
+import { DEMO_ACCOUNT } from "@/lib/demo";
 
-export function LoginForm({ nextPath }: { nextPath?: string }) {
+export function LoginForm({ nextPath, demo = false }: { nextPath?: string; demo?: boolean }) {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
@@ -45,12 +46,17 @@ export function LoginForm({ nextPath }: { nextPath?: string }) {
           {formError}
         </div>
       ) : null}
+      {demo ? (
+        <div className="rounded-lg border border-brand-500/30 bg-primary-soft px-3 py-2 text-sm text-brand-700 dark:text-brand-200">
+          You are signing in as Andrew, a sample student with four courses and a term of coursework already loaded.
+        </div>
+      ) : null}
       <Field id="email" label="Email" required error={errors.email}>
-        <Input name="email" type="email" autoComplete="email" placeholder="you@school.edu" required />
+        <Input name="email" type="email" autoComplete="email" placeholder="you@school.edu" defaultValue={demo ? DEMO_ACCOUNT.email : undefined} required />
       </Field>
       <div className="space-y-1.5">
         <Field id="password" label="Password" required error={errors.password}>
-          <Input name="password" type="password" autoComplete="current-password" placeholder="••••••••" required />
+          <Input name="password" type="password" autoComplete="current-password" placeholder="••••••••" defaultValue={demo ? DEMO_ACCOUNT.password : undefined} required />
         </Field>
         <div className="text-right text-xs">
           <AuthLink href="/forgot-password">Forgot password?</AuthLink>
