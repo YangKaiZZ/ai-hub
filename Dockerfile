@@ -34,7 +34,8 @@ RUN addgroup -S aihub && adduser -S aihub -G aihub
 
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
+# Next writes its cache under .next at runtime, so only that tree belongs to the app user.
+COPY --from=builder --chown=aihub:aihub /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
@@ -45,7 +46,10 @@ COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/src ./src
 COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
-RUN mkdir -p /data/storage && chown -R aihub:aihub /data /app
+# Everything else stays root-owned and read-only to the app. A recursive chown of
+# /app here would rewrite every file in node_modules into a second copy of that
+# layer: minutes of build time and hundreds of megabytes for nothing.
+RUN mkdir -p /data/storage && chown aihub:aihub /data /data/storage
 USER aihub
 
 EXPOSE 3000
