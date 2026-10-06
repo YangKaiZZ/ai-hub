@@ -75,7 +75,7 @@ export default function FilmPage() {
               </Button>
             </div>
             <div className="mx-auto w-44 lg:w-52">
-              <Sticker src="/campaign/wave.webp" alt="The student waving" width={412} height={634} pitch={1.2} />
+              <Sticker src="/campaign/wave.webp" alt="The student waving" width={824} height={1268} pitch={1.2} />
             </div>
           </div>
         </div>

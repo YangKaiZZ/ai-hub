@@ -54,35 +54,35 @@ const features = [
 // The film's five proof scenes, in the same order and with the same lines.
 const story = [
   {
-    sticker: { src: "/campaign/arms-crossed.webp", width: 398, height: 680, alt: "The student, arms crossed and confident" },
+    sticker: { src: "/campaign/arms-crossed.webp", width: 796, height: 1360, alt: "The student, arms crossed and confident" },
     eyebrow: "Smart priorities",
     title: "Knows what's due first.",
     body: "Every assignment lands in one list, ranked by deadline × workload × importance. AI Hub tells you what to start tonight and why.",
     points: ["Explainable priority score", "AI task analysis: type, effort, urgency", "Daily recommendation"],
   },
   {
-    sticker: { src: "/campaign/sit-phone.webp", width: 410, height: 626, alt: "The student sitting on a crate, asking the tutor on his phone" },
+    sticker: { src: "/campaign/sit-phone.webp", width: 820, height: 1252, alt: "The student sitting on a crate, asking the tutor on his phone" },
     eyebrow: "AI Tutor",
     title: "A tutor, not a shortcut.",
     body: "Pick how much help you want. Learning mode gives hints first, Guided walks you through, Review gives feedback on your own work.",
     points: ["Learning, Guided and Review modes", "Knows your course and assignment", "Never completes graded work"],
   },
   {
-    sticker: { src: "/campaign/trackpad.webp", width: 516, height: 370, alt: "A hand on a laptop trackpad" },
+    sticker: { src: "/campaign/trackpad.webp", width: 1032, height: 740, alt: "A hand on a laptop trackpad" },
     eyebrow: "Document intelligence",
     title: "Answers with sources.",
     body: "Drop in lecture slides, PDFs and notes. Ask a question and the answer points to the exact page it came from.",
     points: ["PDF, DOCX, PPTX and text", "Summaries and cited answers", "Click a citation to open the page"],
   },
   {
-    sticker: { src: "/campaign/walk-phone.webp", width: 388, height: 648, alt: "The student walking and checking his phone" },
+    sticker: { src: "/campaign/walk-phone.webp", width: 776, height: 1296, alt: "The student walking and checking his phone" },
     eyebrow: "AI Plan My Week",
     title: "Plans your week. You confirm.",
     body: "Tell AI Hub when you're free. It balances deadlines, workload and difficulty into study blocks, and nothing is saved until you say so.",
     points: ["Fits around your free evenings", "Confirm before anything changes", "Lands on your calendar"],
   },
   {
-    sticker: { src: "/campaign/pose-fist.webp", width: 360, height: 472, alt: "The student pumping his fist" },
+    sticker: { src: "/campaign/pose-fist.webp", width: 720, height: 944, alt: "The student pumping his fist" },
     eyebrow: "Grades + LMS sync",
     title: "Grades you can plan around.",
     body: "Weighted categories, projections and a target calculator that tells you exactly what you need on the remaining work. Canvas, Moodle and Blackboard keep it all in sync.",
@@ -354,7 +354,7 @@ export default async function LandingPage() {
                 </div>
               </div>
               <div className="mx-auto w-48 sm:w-56">
-                <Sticker src="/campaign/celebrate.webp" alt="The student jumping with his phone and laptop" width={554} height={656} pitch={1.3} />
+                <Sticker src="/campaign/celebrate.webp" alt="The student jumping with his phone and laptop" width={1108} height={1312} pitch={1.3} />
               </div>
             </div>
           </div>
@@ -383,10 +383,10 @@ function HeroPreview() {
   return (
     <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
       <div className="absolute -top-32 -left-2 z-10 hidden w-20 rotate-[-6deg] sm:block">
-        <Sticker src="/campaign/idea.webp" alt="The student thinking, a lightbulb over his head" width={366} height={632} pitch={1.5} />
+        <Sticker src="/campaign/idea.webp" alt="The student thinking, a lightbulb over his head" width={732} height={1264} pitch={1.5} />
       </div>
       <div className="absolute -right-4 -bottom-24 z-10 w-28 sm:-right-8 sm:w-40 lg:-right-14 lg:w-48">
-        <Sticker src="/campaign/hero.webp" alt="The AI Hub student holding his phone and a laptop open on AI Hub" width={888} height={1700} eager pitch={0.9} />
+        <Sticker src="/campaign/hero.webp" alt="The AI Hub student holding his phone and a laptop open on AI Hub" width={1777} height={3396} eager pitch={0.9} />
       </div>
       <div className="mr-10 rounded-3xl border border-border bg-surface p-5 shadow-lg sm:mr-16 lg:mr-24" aria-hidden>
         <div className="flex items-center justify-between">

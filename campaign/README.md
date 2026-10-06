@@ -69,10 +69,27 @@ On a machine with a GPU, `--fps 60 --browser-gpu` renders the 60fps master the c
 
 ## Stickers
 
-The cut-outs come from the supplied sheets: the 12-pose sticker sheet and the character sheet. The scripts in
-`tools/stickers/` flood-fill the baked-in checkerboard, rebuild an even white die-cut edge, and upscale 2x. For
-the big hero pose they also warp a real AI Hub dashboard (`laptop-screen.html`) onto his laptop screen and turn
-his phone UI violet. Poses that hold the matcha cup, and the green mascot, were left out.
+The cut-outs come from the supplied sheets: the 12-pose sticker sheet and the character sheet. The art in those
+sheets is small (a pose is about 200 px tall), so the set is rebuilt at high resolution in two steps:
+
+1. `tools/stickers/upscale.py`: each whole sheet is upscaled 4x with Real-ESRGAN's anime model
+   (`RealESRGAN_x4plus_anime_6B`, via spandrel + torch, tiled for CPU). It keeps the line art crisp and clears
+   the WebP compression blur.
+2. `tools/stickers/make_stickers.py`: masks are found on the 1x sheets, where the flat backgrounds separate
+   easily, then refined on the 4x art. Every sticker gets a rebuilt, even white die-cut edge. For the big hero
+   pose, a real AI Hub dashboard (`laptop-screen.html`, rendered at 700x500 @2x) is perspective-warped onto
+   his laptop screen at full resolution, and his phone UI is turned violet.
+
+```bash
+python3 tools/stickers/upscale.py sticker-sheet.webp sheet1_x4.png RealESRGAN_x4plus_anime_6B.pth
+python3 tools/stickers/upscale.py character-sheet.webp sheet3_x4.png RealESRGAN_x4plus_anime_6B.pth
+python3 -I tools/stickers/make_stickers.py sticker-sheet.webp sheet1_x4.png character-sheet.webp sheet3_x4.png \
+  laptop-screen.png out/
+```
+
+The output is 29 WebP stickers, each exactly 2x its earlier size (a standing pose is about 800x1300; the hero is
+1777x3396), so existing layouts kept their on-screen sizes and simply got sharper. The site serves them through
+`next/image` at a fitting size. Poses that hold the matcha cup, and the green mascot, are left out.
 
 ## Credits
 

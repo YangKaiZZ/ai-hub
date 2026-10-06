@@ -28,6 +28,8 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // 90 is for the campaign stickers, whose hand-drawn line art bands at the default 75.
+  images: { qualities: [75, 90] },
   serverExternalPackages: ["pdf-parse", "mammoth", "@prisma/client", "@prisma/adapter-pg", "pg"],
   experimental: {
     serverActions: { bodySizeLimit: "2mb" },

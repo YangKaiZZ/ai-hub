@@ -39,6 +39,7 @@ export function Sticker({
   className,
   pitch = 1,
   eager = false,
+  sizes = "(min-width: 640px) 240px, 180px",
 }: {
   src: string;
   alt: string;
@@ -48,6 +49,8 @@ export function Sticker({
   pitch?: number;
   /** Above-the-fold stickers load eagerly (Next 16 replaced `priority` with this). */
   eager?: boolean;
+  /** Rendered width, so the browser picks a fitting size from the high-resolution source. */
+  sizes?: string;
 }) {
   const [popping, setPopping] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -67,7 +70,7 @@ export function Sticker({
       aria-label={`${alt} (plays a pop sound)`}
       className={cn("sticker-btn rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", popping && "sticker-pop", className)}
     >
-      <Image src={src} alt="" width={width} height={height} loading={eager ? "eager" : undefined} className="sticker-img h-auto w-full select-none" draggable={false} />
+      <Image src={src} alt="" width={width} height={height} loading={eager ? "eager" : undefined} sizes={sizes} quality={90} className="sticker-img h-auto w-full select-none" draggable={false} />
     </button>
   );
 }
