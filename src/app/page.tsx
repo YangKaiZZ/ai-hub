@@ -1,17 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  ArrowRight,
-  BookOpen,
-  BrainCircuit,
-  CalendarClock,
-  CheckCircle2,
-  FileSearch,
-  FolderKanban,
-  Plug,
-  Sparkles,
-  Zap,
-} from "lucide-react";
+import { ArrowRightIcon, BookOpenIcon, CalendarDotsIcon, ChalkboardTeacherIcon, CheckCircleIcon, ClipboardTextIcon, FileMagnifyingGlassIcon, KanbanIcon, LightbulbIcon, PlugIcon, StudentIcon } from "@/components/icons";
 import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,37 +13,37 @@ export const metadata: Metadata = {
 
 const features = [
   {
-    icon: FolderKanban,
+    icon: KanbanIcon,
     title: "Automatic task organization",
     body: "Assignments, quizzes and projects from every course land in one prioritized list — imported from your LMS, calendar or added in seconds.",
   },
   {
-    icon: BrainCircuit,
+    icon: ChalkboardTeacherIcon,
     title: "AI Tutor",
     body: "Ask about calculus, code, essays or anything in your notes. It explains, gives hints and checks your reasoning — it never does the work for you.",
   },
   {
-    icon: Sparkles,
+    icon: ClipboardTextIcon,
     title: "Assignment Workspaces",
     body: "Every important assignment gets its own space: instructions, rubric, files, your draft, a checklist and an AI that knows the context.",
   },
   {
-    icon: CalendarClock,
+    icon: CalendarDotsIcon,
     title: "Smart study planning",
     body: "Tell AI Hub when you are free. It proposes a week that balances deadlines, workload and difficulty — you confirm before anything changes.",
   },
   {
-    icon: BookOpen,
+    icon: BookOpenIcon,
     title: "Course management",
     body: "Instructors, grades, resources, announcements and progress for each course, with grade projections you can actually plan around.",
   },
   {
-    icon: FileSearch,
+    icon: FileMagnifyingGlassIcon,
     title: "Document intelligence",
     body: "Upload lecture slides, PDFs and notes. Ask questions and get answers with sources you can click straight back into.",
   },
   {
-    icon: Plug,
+    icon: PlugIcon,
     title: "LMS integrations",
     body: "Canvas, Moodle and Blackboard ready. Connect with secure tokens — AI Hub never stores your school password.",
   },
@@ -89,7 +78,7 @@ export default async function LandingPage() {
             {user ? (
               <Button asChild>
                 <Link href="/dashboard">
-                  Open dashboard <ArrowRight />
+                  Open dashboard <ArrowRightIcon />
                 </Link>
               </Button>
             ) : (
@@ -114,7 +103,7 @@ export default async function LandingPage() {
           <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-20 pt-16 sm:px-8 lg:grid-cols-[1.1fr_1fr] lg:pb-28 lg:pt-24">
             <div className="max-w-xl">
               <Badge variant="brand" className="mb-5 px-3 py-1 text-xs">
-                <Sparkles /> Built for students, at any school
+                <StudentIcon /> Built for students, at any school
               </Badge>
               <h1 className="text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
                 Your entire student life. <span className="text-gradient">One intelligent hub.</span>
@@ -126,7 +115,7 @@ export default async function LandingPage() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button asChild size="lg" variant="gradient">
                   <Link href={user ? "/dashboard" : "/signup"}>
-                    Get started <ArrowRight />
+                    Get started <ArrowRightIcon />
                   </Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
@@ -136,7 +125,7 @@ export default async function LandingPage() {
               <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
                 {["Free to start", "No school verification", "Works with any LMS"].map((t) => (
                   <li key={t} className="inline-flex items-center gap-1.5">
-                    <CheckCircle2 className="size-4 text-success" /> {t}
+                    <CheckCircleIcon className="size-4 text-success" /> {t}
                   </li>
                 ))}
               </ul>
@@ -236,7 +225,7 @@ export default async function LandingPage() {
                 <ul className="mt-6 space-y-2.5 text-sm">
                   {tier.features.map((f) => (
                     <li key={f} className="flex items-start gap-2">
-                      <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-success" /> {f}
+                      <CheckCircleIcon className="mt-0.5 size-4 shrink-0 text-success" /> {f}
                     </li>
                   ))}
                 </ul>
@@ -277,7 +266,7 @@ function HeroPreview() {
             <p className="text-lg font-semibold">Welcome back, Andrew</p>
           </div>
           <Badge variant="brand">
-            <Zap /> AI analyzed 5 tasks
+            <LightbulbIcon /> AI analyzed 5 tasks
           </Badge>
         </div>
         <div className="mt-4 grid grid-cols-4 gap-2">
@@ -305,7 +294,7 @@ function HeroPreview() {
           <Progress value={45} className="mt-3" tone="brand" size="sm" />
         </div>
         <div className="mt-3 flex items-start gap-3 rounded-2xl bg-primary-soft p-4 text-sm">
-          <Sparkles className="mt-0.5 size-4 shrink-0 text-brand-600 dark:text-brand-300" />
+          <LightbulbIcon className="mt-0.5 size-4 shrink-0 text-brand-600 dark:text-brand-300" />
           <p className="text-brand-900 dark:text-brand-100">
             Study Calculus for 45 minutes today — your problem set is due Thursday and you have not started section 3.
           </p>

@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { format, isSameDay } from "date-fns";
-import { CalendarCheck2, CheckCircle2, Circle, Loader2, Pencil, Sparkles, Trash2, X } from "lucide-react";
+import { CalendarBlankIcon, CalendarCheckIcon, CalendarPlusIcon, CheckCircleIcon, CircleIcon, CircleNotchIcon, PencilSimpleIcon, TrashIcon, XIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -99,7 +99,7 @@ export function PlannerView({ proposed, active, history, preferences, openTasks 
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-md">
             <h2 className="flex items-center gap-2 text-lg font-semibold">
-              <Sparkles className="size-5 text-brand-600 dark:text-brand-300" /> AI Plan My Week
+              <CalendarPlusIcon className="size-5 text-brand-600 dark:text-brand-300" /> AI Plan My Week
             </h2>
             <p className="mt-1.5 text-sm text-muted">
               Tell AI Hub when you can study. It balances your {openTasks} open task{openTasks === 1 ? "" : "s"} by deadline, workload and priority — and nothing lands on your calendar until you confirm.
@@ -149,7 +149,7 @@ export function PlannerView({ proposed, active, history, preferences, openTasks 
             </div>
             <div className="sm:col-span-3">
               <Button onClick={generate} loading={generating} size="lg" variant="gradient" disabled={openTasks === 0}>
-                <Sparkles /> {proposed ? "Regenerate plan" : "Generate plan"}
+                <CalendarPlusIcon /> {proposed ? "Regenerate plan" : "Generate plan"}
               </Button>
               {openTasks === 0 ? <p className="mt-2 text-xs text-muted">Add a few tasks with deadlines first.</p> : null}
             </div>
@@ -165,10 +165,10 @@ export function PlannerView({ proposed, active, history, preferences, openTasks 
           actions={
             <>
               <Button variant="ghost" onClick={() => act(proposed.id, "discard")} disabled={busy === proposed.id}>
-                <X /> Discard
+                <XIcon /> Discard
               </Button>
               <Button onClick={() => act(proposed.id, "confirm")} loading={busy === proposed.id}>
-                <CalendarCheck2 /> Confirm & add to calendar
+                <CalendarCheckIcon /> Confirm & add to calendar
               </Button>
             </>
           }
@@ -188,7 +188,7 @@ export function PlannerView({ proposed, active, history, preferences, openTasks 
                 <Link href="/calendar">View in calendar</Link>
               </Button>
               <Button variant="ghost" onClick={() => act(active.id, "discard")} disabled={busy === active.id} className="text-danger hover:text-danger">
-                <Trash2 /> Remove plan
+                <TrashIcon /> Remove plan
               </Button>
             </>
           }
@@ -197,7 +197,7 @@ export function PlannerView({ proposed, active, history, preferences, openTasks 
           onRemove={removeSession}
         />
       ) : !proposed ? (
-        <EmptyState icon={<Sparkles />} title="No study plan yet" description="Generate one above. You can edit every session before confirming." />
+        <EmptyState icon={<CalendarBlankIcon />} title="No study plan yet" description="Generate one above. You can edit every session before confirming." />
       ) : null}
 
       {history.length ? (
@@ -255,7 +255,7 @@ function PlanCard({ plan, badge, actions, onToggle, onEdit, onRemove }: { plan: 
                 <li key={s.id} className={cn("group flex items-start gap-2 rounded-lg px-2 py-1.5 text-sm", sessionTypeStyle[s.type], s.completedAt && "opacity-60")}>
                   {onToggle && s.type !== "BREAK" ? (
                     <button type="button" onClick={() => onToggle(s.id, !s.completedAt)} className="mt-0.5 shrink-0" aria-label={s.completedAt ? "Mark not done" : "Mark done"}>
-                      {s.completedAt ? <CheckCircle2 className="size-4" /> : <Circle className="size-4" />}
+                      {s.completedAt ? <CheckCircleIcon className="size-4" /> : <CircleIcon className="size-4" />}
                     </button>
                   ) : null}
                   <span className="w-[5.5rem] shrink-0 text-xs tabular-nums opacity-80">
@@ -274,10 +274,10 @@ function PlanCard({ plan, badge, actions, onToggle, onEdit, onRemove }: { plan: 
                   {s.type !== "BREAK" ? (
                     <span className="flex shrink-0 gap-0.5 opacity-0 transition group-hover:opacity-100 focus-within:opacity-100">
                       <button type="button" onClick={() => onEdit(s)} className="rounded p-0.5 hover:bg-white/40" aria-label="Edit session">
-                        <Pencil className="size-3.5" />
+                        <PencilSimpleIcon className="size-3.5" />
                       </button>
                       <button type="button" onClick={() => onRemove(s.id)} className="rounded p-0.5 hover:bg-white/40" aria-label="Remove session">
-                        <Trash2 className="size-3.5" />
+                        <TrashIcon className="size-3.5" />
                       </button>
                     </span>
                   ) : null}
@@ -356,7 +356,7 @@ function SessionForm({ session, onClose, onSaved }: { session: StudyPlanDetail["
             Cancel
           </Button>
           <Button type="submit" loading={saving}>
-            {saving ? <Loader2 className="animate-spin" /> : null} Save
+            {saving ? <CircleNotchIcon className="animate-spin" /> : null} Save
           </Button>
         </DialogFooter>
       </form>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LogOut, Moon, Settings, Sun, Monitor, User } from "lucide-react";
+import { GearSixIcon, MonitorIcon, MoonIcon, SignOutIcon, SunIcon, UserIcon } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -43,12 +43,12 @@ export function UserMenu({ user }: UserMenuProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/settings">
-            <User /> Profile
+            <UserIcon /> Profile
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/settings?tab=preferences">
-            <Settings /> Preferences
+            <GearSixIcon /> Preferences
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -56,9 +56,9 @@ export function UserMenu({ user }: UserMenuProps) {
         <div className="grid grid-cols-3 gap-1 px-1.5 pb-1.5">
           {(
             [
-              ["light", Sun, "Light"],
-              ["dark", Moon, "Dark"],
-              ["system", Monitor, "Auto"],
+              ["light", SunIcon, "Light"],
+              ["dark", MoonIcon, "Dark"],
+              ["system", MonitorIcon, "Auto"],
             ] as const
           ).map(([value, Icon, label]) => (
             <button
@@ -75,7 +75,7 @@ export function UserMenu({ user }: UserMenuProps) {
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={logout} destructive>
-          <LogOut /> Log out
+          <SignOutIcon /> Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ArrowUpDown, CheckCircle2, Circle, Clock, MoreHorizontal, Pencil, Plus, Search, Sparkles, Trash2 } from "lucide-react";
+import { ArrowsDownUpIcon, CheckCircleIcon, CircleIcon, ClockIcon, DotsThreeIcon, LightbulbIcon, MagnifyingGlassIcon, PencilSimpleIcon, PlusIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -116,7 +116,7 @@ export function TaskList({ tasks, total, courses, filter, sort, courseId, q, ope
           ))}
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Input leftIcon={<Search />} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search tasks" className="h-9 w-full sm:w-56" aria-label="Search tasks" />
+          <Input leftIcon={<MagnifyingGlassIcon />} value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search tasks" className="h-9 w-full sm:w-56" aria-label="Search tasks" />
           <Select value={courseId ?? "all"} onValueChange={(v) => setParam({ courseId: v })}>
             <SelectTrigger className="h-9 w-[11rem]" aria-label="Filter by course">
               <SelectValue placeholder="All courses" />
@@ -132,7 +132,7 @@ export function TaskList({ tasks, total, courses, filter, sort, courseId, q, ope
           </Select>
           <Select value={sort} onValueChange={(v) => setParam({ sort: v })}>
             <SelectTrigger className="h-9 w-[9.5rem]" aria-label="Sort tasks">
-              <ArrowUpDown className="size-3.5 text-subtle" />
+              <ArrowsDownUpIcon className="size-3.5 text-subtle" />
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -143,14 +143,14 @@ export function TaskList({ tasks, total, courses, filter, sort, courseId, q, ope
             </SelectContent>
           </Select>
           <Button onClick={() => setDialog({ open: true, initial: emptyTaskForm(courseId ?? "") })} size="sm" className="h-9">
-            <Plus /> New task
+            <PlusIcon /> New task
           </Button>
         </div>
       </div>
 
       {tasks.length === 0 ? (
         <EmptyState
-          icon={<CheckCircle2 />}
+          icon={<CheckCircleIcon />}
           title={filter === "completed" ? "Nothing completed yet" : q ? "No tasks match your search" : "No tasks here"}
           description={
             filter === "all" && !q
@@ -159,7 +159,7 @@ export function TaskList({ tasks, total, courses, filter, sort, courseId, q, ope
           }
           action={
             <Button onClick={() => setDialog({ open: true, initial: emptyTaskForm(courseId ?? "") })}>
-              <Plus /> Add task
+              <PlusIcon /> Add task
             </Button>
           }
         />
@@ -181,7 +181,7 @@ export function TaskList({ tasks, total, courses, filter, sort, courseId, q, ope
                     aria-label={completed ? "Mark as not completed" : "Mark as completed"}
                     disabled={busy === task.id}
                   >
-                    {completed ? <CheckCircle2 className="size-5 text-success" /> : <Circle className="size-5" />}
+                    {completed ? <CheckCircleIcon className="size-5 text-success" /> : <CircleIcon className="size-5" />}
                   </button>
 
                   <div className="min-w-0 flex-1">
@@ -190,7 +190,7 @@ export function TaskList({ tasks, total, courses, filter, sort, courseId, q, ope
                         {task.title}
                       </Link>
                       <PriorityBadge priority={task.priority} className="hidden sm:inline-flex" />
-                      {task.aiAnalyzedAt ? <Sparkles className="size-3.5 text-brand-500" aria-label="AI analyzed" /> : null}
+                      {task.aiAnalyzedAt ? <LightbulbIcon className="size-3.5 text-brand-500" aria-label="AI analyzed" /> : null}
                     </div>
                     <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
                       {task.course ? (
@@ -203,7 +203,7 @@ export function TaskList({ tasks, total, courses, filter, sort, courseId, q, ope
                       <span className={cn(overdue && "font-medium text-danger")}>{formatDeadline(task.dueDate)}</span>
                       {task.estimatedMinutes ? (
                         <span className="inline-flex items-center gap-1">
-                          <Clock className="size-3" /> {formatMinutes(task.estimatedMinutes)}
+                          <ClockIcon className="size-3" /> {formatMinutes(task.estimatedMinutes)}
                         </span>
                       ) : null}
                     </div>
@@ -225,7 +225,7 @@ export function TaskList({ tasks, total, courses, filter, sort, courseId, q, ope
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon-sm" aria-label="Task actions">
-                          <MoreHorizontal />
+                          <DotsThreeIcon />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
@@ -233,11 +233,11 @@ export function TaskList({ tasks, total, courses, filter, sort, courseId, q, ope
                           <Link href={`/tasks/${task.id}`}>Open details</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem onSelect={() => setDialog({ open: true, initial: taskToForm(task) })}>
-                          <Pencil /> Edit
+                          <PencilSimpleIcon /> Edit
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem destructive onSelect={() => remove(task)}>
-                          <Trash2 /> Delete
+                          <TrashIcon /> Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

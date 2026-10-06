@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
+import { GraduationCapIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 export function LogoMark({ className }: { className?: string }) {
@@ -8,7 +8,7 @@ export function LogoMark({ className }: { className?: string }) {
       className={cn("inline-flex size-9 items-center justify-center rounded-xl brand-gradient text-white shadow-md", className)}
       aria-hidden
     >
-      <Sparkles className="size-[55%]" strokeWidth={2.4} />
+      <GraduationCapIcon className="size-[60%]" weight="bold" />
     </span>
   );
 }

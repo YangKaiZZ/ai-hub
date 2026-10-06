@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, FileUp, Loader2, XCircle } from "lucide-react";
+import { CheckCircleIcon, CircleNotchIcon, FileArrowUpIcon, XCircleIcon } from "@/components/icons";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
@@ -73,7 +73,7 @@ export function UploadDropzone({ courses, fixedCourseId, maxMb }: { courses: { i
         )}
       >
         <span className="mb-3 inline-flex size-12 items-center justify-center rounded-2xl bg-primary-soft text-brand-600 dark:text-brand-300">
-          <FileUp className="size-6" />
+          <FileArrowUpIcon className="size-6" />
         </span>
         <p className="text-sm font-semibold">Drop files here or click to upload</p>
         <p className="mt-1 text-xs text-muted">PDF, DOCX, PPTX, images and text files · up to {maxMb} MB each</p>
@@ -104,7 +104,7 @@ export function UploadDropzone({ courses, fixedCourseId, maxMb }: { courses: { i
         <ul className="space-y-1.5 text-sm" aria-live="polite">
           {uploads.map((u, i) => (
             <li key={`${u.name}-${i}`} className="flex items-center gap-2 rounded-lg bg-surface-muted px-3 py-2">
-              {u.status === "uploading" ? <Loader2 className="size-4 animate-spin text-brand-500" /> : u.status === "done" ? <CheckCircle2 className="size-4 text-success" /> : <XCircle className="size-4 text-danger" />}
+              {u.status === "uploading" ? <CircleNotchIcon className="size-4 animate-spin text-brand-500" /> : u.status === "done" ? <CheckCircleIcon className="size-4 text-success" /> : <XCircleIcon className="size-4 text-danger" />}
               <span className="min-w-0 flex-1 truncate">{u.name}</span>
               <span className="text-xs text-muted">{u.status === "uploading" ? "Processing…" : u.message}</span>
             </li>

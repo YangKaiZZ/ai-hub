@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { BookOpen, FileText, MessageSquare, Plus, Sparkles, Trash2 } from "lucide-react";
+import { BookOpenIcon, ChalkboardTeacherIcon, ChatTextIcon, CompassIcon, FileTextIcon, PlusIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -200,7 +200,7 @@ export function TutorView({ conversations, active, courses, documents, tasks, in
                     }}
                     className={cn("flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs transition", on ? "bg-primary-soft text-brand-800 dark:text-brand-100" : "hover:bg-surface-muted")}
                   >
-                    <FileText className="size-3.5 shrink-0" />
+                    <FileTextIcon className="size-3.5 shrink-0" />
                     <span className="truncate">{d.name}</span>
                   </button>
                 </li>
@@ -222,7 +222,7 @@ export function TutorView({ conversations, active, courses, documents, tasks, in
             <h2 className="text-sm font-semibold">Conversations</h2>
             <Button asChild size="icon-sm" variant="ghost" aria-label="New conversation">
               <a href="/tutor">
-                <Plus />
+                <PlusIcon />
               </a>
             </Button>
           </div>
@@ -235,7 +235,7 @@ export function TutorView({ conversations, active, courses, documents, tasks, in
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon-sm" className="lg:hidden" aria-label="Conversations">
-                  <MessageSquare />
+                  <ChatTextIcon />
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="p-0">
@@ -244,7 +244,7 @@ export function TutorView({ conversations, active, courses, documents, tasks, in
                 <div className="p-3">
                   <Button asChild className="w-full" size="sm">
                     <a href="/tutor">
-                      <Plus /> New conversation
+                      <PlusIcon /> New conversation
                     </a>
                   </Button>
                 </div>
@@ -257,7 +257,7 @@ export function TutorView({ conversations, active, courses, documents, tasks, in
               </p>
             </div>
             <Badge variant="brand" className="hidden sm:inline-flex">
-              <Sparkles /> {mode.charAt(0) + mode.slice(1).toLowerCase()}
+              <ChalkboardTeacherIcon /> {mode.charAt(0) + mode.slice(1).toLowerCase()}
             </Badge>
             <Sheet open={contextOpen} onOpenChange={setContextOpen}>
               <SheetTrigger asChild>
@@ -304,13 +304,13 @@ function ConversationList({ conversations, activeId, onDelete }: { conversations
           <a href={`/tutor?c=${c.id}`} className={cn("block rounded-xl px-3 py-2.5 pr-8 transition", c.id === activeId ? "bg-primary-soft" : "hover:bg-surface-muted")}>
             <p className="truncate text-sm font-medium">{c.title}</p>
             <p className="mt-0.5 flex items-center gap-1.5 truncate text-[11px] text-subtle">
-              {c.kind === "AGENT" ? <Sparkles className="size-3" /> : c.course ? <CourseDot color={c.course.color} /> : <BookOpen className="size-3" />}
+              {c.kind === "AGENT" ? <CompassIcon className="size-3" /> : c.course ? <CourseDot color={c.course.color} /> : <BookOpenIcon className="size-3" />}
               <span className="truncate">{c.course?.name ?? (c.kind === "AGENT" ? "Study agent" : c.subject ?? "General")}</span>
               <span>· {formatRelative(c.updatedAt)}</span>
             </p>
           </a>
           <button type="button" onClick={() => onDelete(c.id)} className="absolute right-2 top-2.5 rounded-md p-1 text-subtle opacity-0 transition hover:bg-danger-soft hover:text-danger focus:opacity-100 group-hover:opacity-100" aria-label="Delete conversation">
-            <Trash2 className="size-3.5" />
+            <TrashIcon className="size-3.5" />
           </button>
         </li>
       ))}

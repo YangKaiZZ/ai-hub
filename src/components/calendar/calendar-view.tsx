@@ -19,7 +19,7 @@ import {
   subMonths,
   subWeeks,
 } from "date-fns";
-import { CalendarDays, ChevronLeft, ChevronRight, Plus, Sparkles } from "lucide-react";
+import { CalendarBlankIcon, CalendarPlusIcon, CaretLeftIcon, CaretRightIcon, PlusIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -101,10 +101,10 @@ export function CalendarView({ initialEvents, initialFrom, initialTo, courses }:
           {view !== "agenda" ? (
             <>
               <Button variant="outline" size="icon-sm" onClick={() => go(-1)} aria-label="Previous">
-                <ChevronLeft />
+                <CaretLeftIcon />
               </Button>
               <Button variant="outline" size="icon-sm" onClick={() => go(1)} aria-label="Next">
-                <ChevronRight />
+                <CaretRightIcon />
               </Button>
               <Button variant="ghost" size="sm" onClick={() => setCursor(new Date())}>
                 Today
@@ -123,11 +123,11 @@ export function CalendarView({ initialEvents, initialFrom, initialTo, courses }:
           </div>
           <Button asChild variant="secondary" size="sm">
             <Link href="/planner">
-              <Sparkles /> AI Plan My Week
+              <CalendarPlusIcon /> AI Plan My Week
             </Link>
           </Button>
           <Button size="sm" onClick={() => setDialog({ open: true, date: selectedDay ?? new Date() })}>
-            <Plus /> Event
+            <PlusIcon /> Event
           </Button>
         </div>
       </div>
@@ -160,7 +160,7 @@ export function CalendarView({ initialEvents, initialFrom, initialTo, courses }:
                   <div className="flex items-center justify-between">
                     <span className={cn("inline-flex size-6 items-center justify-center rounded-full text-xs font-medium", isToday(day) && "bg-primary text-white")}>{format(day, "d")}</span>
                     <button type="button" onClick={(e) => (e.stopPropagation(), setDialog({ open: true, date: day }))} className="rounded p-0.5 text-subtle opacity-0 transition hover:bg-surface hover:text-foreground group-hover:opacity-100" aria-label={`Add event on ${format(day, "MMM d")}`}>
-                      <Plus className="size-3.5" />
+                      <PlusIcon className="size-3.5" />
                     </button>
                   </div>
                   <ul className="mt-1 space-y-1">
@@ -218,7 +218,7 @@ export function CalendarView({ initialEvents, initialFrom, initialTo, courses }:
 type Ev = ReturnType<typeof serialize>[number];
 
 function AgendaView({ events, onSelect }: { events: Ev[]; onSelect: (e: Ev) => void }) {
-  if (events.length === 0) return <EmptyState icon={<CalendarDays />} title="Nothing in the next 30 days" description="Deadlines, exams and study sessions will show up here as you add them." />;
+  if (events.length === 0) return <EmptyState icon={<CalendarBlankIcon />} title="Nothing in the next 30 days" description="Deadlines, exams and study sessions will show up here as you add them." />;
   const groups = new Map<string, Ev[]>();
   for (const e of events) {
     const k = format(e.startAt, "yyyy-MM-dd");

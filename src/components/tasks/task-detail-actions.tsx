@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, MoreHorizontal, Pencil, RotateCcw, Trash2 } from "lucide-react";
+import { ArrowCounterClockwiseIcon, CheckCircleIcon, DotsThreeIcon, PencilSimpleIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -115,23 +115,23 @@ export function TaskDetailActions({ task, courses }: { task: TaskLike; courses: 
       </Select>
 
       <Button variant={completed ? "outline" : "primary"} size="sm" className="h-9" onClick={() => patch({ status: completed ? "IN_PROGRESS" : "COMPLETED" }, completed ? "Task reopened" : "Task completed")} disabled={busy}>
-        {completed ? <RotateCcw /> : <CheckCircle2 />}
+        {completed ? <ArrowCounterClockwiseIcon /> : <CheckCircleIcon />}
         {completed ? "Reopen" : "Mark complete"}
       </Button>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon" className="size-9" aria-label="More actions">
-            <MoreHorizontal />
+            <DotsThreeIcon />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onSelect={() => setEditOpen(true)}>
-            <Pencil /> Edit task
+            <PencilSimpleIcon /> Edit task
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem destructive onSelect={remove}>
-            <Trash2 /> Delete task
+            <TrashIcon /> Delete task
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

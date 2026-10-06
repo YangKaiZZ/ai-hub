@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRightIcon, LightbulbIcon } from "@/components/icons";
 import type { Recommendation } from "@/server/recommendations/service";
 
 export function Recommendations({ items }: { items: Recommendation[] }) {
@@ -7,7 +7,7 @@ export function Recommendations({ items }: { items: Recommendation[] }) {
     <section aria-labelledby="recs-heading" className="rounded-2xl border border-border bg-surface p-5 shadow-sm">
       <div className="mb-4 flex items-center gap-2">
         <span className="inline-flex size-8 items-center justify-center rounded-lg brand-gradient text-white">
-          <Sparkles className="size-4" />
+          <LightbulbIcon className="size-4" />
         </span>
         <h2 id="recs-heading" className="text-base font-semibold">
           AI Recommendations
@@ -22,7 +22,7 @@ export function Recommendations({ items }: { items: Recommendation[] }) {
               <>
                 <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" aria-hidden />
                 <span className="flex-1 text-sm leading-relaxed">{r.text}</span>
-                {r.href ? <ArrowRight className="mt-1 size-4 shrink-0 text-subtle transition group-hover:translate-x-0.5 group-hover:text-primary" /> : null}
+                {r.href ? <ArrowRightIcon className="mt-1 size-4 shrink-0 text-subtle transition group-hover:translate-x-0.5 group-hover:text-primary" /> : null}
               </>
             );
             return (

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FileText, Search, Sparkles } from "lucide-react";
+import { FileTextIcon, ListMagnifyingGlassIcon, MagnifyingGlassIcon, QuotesIcon } from "@/components/icons";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -76,7 +76,7 @@ export function ResourcesView({ resources, courses, courseId, type, q, maxUpload
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
         <div className="flex flex-1 items-center gap-2">
           <Input
-            leftIcon={<Search />}
+            leftIcon={<MagnifyingGlassIcon />}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && runSemantic()}
@@ -90,7 +90,7 @@ export function ResourcesView({ resources, courses, courseId, type, q, maxUpload
             disabled={search.trim().length < 2 || semanticLoading}
             className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-lg bg-primary-soft px-3 text-sm font-medium text-brand-700 transition hover:bg-brand-200 disabled:opacity-50 dark:text-brand-200 dark:hover:bg-brand-800/40"
           >
-            <Sparkles className="size-4" /> {semanticLoading ? "Searching…" : "AI search"}
+            <ListMagnifyingGlassIcon className="size-4" /> {semanticLoading ? "Searching…" : "AI search"}
           </button>
         </div>
         <Select value={courseId ?? "all"} onValueChange={(v) => setParam({ courseId: v })}>
@@ -112,7 +112,7 @@ export function ResourcesView({ resources, courses, courseId, type, q, maxUpload
         <section className="rounded-2xl border border-brand-200 bg-primary-soft/40 p-4 dark:border-brand-800">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="flex items-center gap-2 text-sm font-semibold">
-              <Sparkles className="size-4 text-brand-500" /> Passages matching “{semantic.q}”
+              <QuotesIcon className="size-4 text-brand-500" /> Passages matching “{semantic.q}”
             </h2>
             <button type="button" className="text-xs text-muted hover:text-foreground" onClick={() => setSemantic(null)}>
               Clear
@@ -125,7 +125,7 @@ export function ResourcesView({ resources, courses, courseId, type, q, maxUpload
               {semantic.hits.map((h) => (
                 <li key={h.chunkId} className="rounded-xl bg-surface p-3 shadow-xs">
                   <Link href={`/resources?document=${h.documentId}#chunk-${h.chunkId}`} className="flex items-center gap-1.5 text-xs font-semibold text-brand-700 hover:underline dark:text-brand-300">
-                    <FileText className="size-3.5" /> {h.documentName}
+                    <FileTextIcon className="size-3.5" /> {h.documentName}
                     {h.page ? <span className="text-subtle">· p. {h.page}</span> : null}
                   </Link>
                   <p className="mt-1 line-clamp-3 text-sm text-foreground/90">{h.snippet}</p>

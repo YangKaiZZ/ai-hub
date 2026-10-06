@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
-import { AlertTriangle, Check, KeyRound, Link2, Loader2, LogOut, Plug, RefreshCw, Trash2, Unplug } from "lucide-react";
+import { ArrowClockwiseIcon, CheckIcon, CircleNotchIcon, KeyIcon, LinkSimpleIcon, PlugIcon, PlugsIcon, SignOutIcon, TrashIcon, WarningIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
@@ -389,7 +389,7 @@ function IntegrationsTab({ providers, integrations }: { providers: ProviderInfo[
     <div className="space-y-6">
       {info?.mock ? (
         <div className="flex items-start gap-3 rounded-2xl border border-warning/40 bg-warning-soft p-4 text-sm text-amber-900 dark:text-amber-100">
-          <AlertTriangle className="mt-0.5 size-4 shrink-0" />
+          <WarningIcon className="mt-0.5 size-4 shrink-0" />
           <p>
             <strong>Demo mode.</strong> LMS connections currently return realistic sample data instead of contacting your school. Set <code className="rounded bg-black/10 px-1">LMS_MOCK_MODE=false</code> with real credentials to sync live.
           </p>
@@ -406,7 +406,7 @@ function IntegrationsTab({ providers, integrations }: { providers: ProviderInfo[
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
                     <span className="inline-flex size-10 items-center justify-center rounded-xl bg-primary-soft text-brand-600 dark:text-brand-300">
-                      <Plug className="size-5" />
+                      <PlugIcon className="size-5" />
                     </span>
                     <div>
                       <p className="flex items-center gap-2 font-semibold">
@@ -422,16 +422,16 @@ function IntegrationsTab({ providers, integrations }: { providers: ProviderInfo[
                   <div className="flex flex-wrap gap-2">
                     {i.status !== "DISCONNECTED" && i.baseUrl ? (
                       <Button size="sm" onClick={() => act(i.id, "sync")} loading={busy === i.id}>
-                        <RefreshCw /> Sync now
+                        <ArrowClockwiseIcon /> Sync now
                       </Button>
                     ) : null}
                     {i.status === "CONNECTED" ? (
                       <Button size="sm" variant="outline" onClick={() => act(i.id, "disconnect")} disabled={busy === i.id}>
-                        <Unplug /> Disconnect
+                        <PlugsIcon /> Disconnect
                       </Button>
                     ) : null}
                     <Button size="sm" variant="ghost" onClick={() => act(i.id, "delete")} disabled={busy === i.id} aria-label="Remove integration">
-                      <Trash2 />
+                      <TrashIcon />
                     </Button>
                   </div>
                 </div>
@@ -439,7 +439,7 @@ function IntegrationsTab({ providers, integrations }: { providers: ProviderInfo[
                   <ul className="mt-3 space-y-1 text-xs text-muted">
                     {i.syncLogs.slice(0, 3).map((l) => (
                       <li key={l.id} className="flex items-center gap-2">
-                        {l.status === "RUNNING" ? <Loader2 className="size-3 animate-spin" /> : l.status === "FAILED" ? <AlertTriangle className="size-3 text-danger" /> : <Check className="size-3 text-success" />}
+                        {l.status === "RUNNING" ? <CircleNotchIcon className="size-3 animate-spin" /> : l.status === "FAILED" ? <WarningIcon className="size-3 text-danger" /> : <CheckIcon className="size-3 text-success" />}
                         {format(l.startedAt, "MMM d, h:mm a")} · {l.coursesImported} courses · {l.tasksImported} new / {l.tasksUpdated} updated tasks
                         {l.error ? ` · ${l.error.split("\n")[0]}` : ""}
                       </li>
@@ -470,15 +470,15 @@ function IntegrationsTab({ providers, integrations }: { providers: ProviderInfo[
               </Select>
             </Field>
             <Field id="int-url" label="Platform URL" required>
-              <Input value={baseUrl} onChange={(e) => setBaseUrl(e.target.value)} placeholder="https://myschool.instructure.com" leftIcon={<Link2 />} />
+              <Input value={baseUrl} onChange={(e) => setBaseUrl(e.target.value)} placeholder="https://myschool.instructure.com" leftIcon={<LinkSimpleIcon />} />
             </Field>
           </div>
           <Field id="int-token" label="Access token" hint={info?.connectionHelp} required={!info?.mock}>
-            <Input value={token} onChange={(e) => setToken(e.target.value)} type="password" autoComplete="off" placeholder={info?.mock ? "Optional in demo mode" : "Paste your token"} leftIcon={<KeyRound />} />
+            <Input value={token} onChange={(e) => setToken(e.target.value)} type="password" autoComplete="off" placeholder={info?.mock ? "Optional in demo mode" : "Paste your token"} leftIcon={<KeyIcon />} />
           </Field>
           <div className="flex justify-end">
             <Button type="submit" loading={connecting} disabled={!baseUrl}>
-              <Plug /> Connect
+              <PlugIcon /> Connect
             </Button>
           </div>
         </form>
@@ -606,7 +606,7 @@ function SecurityTab({ sessions, email, isDemo }: { sessions: SettingsData["sess
                 </p>
               </div>
               <Button variant="ghost" size="sm" onClick={() => revoke(s.id)}>
-                <LogOut /> Sign out
+                <SignOutIcon /> Sign out
               </Button>
             </li>
           ))}
@@ -619,7 +619,7 @@ function SecurityTab({ sessions, email, isDemo }: { sessions: SettingsData["sess
             <Input value={confirmText} onChange={(e) => setConfirmText(e.target.value)} autoComplete="off" />
           </Field>
           <Button variant="danger" disabled={confirmText !== email} loading={deleting} onClick={deleteAccount}>
-            <Trash2 /> Delete account
+            <TrashIcon /> Delete account
           </Button>
         </div>
       </Section>

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Bell, CheckCheck, Sparkles, AlertTriangle, CalendarClock, GraduationCap, Info, ListPlus } from "lucide-react";
+import { BellIcon, CalendarDotsIcon, ChecksIcon, ExamIcon, InfoIcon, LightbulbIcon, ListPlusIcon, WarningIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { apiGet, apiPost } from "@/lib/client/api";
@@ -19,13 +19,13 @@ interface NotificationItem {
 }
 
 const iconFor: Record<string, React.ComponentType<{ className?: string }>> = {
-  NEW_TASK: ListPlus,
-  DEADLINE_APPROACHING: CalendarClock,
-  OVERDUE_TASK: AlertTriangle,
-  AI_RECOMMENDATION: Sparkles,
-  STUDY_SESSION: CalendarClock,
-  GRADE_UPDATE: GraduationCap,
-  SYSTEM: Info,
+  NEW_TASK: ListPlusIcon,
+  DEADLINE_APPROACHING: CalendarDotsIcon,
+  OVERDUE_TASK: WarningIcon,
+  AI_RECOMMENDATION: LightbulbIcon,
+  STUDY_SESSION: CalendarDotsIcon,
+  GRADE_UPDATE: ExamIcon,
+  SYSTEM: InfoIcon,
 };
 
 export function NotificationBell({ initialUnread }: { initialUnread: number }) {
@@ -67,7 +67,7 @@ export function NotificationBell({ initialUnread }: { initialUnread: number }) {
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="relative" aria-label={`Notifications${unread ? `, ${unread} unread` : ""}`}>
-          <Bell />
+          <BellIcon />
           {unread > 0 ? (
             <span className="absolute right-1.5 top-1.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-white ring-2 ring-background">
               {unread > 9 ? "9+" : unread}
@@ -79,7 +79,7 @@ export function NotificationBell({ initialUnread }: { initialUnread: number }) {
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <p className="text-sm font-semibold">Notifications</p>
           <Button variant="ghost" size="xs" onClick={markAll} disabled={unread === 0}>
-            <CheckCheck /> Mark all read
+            <ChecksIcon /> Mark all read
           </Button>
         </div>
         <div className="max-h-96 overflow-y-auto scrollbar-thin">
@@ -94,7 +94,7 @@ export function NotificationBell({ initialUnread }: { initialUnread: number }) {
           ) : (
             <ul>
               {items.map((n) => {
-                const Icon = iconFor[n.type] ?? Info;
+                const Icon = iconFor[n.type] ?? InfoIcon;
                 const href = n.data?.href;
                 const inner = (
                   <div className={`flex gap-3 px-4 py-3 transition hover:bg-surface-muted ${n.readAt ? "opacity-70" : ""}`}>

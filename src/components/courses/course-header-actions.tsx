@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Archive, ArchiveRestore, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { ArchiveIcon, ArrowUUpLeftIcon, DotsThreeIcon, PencilSimpleIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/toaster";
@@ -58,22 +58,22 @@ export function CourseHeaderActions({ course }: { course: CourseLike }) {
   return (
     <div className="flex items-center gap-2">
       <Button variant="outline" size="sm" className="h-9" onClick={() => setEditOpen(true)}>
-        <Pencil /> Edit
+        <PencilSimpleIcon /> Edit
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon" className="size-9" aria-label="More actions" disabled={busy}>
-            <MoreHorizontal />
+            <DotsThreeIcon />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onSelect={toggleArchive}>
-            {course.isActive ? <Archive /> : <ArchiveRestore />}
+            {course.isActive ? <ArchiveIcon /> : <ArrowUUpLeftIcon />}
             {course.isActive ? "Archive course" : "Restore course"}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem destructive onSelect={remove}>
-            <Trash2 /> Delete course
+            <TrashIcon /> Delete course
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { ArrowLeft, CalendarClock, Clock, ExternalLink, Sparkles, User } from "lucide-react";
+import { ArrowLeftIcon, ArrowSquareOutIcon, CalendarDotsIcon, ClockIcon, LightbulbIcon, UserIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -51,7 +51,7 @@ export default async function TaskDetailPage({
   return (
     <div className="space-y-6">
       <Link href="/tasks" className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground">
-        <ArrowLeft className="size-4" /> Back to tasks
+        <ArrowLeftIcon className="size-4" /> Back to tasks
       </Link>
 
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -80,9 +80,9 @@ export default async function TaskDetailPage({
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <InfoTile icon={<CalendarClock />} label="Deadline" value={formatDeadline(task.dueDate)} sub={task.dueDate ? formatDate(task.dueDate, "EEE, MMM d · h:mm a") : undefined} />
-        <InfoTile icon={<Clock />} label="Estimated time" value={formatMinutes(task.estimatedMinutes)} sub={analysis?.estimatedMinutes && analysis.estimatedMinutes !== task.estimatedMinutes ? `AI suggests ${formatMinutes(analysis.estimatedMinutes)}` : undefined} />
-        <InfoTile icon={<User />} label="Instructor" value={task.instructor ?? task.course?.instructor ?? "—"} />
+        <InfoTile icon={<CalendarDotsIcon />} label="Deadline" value={formatDeadline(task.dueDate)} sub={task.dueDate ? formatDate(task.dueDate, "EEE, MMM d · h:mm a") : undefined} />
+        <InfoTile icon={<ClockIcon />} label="Estimated time" value={formatMinutes(task.estimatedMinutes)} sub={analysis?.estimatedMinutes && analysis.estimatedMinutes !== task.estimatedMinutes ? `AI suggests ${formatMinutes(analysis.estimatedMinutes)}` : undefined} />
+        <InfoTile icon={<UserIcon />} label="Instructor" value={task.instructor ?? task.course?.instructor ?? "—"} />
         <div className="rounded-2xl border border-border bg-surface p-4 shadow-sm">
           <p className="text-xs text-muted">Progress</p>
           <div className="mt-2 flex items-center gap-3">
@@ -143,7 +143,7 @@ export default async function TaskDetailPage({
               <CardContent className="space-y-2 text-sm">
                 {task.externalUrl ? (
                   <a href={task.externalUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-primary hover:underline">
-                    Open in learning platform <ExternalLink className="size-3.5" />
+                    Open in learning platform <ArrowSquareOutIcon className="size-3.5" />
                   </a>
                 ) : null}
                 {task.attachments.map((a) => (
@@ -161,7 +161,7 @@ export default async function TaskDetailPage({
           <Card className="brand-gradient-soft border-brand-200 dark:border-brand-800">
             <CardContent className="p-5">
               <div className="flex items-center gap-2 text-brand-800 dark:text-brand-100">
-                <Sparkles className="size-4" />
+                <LightbulbIcon className="size-4" />
                 <p className="text-sm font-semibold">Work on this with AI</p>
               </div>
               <p className="mt-1.5 text-sm text-brand-900/80 dark:text-brand-100/80">

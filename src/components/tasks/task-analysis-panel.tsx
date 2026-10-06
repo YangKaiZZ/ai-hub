@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { AlertTriangle, BookMarked, ListChecks, RefreshCw, Sparkles } from "lucide-react";
+import { ArrowClockwiseIcon, BookBookmarkIcon, LightbulbIcon, ListChecksIcon, WarningIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,12 +42,12 @@ export function TaskAnalysisPanel({ taskId, analysis, analyzedAt }: { taskId: st
       <CardHeader className="flex-row items-start justify-between gap-3">
         <div>
           <CardTitle className="flex items-center gap-2">
-            <Sparkles className="size-4 text-brand-500" /> AI analysis
+            <LightbulbIcon className="size-4 text-brand-500" /> AI analysis
           </CardTitle>
           <p className="mt-1 text-xs text-subtle">{analyzedAt ? `Updated ${formatRelative(analyzedAt)}` : "Not analyzed yet"}</p>
         </div>
         <Button size="sm" variant={analysis ? "ghost" : "primary"} onClick={analyze} loading={loading}>
-          {analysis ? <RefreshCw /> : <Sparkles />}
+          {analysis ? <ArrowClockwiseIcon /> : <LightbulbIcon />}
           {analysis ? "Re-analyze" : "Analyze"}
         </Button>
       </CardHeader>
@@ -66,7 +66,7 @@ export function TaskAnalysisPanel({ taskId, analysis, analyzedAt }: { taskId: st
             {analysis.recommendedSteps.length ? (
               <section>
                 <h4 className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-subtle">
-                  <ListChecks className="size-3.5" /> Recommended steps
+                  <ListChecksIcon className="size-3.5" /> Recommended steps
                 </h4>
                 <ol className="list-decimal space-y-1 pl-5 text-sm">
                   {analysis.recommendedSteps.map((s, i) => (
@@ -90,7 +90,7 @@ export function TaskAnalysisPanel({ taskId, analysis, analyzedAt }: { taskId: st
             {analysis.keyConcepts.length ? (
               <section>
                 <h4 className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-subtle">
-                  <BookMarked className="size-3.5" /> Key concepts
+                  <BookBookmarkIcon className="size-3.5" /> Key concepts
                 </h4>
                 <div className="flex flex-wrap gap-1.5">
                   {analysis.keyConcepts.map((c) => (
@@ -112,7 +112,7 @@ export function TaskAnalysisPanel({ taskId, analysis, analyzedAt }: { taskId: st
             {analysis.risks.length ? (
               <section className="rounded-xl bg-warning-soft p-3 text-sm text-amber-800 dark:text-amber-200">
                 <p className="mb-1 flex items-center gap-1.5 font-semibold">
-                  <AlertTriangle className="size-3.5" /> Watch out
+                  <WarningIcon className="size-3.5" /> Watch out
                 </p>
                 <ul className="list-disc pl-5">
                   {analysis.risks.map((r, i) => (

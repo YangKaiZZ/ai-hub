@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { BookOpenCheck, BrainCircuit, CalendarCheck2, Sparkles } from "lucide-react";
+import { BookOpenTextIcon, CalendarCheckIcon, ChalkboardTeacherIcon, GraduationCapIcon } from "@/components/icons";
 import { Logo } from "@/components/brand/logo";
 
 const highlights = [
-  { icon: BookOpenCheck, text: "Every deadline from every course, in one place." },
-  { icon: BrainCircuit, text: "An AI tutor that explains, guides, and checks your work." },
-  { icon: CalendarCheck2, text: "Study plans that fit the time you actually have." },
+  { icon: BookOpenTextIcon, text: "Every deadline from every course, in one place." },
+  { icon: ChalkboardTeacherIcon, text: "An AI tutor that explains, guides, and checks your work." },
+  { icon: CalendarCheckIcon, text: "Study plans that fit the time you actually have." },
 ];
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
@@ -16,7 +16,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="pointer-events-none absolute -bottom-32 -left-16 size-96 rounded-full bg-brand-900/30 blur-3xl" aria-hidden />
         <Link href="/" className="relative inline-flex items-center gap-2.5 text-lg font-semibold">
           <span className="inline-flex size-9 items-center justify-center rounded-xl bg-white/15 backdrop-blur">
-            <Sparkles className="size-5" />
+            <GraduationCapIcon className="size-5" weight="bold" />
           </span>
           AI Hub
         </Link>

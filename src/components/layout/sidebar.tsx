@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogOut, ShieldCheck } from "lucide-react";
+import { ShieldCheckIcon, SignOutIcon } from "@/components/icons";
 import { Logo } from "@/components/brand/logo";
 import { Separator } from "@/components/ui/separator";
 import { isActivePath, primaryNav, secondaryNav, type NavItem } from "@/components/layout/nav-items";
@@ -33,7 +33,7 @@ function NavLink({ item, active, onNavigate }: { item: NavItem; active: boolean;
 export function SidebarNav({ onNavigate, isAdmin }: { onNavigate?: () => void; isAdmin?: boolean }) {
   const pathname = usePathname();
   const { logout, pending } = useLogout();
-  const secondary = isAdmin ? [...secondaryNav, { href: "/admin", label: "Admin", icon: ShieldCheck }] : secondaryNav;
+  const secondary = isAdmin ? [...secondaryNav, { href: "/admin", label: "Admin", icon: ShieldCheckIcon }] : secondaryNav;
 
   return (
     <div className="flex h-full flex-col">
@@ -54,7 +54,7 @@ export function SidebarNav({ onNavigate, isAdmin }: { onNavigate?: () => void; i
           disabled={pending}
           className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-surface-muted hover:text-foreground disabled:opacity-60"
         >
-          <LogOut className="size-[18px] text-subtle group-hover:text-foreground" />
+          <SignOutIcon className="size-[18px] text-subtle group-hover:text-foreground" />
           {pending ? "Signing out…" : "Logout"}
         </button>
       </nav>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookOpen, CheckSquare, Plus } from "lucide-react";
+import { BookOpenIcon, CheckSquareIcon, PlusIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { WelcomeBanner } from "@/components/dashboard/welcome-banner";
@@ -36,13 +36,13 @@ export default async function DashboardPage() {
           </div>
           {data.attention.length === 0 ? (
             <EmptyState
-              icon={<CheckSquare />}
+              icon={<CheckSquareIcon />}
               title="No tasks yet"
               description="Once assignments are imported or added, they'll appear here ranked by what matters most."
               action={
                 <Button asChild>
                   <Link href="/tasks?new=1">
-                    <Plus /> Add task
+                    <PlusIcon /> Add task
                   </Link>
                 </Button>
               }
@@ -73,13 +73,13 @@ export default async function DashboardPage() {
         </div>
         {data.courses.length === 0 ? (
           <EmptyState
-            icon={<BookOpen />}
+            icon={<BookOpenIcon />}
             title="No courses"
             description="Add your first course to start building your academic workspace."
             action={
               <Button asChild>
                 <Link href="/courses?new=1">
-                  <Plus /> Add course
+                  <PlusIcon /> Add course
                 </Link>
               </Button>
             }

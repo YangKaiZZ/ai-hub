@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookOpen, BrainCircuit, CalendarDays, FileUp, Keyboard, ShieldCheck } from "lucide-react";
+import { BookOpenIcon, CalendarBlankIcon, ChalkboardTeacherIcon, FileArrowUpIcon, KeyboardIcon, ShieldCheckIcon } from "@/components/icons";
 import { PageHeader } from "@/components/ui/page-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const metadata: Metadata = { title: "Help" };
 
 const topics = [
-  { icon: BookOpen, title: "Getting started", body: "Add your institution and courses, then create or import tasks. The dashboard ranks them by deadline, workload and importance.", href: "/courses" },
-  { icon: BrainCircuit, title: "Using the AI Tutor", body: "Ask about any subject. Switch between Learning, Guided and Review modes to control how much the tutor reveals.", href: "/tutor" },
-  { icon: FileUp, title: "Uploading documents", body: "PDF, DOCX, PPTX, images and text files are extracted, indexed and searchable. Ask questions and get cited answers.", href: "/resources" },
-  { icon: CalendarDays, title: "Planning your week", body: "Open the Study Planner, set your availability and let AI propose a schedule. Nothing is saved until you confirm.", href: "/planner" },
-  { icon: ShieldCheck, title: "Academic integrity", body: "AI Hub explains, guides and reviews — it does not complete or submit graded work for you.", href: "/settings" },
-  { icon: Keyboard, title: "Keyboard shortcuts", body: "Press Ctrl/⌘ + K anywhere to search tasks, courses, resources and documents.", href: "/dashboard" },
+  { icon: BookOpenIcon, title: "Getting started", body: "Add your institution and courses, then create or import tasks. The dashboard ranks them by deadline, workload and importance.", href: "/courses" },
+  { icon: ChalkboardTeacherIcon, title: "Using the AI Tutor", body: "Ask about any subject. Switch between Learning, Guided and Review modes to control how much the tutor reveals.", href: "/tutor" },
+  { icon: FileArrowUpIcon, title: "Uploading documents", body: "PDF, DOCX, PPTX, images and text files are extracted, indexed and searchable. Ask questions and get cited answers.", href: "/resources" },
+  { icon: CalendarBlankIcon, title: "Planning your week", body: "Open the Study Planner, set your availability and let AI propose a schedule. Nothing is saved until you confirm.", href: "/planner" },
+  { icon: ShieldCheckIcon, title: "Academic integrity", body: "AI Hub explains, guides and reviews — it does not complete or submit graded work for you.", href: "/settings" },
+  { icon: KeyboardIcon, title: "Keyboard shortcuts", body: "Press Ctrl/⌘ + K anywhere to search tasks, courses, resources and documents.", href: "/dashboard" },
 ];
 
 export default function HelpPage() {

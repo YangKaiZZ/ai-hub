@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { Trash2 } from "lucide-react";
+import { TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -171,7 +171,7 @@ function EventForm({ event, defaultDate, courses, onOpenChange, onSaved }: Props
           <div>
             {event && !isTask ? (
               <Button type="button" variant="ghost" onClick={remove} disabled={saving} className="text-danger hover:bg-danger-soft hover:text-danger">
-                <Trash2 /> Delete
+                <TrashIcon /> Delete
               </Button>
             ) : event?.taskId ? (
               <Button asChild type="button" variant="ghost">

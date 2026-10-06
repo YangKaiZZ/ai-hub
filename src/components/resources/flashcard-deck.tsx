@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronLeft, ChevronRight, RotateCcw, Shuffle } from "lucide-react";
+import { ArrowCounterClockwiseIcon, CaretLeftIcon, CaretRightIcon, ShuffleIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +35,7 @@ export function FlashcardDeck({ cards }: { cards: { front: string; back: string 
         </h2>
         <div className="flex gap-1">
           <Button variant="ghost" size="icon-sm" onClick={shuffle} aria-label="Shuffle">
-            <Shuffle />
+            <ShuffleIcon />
           </Button>
           <Button
             variant="ghost"
@@ -47,7 +47,7 @@ export function FlashcardDeck({ cards }: { cards: { front: string; back: string 
             }}
             aria-label="Reset order"
           >
-            <RotateCcw />
+            <ArrowCounterClockwiseIcon />
           </Button>
         </div>
       </div>
@@ -65,10 +65,10 @@ export function FlashcardDeck({ cards }: { cards: { front: string; back: string 
       <p className="mt-2 text-center text-xs text-subtle">{flipped ? "Answer" : "Click the card to reveal the answer"}</p>
       <div className="mt-4 flex items-center justify-center gap-3">
         <Button variant="outline" size="sm" onClick={() => go(-1)} aria-label="Previous card">
-          <ChevronLeft /> Prev
+          <CaretLeftIcon /> Prev
         </Button>
         <Button variant="outline" size="sm" onClick={() => go(1)} aria-label="Next card">
-          Next <ChevronRight />
+          Next <CaretRightIcon />
         </Button>
       </div>
     </section>

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Check } from "lucide-react";
+import { CheckIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Field } from "@/components/ui/field";
@@ -153,7 +153,7 @@ function CourseForm({ initial, onOpenChange }: { initial: CourseFormValues; onOp
                 onClick={() => set("color", c)}
                 className={cn("flex size-8 items-center justify-center rounded-full text-white ring-offset-2 ring-offset-surface transition", courseStyles(c).solid, values.color === c && "ring-2 ring-foreground/60")}
               >
-                {values.color === c ? <Check className="size-4" /> : null}
+                {values.color === c ? <CheckIcon className="size-4" /> : null}
               </button>
             ))}
           </div>

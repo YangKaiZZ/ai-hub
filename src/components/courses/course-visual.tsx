@@ -1,33 +1,19 @@
-import {
-  Atom,
-  BookOpen,
-  Briefcase,
-  Code,
-  Cpu,
-  Database,
-  FlaskConical,
-  Globe,
-  Landmark,
-  Palette,
-  PenLine,
-  Sigma,
-  type LucideIcon,
-} from "lucide-react";
+import { AtomIcon, BankIcon, BookOpenIcon, BriefcaseIcon, CodeIcon, CpuIcon, DatabaseIcon, FlaskIcon, GlobeIcon, MathOperationsIcon, PaletteIcon, PenNibIcon, type AppIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
-const icons: Record<string, LucideIcon> = {
-  "book-open": BookOpen,
-  code: Code,
-  database: Database,
-  sigma: Sigma,
-  "flask-conical": FlaskConical,
-  atom: Atom,
-  "pen-line": PenLine,
-  landmark: Landmark,
-  briefcase: Briefcase,
-  cpu: Cpu,
-  globe: Globe,
-  palette: Palette,
+const icons: Record<string, AppIcon> = {
+  "book-open": BookOpenIcon,
+  code: CodeIcon,
+  database: DatabaseIcon,
+  sigma: MathOperationsIcon,
+  "flask-conical": FlaskIcon,
+  atom: AtomIcon,
+  "pen-line": PenNibIcon,
+  landmark: BankIcon,
+  briefcase: BriefcaseIcon,
+  cpu: CpuIcon,
+  globe: GlobeIcon,
+  palette: PaletteIcon,
 };
 
 /** Tailwind classes per course color: [soft bg + text, solid bg]. */
@@ -59,7 +45,7 @@ export function CourseIcon({
   size?: "sm" | "md" | "lg";
   className?: string;
 }) {
-  const Icon = icons[icon ?? "book-open"] ?? BookOpen;
+  const Icon = icons[icon ?? "book-open"] ?? BookOpenIcon;
   const styles = courseStyles(color);
   return (
     <span

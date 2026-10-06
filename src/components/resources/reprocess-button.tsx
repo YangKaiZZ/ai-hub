@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { RefreshCw } from "lucide-react";
+import { ArrowClockwiseIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toaster";
 import { apiPost } from "@/lib/client/api";
@@ -27,7 +27,7 @@ export function ReprocessButton({ documentId }: { documentId: string }) {
         }
       }}
     >
-      <RefreshCw /> Reprocess
+      <ArrowClockwiseIcon /> Reprocess
     </Button>
   );
 }

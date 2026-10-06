@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ArrowUp, BookOpen, CheckCircle2, Loader2, Sparkles, Square, XCircle } from "lucide-react";
+import { ArrowUpIcon, BookOpenIcon, ChalkboardTeacherIcon, CheckCircleIcon, CircleNotchIcon, SquareIcon, XCircleIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Markdown } from "@/components/chat/markdown";
 import type { ChatMessage, ToolActivity } from "@/components/chat/use-chat-stream";
@@ -46,7 +46,7 @@ export function ChatPanel({ messages, streaming, error, onSend, onStop, suggesti
         {messages.length === 0 ? (
           <div className="mx-auto flex h-full max-w-lg flex-col items-center justify-center text-center">
             <span className="mb-4 inline-flex size-14 items-center justify-center rounded-2xl brand-gradient text-white shadow-md">
-              <Sparkles className="size-7" />
+              <ChalkboardTeacherIcon className="size-7" />
             </span>
             <h2 className="text-xl font-semibold tracking-tight">{emptyTitle}</h2>
             {emptyDescription ? <p className="mt-2 text-sm text-muted">{emptyDescription}</p> : null}
@@ -102,11 +102,11 @@ export function ChatPanel({ messages, streaming, error, onSend, onStop, suggesti
           />
           {streaming ? (
             <Button size="icon-sm" variant="outline" onClick={onStop} aria-label="Stop generating">
-              <Square className="size-3.5" />
+              <SquareIcon className="size-3.5" />
             </Button>
           ) : (
             <Button size="icon-sm" onClick={submit} disabled={!input.trim()} aria-label="Send message">
-              <ArrowUp />
+              <ArrowUpIcon />
             </Button>
           )}
         </div>
@@ -125,7 +125,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
     <div className={cn("flex gap-3", isUser ? "justify-end" : "justify-start")}>
       {!isUser ? (
         <span className="mt-1 inline-flex size-8 shrink-0 items-center justify-center rounded-xl brand-gradient text-white">
-          <Sparkles className="size-4" />
+          <ChalkboardTeacherIcon className="size-4" />
         </span>
       ) : null}
       <div className={cn("max-w-[85%] space-y-2", isUser && "items-end")}>
@@ -137,7 +137,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
             <Markdown text={message.content} />
           ) : message.pending ? (
             <span className="inline-flex items-center gap-2 text-muted">
-              <Loader2 className="size-4 animate-spin" /> Thinking…
+              <CircleNotchIcon className="size-4 animate-spin" /> Thinking…
             </span>
           ) : null}
         </div>
@@ -152,7 +152,7 @@ function ToolActivityList({ calls }: { calls: ToolActivity[] }) {
     <ul className="space-y-1">
       {calls.map((c, i) => (
         <li key={`${c.name}-${i}`} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-muted px-2.5 py-1 text-xs text-muted">
-          {c.status === "running" ? <Loader2 className="size-3 animate-spin text-brand-500" /> : c.status === "ok" ? <CheckCircle2 className="size-3 text-success" /> : <XCircle className="size-3 text-danger" />}
+          {c.status === "running" ? <CircleNotchIcon className="size-3 animate-spin text-brand-500" /> : c.status === "ok" ? <CheckCircleIcon className="size-3 text-success" /> : <XCircleIcon className="size-3 text-danger" />}
           {c.label}
           {c.summary && c.status !== "running" ? <span className="text-subtle">· {c.summary}</span> : null}
         </li>
@@ -172,7 +172,7 @@ function SourceChips({ sources }: { sources: NonNullable<ChatMessage["sources"]>
           className="inline-flex items-center gap-1 rounded-full bg-primary-soft px-2.5 py-1 text-[11px] font-medium text-brand-700 hover:bg-brand-200 dark:text-brand-200"
           title={s.snippet}
         >
-          <BookOpen className="size-3" /> {s.title}
+          <BookOpenIcon className="size-3" /> {s.title}
           {s.page ? `, p. ${s.page}` : ""}
         </Link>
       ))}

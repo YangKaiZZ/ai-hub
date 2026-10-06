@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeftIcon } from "@/components/icons";
 import { PageHeader } from "@/components/ui/page-header";
 import { GradesOverview } from "@/components/grades/grades-overview";
 import { CourseGradesPanel } from "@/components/grades/course-grades-panel";
@@ -26,7 +26,7 @@ export default async function GradesPage({ searchParams }: { searchParams: Promi
       return (
         <div className="space-y-6">
           <Link href="/grades" className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground">
-            <ArrowLeft className="size-4" /> All grades
+            <ArrowLeftIcon className="size-4" /> All grades
           </Link>
           <div className="flex items-center gap-4">
             <CourseIcon icon={report.course.icon} color={report.course.color} size="lg" />

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { format, isToday, isTomorrow } from "date-fns";
-import { CalendarDays } from "lucide-react";
+import { CalendarBlankIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { CourseDot } from "@/components/courses/course-visual";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -50,7 +50,7 @@ export function UpcomingTimeline({ events }: { events: UpcomingEvent[] }) {
         </Button>
       </div>
       {events.length === 0 ? (
-        <EmptyState compact icon={<CalendarDays />} title="Nothing scheduled" description="Deadlines and study sessions will show up here." />
+        <EmptyState compact icon={<CalendarBlankIcon />} title="Nothing scheduled" description="Deadlines and study sessions will show up here." />
       ) : (
         <ol className="relative space-y-4 border-l border-border pl-4">
           {[...groups.entries()].map(([key, items]) => (

@@ -3,26 +3,26 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Command } from "cmdk";
-import { BookOpen, CheckSquare, FileText, FolderOpen, Search, Sparkles, LayoutDashboard, CalendarDays, GraduationCap, BrainCircuit } from "lucide-react";
+import { BookOpenIcon, CalendarBlankIcon, ChalkboardTeacherIcon, CheckSquareIcon, ExamIcon, FileTextIcon, FolderOpenIcon, LightbulbIcon, MagnifyingGlassIcon, SquaresFourIcon } from "@/components/icons";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { apiGet } from "@/lib/client/api";
 import type { SearchResult } from "@/server/search/service";
 
 const kindIcon: Record<SearchResult["kind"], React.ComponentType<{ className?: string }>> = {
-  task: CheckSquare,
-  course: BookOpen,
-  resource: FolderOpen,
-  document: FileText,
-  workspace: Sparkles,
+  task: CheckSquareIcon,
+  course: BookOpenIcon,
+  resource: FolderOpenIcon,
+  document: FileTextIcon,
+  workspace: LightbulbIcon,
 };
 
 const quickLinks = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "My Tasks", href: "/tasks", icon: CheckSquare },
-  { label: "Courses", href: "/courses", icon: BookOpen },
-  { label: "Calendar", href: "/calendar", icon: CalendarDays },
-  { label: "AI Tutor", href: "/tutor", icon: BrainCircuit },
-  { label: "Grades", href: "/grades", icon: GraduationCap },
+  { label: "Dashboard", href: "/dashboard", icon: SquaresFourIcon },
+  { label: "My Tasks", href: "/tasks", icon: CheckSquareIcon },
+  { label: "Courses", href: "/courses", icon: BookOpenIcon },
+  { label: "Calendar", href: "/calendar", icon: CalendarBlankIcon },
+  { label: "AI Tutor", href: "/tutor", icon: ChalkboardTeacherIcon },
+  { label: "Grades", href: "/grades", icon: ExamIcon },
 ];
 
 const groupHeadingClass =
@@ -51,7 +51,7 @@ export function GlobalSearchTrigger() {
         className="hidden h-9 w-64 items-center gap-2 rounded-lg border border-border bg-surface px-3 text-sm text-subtle shadow-xs transition hover:border-border-strong md:flex lg:w-80"
         aria-label="Search (Ctrl+K)"
       >
-        <Search className="size-4" />
+        <MagnifyingGlassIcon className="size-4" />
         <span className="flex-1 text-left">Search tasks, courses, files…</span>
         <kbd className="rounded border border-border bg-surface-muted px-1.5 py-0.5 font-mono text-[10px] text-subtle">Ctrl K</kbd>
       </button>
@@ -61,7 +61,7 @@ export function GlobalSearchTrigger() {
         className="inline-flex size-10 items-center justify-center rounded-lg text-muted hover:bg-surface-muted md:hidden"
         aria-label="Search"
       >
-        <Search className="size-5" />
+        <MagnifyingGlassIcon className="size-5" />
       </button>
       {open ? <GlobalSearchDialog open={open} onOpenChange={setOpen} /> : null}
     </>
@@ -107,7 +107,7 @@ function GlobalSearchDialog({ open, onOpenChange }: { open: boolean; onOpenChang
         <DialogTitle className="sr-only">Search</DialogTitle>
         <Command label="Global search" shouldFilter={false} className="flex flex-col">
           <div className="flex items-center gap-2 border-b border-border px-4">
-            <Search className="size-4 text-subtle" />
+            <MagnifyingGlassIcon className="size-4 text-subtle" />
             <Command.Input
               value={query}
               onValueChange={setQuery}

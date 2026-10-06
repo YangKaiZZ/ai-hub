@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { format } from "date-fns";
-import { Activity, AlertTriangle, Bot, Building2, CheckCircle2, Database, Plug, Users } from "lucide-react";
+import { BuildingsIcon, ChatsCircleIcon, CheckCircleIcon, DatabaseIcon, PlugIcon, PulseIcon, UsersIcon, WarningIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/ui/page-header";
 import { InstitutionVerifyToggle } from "@/components/admin/institution-verify-toggle";
@@ -33,16 +33,16 @@ export default async function AdminPage() {
       <PageHeader eyebrow="System" title="Admin" description="Users, institutions, integrations, AI usage and health. Aggregates only — no student content." />
 
       <section className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-        {stat("Users", overview.counts.users, `${overview.counts.activeUsers7} active this week`, <Users />)}
-        {stat("New users (30d)", overview.counts.newUsers30, undefined, <Users />)}
-        {stat("Institutions", overview.counts.institutions, undefined, <Building2 />)}
-        {stat("Tasks", overview.counts.tasks, `${overview.counts.documents} documents · ${overview.counts.conversations} conversations`, <Activity />)}
+        {stat("Users", overview.counts.users, `${overview.counts.activeUsers7} active this week`, <UsersIcon />)}
+        {stat("New users (30d)", overview.counts.newUsers30, undefined, <UsersIcon />)}
+        {stat("Institutions", overview.counts.institutions, undefined, <BuildingsIcon />)}
+        {stat("Tasks", overview.counts.tasks, `${overview.counts.documents} documents · ${overview.counts.conversations} conversations`, <PulseIcon />)}
       </section>
 
       <section className="grid gap-4 lg:grid-cols-3">
         <div className="rounded-2xl border border-border bg-surface p-5 shadow-sm">
           <h2 className="flex items-center gap-2 text-sm font-semibold">
-            <Database className="size-4" /> System health
+            <DatabaseIcon className="size-4" /> System health
           </h2>
           <ul className="mt-3 space-y-2 text-sm">
             <li className="flex items-center justify-between">
@@ -72,7 +72,7 @@ export default async function AdminPage() {
 
         <div className="rounded-2xl border border-border bg-surface p-5 shadow-sm">
           <h2 className="flex items-center gap-2 text-sm font-semibold">
-            <Bot className="size-4" /> AI usage (7 days)
+            <ChatsCircleIcon className="size-4" /> AI usage (7 days)
           </h2>
           <p className="mt-3 text-2xl font-semibold tabular-nums">{overview.ai.requests7.toLocaleString()} requests</p>
           <p className="text-xs text-subtle">
@@ -93,7 +93,7 @@ export default async function AdminPage() {
 
         <div className="rounded-2xl border border-border bg-surface p-5 shadow-sm">
           <h2 className="flex items-center gap-2 text-sm font-semibold">
-            <Plug className="size-4" /> Integration providers
+            <PlugIcon className="size-4" /> Integration providers
           </h2>
           {overview.integrations.mockMode ? <p className="mt-2 text-xs text-warning">LMS_MOCK_MODE is on — providers return demo data.</p> : null}
           <ul className="mt-3 space-y-2 text-sm">
@@ -150,13 +150,13 @@ export default async function AdminPage() {
           <h2 className="border-b border-border px-5 py-3 text-sm font-semibold">Recent system events</h2>
           {overview.recentEvents.length === 0 ? (
             <p className="flex items-center gap-2 px-5 py-6 text-sm text-muted">
-              <CheckCircle2 className="size-4 text-success" /> No events logged.
+              <CheckCircleIcon className="size-4 text-success" /> No events logged.
             </p>
           ) : (
             <ul className="divide-y divide-border">
               {overview.recentEvents.map((e) => (
                 <li key={e.id} className="flex items-start gap-3 px-5 py-2.5 text-sm">
-                  {e.level === "ERROR" ? <AlertTriangle className="mt-0.5 size-4 text-danger" /> : <Activity className="mt-0.5 size-4 text-subtle" />}
+                  {e.level === "ERROR" ? <WarningIcon className="mt-0.5 size-4 text-danger" /> : <PulseIcon className="mt-0.5 size-4 text-subtle" />}
                   <div className="min-w-0 flex-1">
                     <p className="truncate">{e.message}</p>
                     <p className="text-xs text-subtle">

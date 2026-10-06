@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { BookOpen, Plus } from "lucide-react";
+import { BookOpenIcon, PlusIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { CourseCard } from "@/components/courses/course-card";
@@ -17,17 +17,17 @@ export function CoursesGrid({ courses, openNew }: { courses: CourseSummary[]; op
     <div className="space-y-8">
       <div className="flex justify-end">
         <Button onClick={() => setOpen(true)}>
-          <Plus /> Add course
+          <PlusIcon /> Add course
         </Button>
       </div>
       {courses.length === 0 ? (
         <EmptyState
-          icon={<BookOpen />}
+          icon={<BookOpenIcon />}
           title="No courses"
           description="Add your first course to start building your academic workspace."
           action={
             <Button onClick={() => setOpen(true)}>
-              <Plus /> Add course
+              <PlusIcon /> Add course
             </Button>
           }
         />

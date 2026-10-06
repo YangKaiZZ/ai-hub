@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { ListIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { SidebarNav } from "@/components/layout/sidebar";
@@ -17,7 +17,7 @@ export function MobileMenu({ isAdmin }: { isAdmin?: boolean }) {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open navigation">
-          <Menu />
+          <ListIcon />
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0" hideClose>
@@ -71,7 +71,7 @@ function MoreSheet() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <button type="button" className="flex w-full flex-col items-center gap-1 py-2.5 text-[11px] font-medium text-subtle">
-          <Menu className="size-5" />
+          <ListIcon className="size-5" />
           More
         </button>
       </SheetTrigger>

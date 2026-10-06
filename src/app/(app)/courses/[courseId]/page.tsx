@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, BrainCircuit, Megaphone, Plus } from "lucide-react";
+import { ArrowLeftIcon, ChalkboardTeacherIcon, MegaphoneIcon, PlusIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -48,7 +48,7 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
   return (
     <div className="space-y-6">
       <Link href="/courses" className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground">
-        <ArrowLeft className="size-4" /> All courses
+        <ArrowLeftIcon className="size-4" /> All courses
       </Link>
 
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -137,7 +137,7 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
                 </Button>
               </div>
               {open.length === 0 ? (
-                <EmptyState compact title="No open tasks" description="Add an assignment or exam for this course." action={<Button asChild size="sm"><Link href={`/tasks?new=1&courseId=${course.id}`}><Plus /> Add task</Link></Button>} />
+                <EmptyState compact title="No open tasks" description="Add an assignment or exam for this course." action={<Button asChild size="sm"><Link href={`/tasks?new=1&courseId=${course.id}`}><PlusIcon /> Add task</Link></Button>} />
               ) : (
                 <div className="grid gap-4 md:grid-cols-2">
                   {open.slice(0, 4).map((t) => (
@@ -150,7 +150,7 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
           <div className="space-y-6">
             <section className="rounded-2xl brand-gradient-soft border border-brand-200 p-5 dark:border-brand-800">
               <div className="flex items-center gap-2 text-brand-800 dark:text-brand-100">
-                <BrainCircuit className="size-4" />
+                <ChalkboardTeacherIcon className="size-4" />
                 <h2 className="text-sm font-semibold">Ask the AI Tutor about {course.code ?? "this course"}</h2>
               </div>
               <p className="mt-1.5 text-sm text-brand-900/80 dark:text-brand-100/80">Start a conversation scoped to this course. Your uploaded resources are used as context.</p>
@@ -178,7 +178,7 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
 
         <TabsContent value="tasks">
           {tasks.items.length === 0 ? (
-            <EmptyState title="No tasks yet" description="Assignments, quizzes and exams for this course will show here." action={<Button asChild><Link href={`/tasks?new=1&courseId=${course.id}`}><Plus /> Add task</Link></Button>} />
+            <EmptyState title="No tasks yet" description="Assignments, quizzes and exams for this course will show here." action={<Button asChild><Link href={`/tasks?new=1&courseId=${course.id}`}><PlusIcon /> Add task</Link></Button>} />
           ) : (
             <div className="space-y-6">
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -215,7 +215,7 @@ export default async function CoursePage({ params, searchParams }: { params: Pro
 
         <TabsContent value="announcements">
           {course.announcements.length === 0 ? (
-            <EmptyState icon={<Megaphone />} title="No announcements" description="Announcements synced from your learning platform will appear here." />
+            <EmptyState icon={<MegaphoneIcon />} title="No announcements" description="Announcements synced from your learning platform will appear here." />
           ) : (
             <ul className="space-y-3">
               {course.announcements.map((a) => (

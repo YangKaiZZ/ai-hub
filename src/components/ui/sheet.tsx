@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { XIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 /** Side drawer built on Radix Dialog; used for mobile navigation and side panels. */
@@ -33,7 +33,7 @@ const SheetContent = React.forwardRef<
           className="absolute right-3 top-3 rounded-md p-1.5 text-subtle transition hover:bg-surface-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           aria-label="Close"
         >
-          <X className="size-4" />
+          <XIcon className="size-4" />
         </DialogPrimitive.Close>
       ) : null}
     </DialogPrimitive.Content>

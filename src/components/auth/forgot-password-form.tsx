@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { MailCheck } from "lucide-react";
+import { EnvelopeSimpleIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -31,7 +31,7 @@ export function ForgotPasswordForm() {
     return (
       <div role="status" className="rounded-2xl border border-border bg-surface p-6 text-center shadow-sm">
         <div className="mx-auto mb-3 flex size-12 items-center justify-center rounded-xl bg-success-soft text-success">
-          <MailCheck className="size-6" />
+          <EnvelopeSimpleIcon className="size-6" />
         </div>
         <h2 className="font-semibold">Check your inbox</h2>
         <p className="mt-1 text-sm text-muted">

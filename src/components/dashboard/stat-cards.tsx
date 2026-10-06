@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AlertTriangle, CalendarClock, CheckCircle2, Flame } from "lucide-react";
+import { CalendarDotsIcon, CheckCircleIcon, FlameIcon, WarningIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 interface Stat {
@@ -20,10 +20,10 @@ const toneClasses: Record<Stat["tone"], { icon: string; bar: string }> = {
 
 export function StatCards({ stats }: { stats: { dueThisWeek: number; highPriority: number; upcoming: number; completed: number; overdue: number; total: number } }) {
   const items: Stat[] = [
-    { label: "Tasks due", value: stats.dueThisWeek, hint: stats.overdue > 0 ? `${stats.overdue} overdue` : "this week", icon: CalendarClock, tone: "brand", href: "/tasks?filter=week" },
-    { label: "High priority", value: stats.highPriority, hint: "need attention", icon: Flame, tone: "danger", href: "/tasks?filter=high" },
-    { label: "Upcoming", value: stats.upcoming, hint: "after this week", icon: AlertTriangle, tone: "info", href: "/tasks?filter=upcoming" },
-    { label: "Completed", value: stats.completed, hint: stats.total ? `${Math.round((stats.completed / stats.total) * 100)}% of all tasks` : "so far", icon: CheckCircle2, tone: "success", href: "/tasks?filter=completed" },
+    { label: "Tasks due", value: stats.dueThisWeek, hint: stats.overdue > 0 ? `${stats.overdue} overdue` : "this week", icon: CalendarDotsIcon, tone: "brand", href: "/tasks?filter=week" },
+    { label: "High priority", value: stats.highPriority, hint: "need attention", icon: FlameIcon, tone: "danger", href: "/tasks?filter=high" },
+    { label: "Upcoming", value: stats.upcoming, hint: "after this week", icon: WarningIcon, tone: "info", href: "/tasks?filter=upcoming" },
+    { label: "Completed", value: stats.completed, hint: stats.total ? `${Math.round((stats.completed / stats.total) * 100)}% of all tasks` : "so far", icon: CheckCircleIcon, tone: "success", href: "/tasks?filter=completed" },
   ];
 
   return (

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Download, ExternalLink, FileText, Layers, RefreshCw } from "lucide-react";
+import { ArrowClockwiseIcon, ArrowLeftIcon, ArrowSquareOutIcon, DownloadSimpleIcon, FileTextIcon, StackIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CourseDot } from "@/components/courses/course-visual";
@@ -35,7 +35,7 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
   return (
     <div className="space-y-6">
       <Link href="/resources" className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground">
-        <ArrowLeft className="size-4" /> Resources
+        <ArrowLeftIcon className="size-4" /> Resources
       </Link>
 
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
@@ -64,7 +64,7 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
           {resource.url ? (
             <Button asChild variant="outline">
               <a href={resource.url} target="_blank" rel="noreferrer">
-                Open link <ExternalLink />
+                Open link <ArrowSquareOutIcon />
               </a>
             </Button>
           ) : null}
@@ -72,7 +72,7 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
             <>
               <Button asChild variant="outline">
                 <a href={`/api/documents/${resource.document.id}/file?download=1`}>
-                  <Download /> Download
+                  <DownloadSimpleIcon /> Download
                 </a>
               </Button>
               <ReprocessButton documentId={resource.document.id} />
@@ -88,7 +88,7 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
         <section className="rounded-2xl border border-border bg-surface p-5 shadow-sm">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
             <span className="inline-flex items-center gap-1.5">
-              <FileText className="size-4" /> {resource.document.name}
+              <FileTextIcon className="size-4" /> {resource.document.name}
             </span>
             <span>{(resource.document.sizeBytes / 1024 / 1024).toFixed(2)} MB</span>
             {resource.document.pageCount ? <span>{resource.document.pageCount} pages</span> : null}
@@ -115,7 +115,7 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
       {chunks.length > 0 ? (
         <section className="rounded-2xl border border-border bg-surface p-5 shadow-sm">
           <h2 className="mb-1 flex items-center gap-2 text-sm font-semibold">
-            <Layers className="size-4 text-brand-500" /> Indexed sections ({resource.document?.chunkCount})
+            <StackIcon className="size-4 text-brand-500" /> Indexed sections ({resource.document?.chunkCount})
           </h2>
           <p className="mb-4 text-xs text-muted">These passages are what the AI Tutor can cite when you ask about this document.</p>
           <ol className="space-y-3">
@@ -135,7 +135,7 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
           <p className="font-semibold">We could not process this file.</p>
           <p className="mt-1">{resource.document.error ?? "Unknown error"}</p>
           <p className="mt-2 inline-flex items-center gap-1 text-xs">
-            <RefreshCw className="size-3" /> Try “Reprocess” above, or re-upload the file.
+            <ArrowClockwiseIcon className="size-3" /> Try “Reprocess” above, or re-upload the file.
           </p>
         </section>
       ) : null}

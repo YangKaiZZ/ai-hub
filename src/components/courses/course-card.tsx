@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, CalendarClock, User } from "lucide-react";
+import { ArrowRightIcon, CalendarDotsIcon, UserIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -22,7 +22,7 @@ export function CourseCard({ course, className }: { course: CourseSummary; class
             </Link>
             {course.instructor ? (
               <p className="mt-0.5 flex items-center gap-1 truncate text-xs text-muted">
-                <User className="size-3.5" /> {course.instructor}
+                <UserIcon className="size-3.5" /> {course.instructor}
               </p>
             ) : null}
           </div>
@@ -36,7 +36,7 @@ export function CourseCard({ course, className }: { course: CourseSummary; class
           <div className="rounded-xl bg-surface-muted px-3 py-2">
             <p className="text-subtle">Next deadline</p>
             <p className="mt-0.5 flex items-center gap-1 truncate font-semibold">
-              <CalendarClock className="size-3.5 shrink-0 text-subtle" />
+              <CalendarDotsIcon className="size-3.5 shrink-0 text-subtle" />
               {course.nextDeadline ? formatDeadline(course.nextDeadline.dueDate).replace("Due ", "") : "None"}
             </p>
           </div>
@@ -52,7 +52,7 @@ export function CourseCard({ course, className }: { course: CourseSummary; class
 
         <Button asChild variant="outline" size="sm" className="mt-5 w-full">
           <Link href={`/courses/${course.id}`}>
-            View course <ArrowRight />
+            View course <ArrowRightIcon />
           </Link>
         </Button>
       </div>

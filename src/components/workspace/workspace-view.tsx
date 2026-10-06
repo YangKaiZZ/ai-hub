@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Download, FileText, NotebookPen, Plus, Save, Sparkles, Trash2, Upload } from "lucide-react";
+import { ArrowLeftIcon, DownloadSimpleIcon, FileTextIcon, FloppyDiskIcon, LightbulbIcon, NotePencilIcon, PlusIcon, TrashIcon, UploadSimpleIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -117,7 +117,7 @@ export function WorkspaceView({ workspace }: { workspace: WorkspaceDetail }) {
       {/* Top bar */}
       <div className="border-b border-border bg-surface/80 px-4 py-4 backdrop-blur sm:px-6 lg:px-8">
         <Link href={`/tasks/${task.id}`} className="inline-flex items-center gap-1.5 text-xs text-muted hover:text-foreground">
-          <ArrowLeft className="size-3.5" /> Task details
+          <ArrowLeftIcon className="size-3.5" /> Task details
         </Link>
         <div className="mt-2 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex min-w-0 items-center gap-3">
@@ -137,7 +137,7 @@ export function WorkspaceView({ workspace }: { workspace: WorkspaceDetail }) {
             </div>
             <Select value={mode} onValueChange={changeMode}>
               <SelectTrigger className="h-8 w-[10.5rem]" aria-label="Assistance mode">
-                <Sparkles className="size-3.5 text-brand-500" />
+                <LightbulbIcon className="size-3.5 text-brand-500" />
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -170,7 +170,7 @@ export function WorkspaceView({ workspace }: { workspace: WorkspaceDetail }) {
               {workspace.aiOverview ? (
                 <div className="rounded-2xl brand-gradient-soft border border-brand-200 p-4 text-sm dark:border-brand-800">
                   <p className="mb-1 flex items-center gap-1.5 font-semibold text-brand-800 dark:text-brand-100">
-                    <Sparkles className="size-4" /> AI overview
+                    <LightbulbIcon className="size-4" /> AI overview
                   </p>
                   <p className="text-brand-900/85 dark:text-brand-100/85">{workspace.aiOverview}</p>
                 </div>
@@ -224,7 +224,7 @@ export function WorkspaceView({ workspace }: { workspace: WorkspaceDetail }) {
 
             <TabsContent value="files" className="space-y-3">
               <label className={cn("flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border-strong px-4 py-5 text-sm text-muted transition hover:border-brand-300 hover:bg-surface-muted", uploading && "opacity-60")}>
-                <Upload className="size-4" /> {uploading ? "Uploading…" : "Attach files to this assignment"}
+                <UploadSimpleIcon className="size-4" /> {uploading ? "Uploading…" : "Attach files to this assignment"}
                 <input type="file" multiple className="hidden" onChange={(e) => void upload(e.target.files)} disabled={uploading} />
               </label>
               {task.attachments.length === 0 ? (
@@ -233,12 +233,12 @@ export function WorkspaceView({ workspace }: { workspace: WorkspaceDetail }) {
                 <ul className="divide-y divide-border rounded-xl border border-border">
                   {task.attachments.map((a) => (
                     <li key={a.id} className="flex items-center gap-3 px-4 py-3 text-sm">
-                      <FileText className="size-4 text-subtle" />
+                      <FileTextIcon className="size-4 text-subtle" />
                       <span className="min-w-0 flex-1 truncate">{a.name}</span>
                       {a.document ? <Badge variant={a.document.status === "READY" ? "success" : "warning"}>{a.document.status.toLowerCase()}</Badge> : null}
                       {a.document ? (
                         <a href={`/api/documents/${a.document.id}/file?download=1`} className="text-subtle hover:text-foreground" aria-label="Download">
-                          <Download className="size-4" />
+                          <DownloadSimpleIcon className="size-4" />
                         </a>
                       ) : a.url ? (
                         <a href={a.url} target="_blank" rel="noreferrer" className="text-primary hover:underline">
@@ -255,7 +255,7 @@ export function WorkspaceView({ workspace }: { workspace: WorkspaceDetail }) {
               <div className="flex items-center justify-between">
                 <p className="text-sm text-muted">Your draft. Ask the AI to “check my work” and it will review what is here.</p>
                 <Button size="sm" onClick={() => save("draft")} loading={saving === "draft"} disabled={draft === workspace.draft}>
-                  <Save /> Save
+                  <FloppyDiskIcon /> Save
                 </Button>
               </div>
               <Textarea value={draft} onChange={(e) => setDraft(e.target.value)} rows={18} placeholder="Start writing, outlining or pasting your work here…" className="font-mono text-[13px] leading-relaxed" />
@@ -269,7 +269,7 @@ export function WorkspaceView({ workspace }: { workspace: WorkspaceDetail }) {
                 </p>
                 {analysis?.recommendedSteps.length ? (
                   <Button size="sm" variant="secondary" onClick={importSteps}>
-                    <Sparkles /> Add AI suggested steps
+                    <LightbulbIcon /> Add AI suggested steps
                   </Button>
                 ) : null}
               </div>
@@ -278,9 +278,9 @@ export function WorkspaceView({ workspace }: { workspace: WorkspaceDetail }) {
                   <li key={item.id} className="flex items-center gap-3 rounded-xl border border-border bg-surface px-3 py-2.5">
                     <Checkbox checked={item.done} onCheckedChange={(v) => void persistChecklist(checklist.map((c) => (c.id === item.id ? { ...c, done: Boolean(v) } : c)))} aria-label={item.text} />
                     <span className={cn("flex-1 text-sm", item.done && "text-muted line-through")}>{item.text}</span>
-                    {item.source === "ai" ? <Sparkles className="size-3.5 text-brand-400" aria-label="Suggested by AI" /> : null}
+                    {item.source === "ai" ? <LightbulbIcon className="size-3.5 text-brand-400" aria-label="Suggested by AI" /> : null}
                     <button type="button" onClick={() => void persistChecklist(checklist.filter((c) => c.id !== item.id))} className="text-subtle hover:text-danger" aria-label="Remove item">
-                      <Trash2 className="size-3.5" />
+                      <TrashIcon className="size-3.5" />
                     </button>
                   </li>
                 ))}
@@ -296,7 +296,7 @@ export function WorkspaceView({ workspace }: { workspace: WorkspaceDetail }) {
               >
                 <Input value={newItem} onChange={(e) => setNewItem(e.target.value)} placeholder="Add a step" aria-label="New checklist item" />
                 <Button type="submit" variant="outline" disabled={!newItem.trim()}>
-                  <Plus /> Add
+                  <PlusIcon /> Add
                 </Button>
               </form>
             </TabsContent>
@@ -304,10 +304,10 @@ export function WorkspaceView({ workspace }: { workspace: WorkspaceDetail }) {
             <TabsContent value="notes" className="space-y-3">
               <div className="flex items-center justify-between">
                 <p className="flex items-center gap-1.5 text-sm text-muted">
-                  <NotebookPen className="size-4" /> Scratch notes, questions for your instructor, ideas.
+                  <NotePencilIcon className="size-4" /> Scratch notes, questions for your instructor, ideas.
                 </p>
                 <Button size="sm" onClick={() => save("notes")} loading={saving === "notes"} disabled={notes === workspace.notes}>
-                  <Save /> Save
+                  <FloppyDiskIcon /> Save
                 </Button>
               </div>
               <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={14} placeholder="Notes…" />
@@ -322,7 +322,7 @@ export function WorkspaceView({ workspace }: { workspace: WorkspaceDetail }) {
         {/* Right: AI */}
         <section className="flex min-h-[60dvh] flex-col border-t border-border bg-surface/40 lg:min-h-0 lg:border-l lg:border-t-0">
           <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
-            <Sparkles className="size-4 text-brand-500" />
+            <LightbulbIcon className="size-4 text-brand-500" />
             <p className="text-sm font-semibold">Ask AI about this assignment</p>
           </div>
           <ChatPanel

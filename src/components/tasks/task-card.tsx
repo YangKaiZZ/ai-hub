@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Clock, Sparkles } from "lucide-react";
+import { ArrowUpRightIcon, ClockIcon, LightbulbIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -43,11 +43,11 @@ export function TaskCard({ task, className }: { task: TaskCardData; className?: 
         <span className={deadlineTone(task.dueDate, task.status)}>{formatDeadline(task.dueDate)}</span>
         {task.estimatedMinutes ? (
           <span className="inline-flex items-center gap-1 text-muted">
-            <Clock className="size-3.5" /> Est. {formatMinutes(task.estimatedMinutes)}
+            <ClockIcon className="size-3.5" /> Est. {formatMinutes(task.estimatedMinutes)}
           </span>
         ) : null}
         <span className={cn("inline-flex items-center gap-1", analyzed ? "text-brand-600 dark:text-brand-300" : "text-subtle")}>
-          <Sparkles className="size-3.5" /> {analyzed ? "AI analyzed" : "Not analyzed"}
+          <LightbulbIcon className="size-3.5" /> {analyzed ? "AI analyzed" : "Not analyzed"}
         </span>
       </div>
 
@@ -60,7 +60,7 @@ export function TaskCard({ task, className }: { task: TaskCardData; className?: 
         <span className="text-xs text-subtle">{taskTypeLabel[task.type]}</span>
         <Button asChild size="sm" variant={task.priority === "CRITICAL" || task.priority === "HIGH" ? "primary" : "secondary"}>
           <Link href={workspaceHref}>
-            Open Workspace <ArrowUpRight />
+            Open Workspace <ArrowUpRightIcon />
           </Link>
         </Button>
       </div>

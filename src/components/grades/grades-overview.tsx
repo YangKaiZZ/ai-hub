@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, GraduationCap, Target } from "lucide-react";
+import { ArrowRightIcon, ExamIcon, TargetIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -13,7 +13,7 @@ export function GradesOverview({ overview, selectedId }: { overview: Overview; s
   if (overview.courses.length === 0) {
     return (
       <EmptyState
-        icon={<GraduationCap />}
+        icon={<ExamIcon />}
         title="No courses to grade yet"
         description="Add your courses first, then record scores as you receive them."
         action={
@@ -60,7 +60,7 @@ export function GradesOverview({ overview, selectedId }: { overview: Overview; s
                   <p className="text-2xl font-semibold tabular-nums">{summary.current != null ? `${summary.current}%` : "—"}</p>
                   {course.targetGrade != null ? (
                     <Badge variant={belowTarget ? "warning" : "success"} className="mt-1">
-                      <Target /> {course.targetGrade}%
+                      <TargetIcon /> {course.targetGrade}%
                     </Badge>
                   ) : null}
                 </div>
@@ -79,7 +79,7 @@ export function GradesOverview({ overview, selectedId }: { overview: Overview; s
                 <span>Projected {summary.projected != null ? `${summary.projected}%` : "—"} · {summary.weightGraded}% graded</span>
                 <Button asChild variant="ghost" size="xs">
                   <Link href={`/grades?course=${course.id}`}>
-                    Details <ArrowRight />
+                    Details <ArrowRightIcon />
                   </Link>
                 </Button>
               </div>

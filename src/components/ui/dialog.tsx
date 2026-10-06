@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { XIcon } from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 const Dialog = DialogPrimitive.Root;
@@ -48,7 +48,7 @@ const DialogContent = React.forwardRef<
         className="absolute right-4 top-4 rounded-md p-1 text-subtle transition hover:bg-surface-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         aria-label="Close"
       >
-        <X className="size-4" />
+        <XIcon className="size-4" />
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>

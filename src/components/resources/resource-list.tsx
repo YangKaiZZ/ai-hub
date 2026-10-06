@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { BookOpen, ExternalLink, FileText, FolderOpen, Layers, Link2, MoreHorizontal, Pin, PinOff, Plus, Sparkles, StickyNote, Trash2 } from "lucide-react";
+import { ArrowSquareOutIcon, ArticleIcon, BookOpenIcon, DotsThreeIcon, FileTextIcon, FolderOpenIcon, LinkSimpleIcon, NoteIcon, PlusIcon, PushPinIcon, PushPinSlashIcon, StackIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -16,13 +16,13 @@ import { cn, formatRelative, truncate } from "@/lib/utils";
 import type { ResourceItem } from "@/server/resources/service";
 
 export const resourceTypeMeta: Record<string, { label: string; icon: React.ComponentType<{ className?: string }> }> = {
-  NOTE: { label: "Note", icon: StickyNote },
-  DOCUMENT: { label: "Document", icon: FileText },
-  LINK: { label: "Link", icon: Link2 },
-  STUDY_GUIDE: { label: "Study guide", icon: BookOpen },
-  FLASHCARD_SET: { label: "Flashcards", icon: Layers },
-  AI_SUMMARY: { label: "AI summary", icon: Sparkles },
-  LECTURE: { label: "Lecture", icon: FolderOpen },
+  NOTE: { label: "Note", icon: NoteIcon },
+  DOCUMENT: { label: "Document", icon: FileTextIcon },
+  LINK: { label: "Link", icon: LinkSimpleIcon },
+  STUDY_GUIDE: { label: "Study guide", icon: BookOpenIcon },
+  FLASHCARD_SET: { label: "Flashcards", icon: StackIcon },
+  AI_SUMMARY: { label: "AI summary", icon: ArticleIcon },
+  LECTURE: { label: "Lecture", icon: FolderOpenIcon },
 };
 
 interface Props {
@@ -84,18 +84,18 @@ export function ResourceList({ resources, courses, fixedCourseId, activeType, on
           <span />
         )}
         <Button size="sm" onClick={() => setCreateOpen(true)}>
-          <Plus /> Add note or link
+          <PlusIcon /> Add note or link
         </Button>
       </div>
 
       {resources.length === 0 ? (
         <EmptyState
-          icon={<FolderOpen />}
+          icon={<FolderOpenIcon />}
           title="No resources yet"
           description="Upload documents, save links, or write notes. Everything here becomes context for the AI Tutor."
           action={
             <Button onClick={() => setCreateOpen(true)}>
-              <Plus /> Add resource
+              <PlusIcon /> Add resource
             </Button>
           }
         />
@@ -123,8 +123,8 @@ export function ResourceList({ resources, courses, fixedCourseId, activeType, on
                           {r.title}
                         </Link>
                       )}
-                      {external ? <ExternalLink className="size-3 shrink-0 text-subtle" /> : null}
-                      {r.isPinned ? <Pin className="size-3 shrink-0 text-brand-500" aria-label="Pinned" /> : null}
+                      {external ? <ArrowSquareOutIcon className="size-3 shrink-0 text-subtle" /> : null}
+                      {r.isPinned ? <PushPinIcon className="size-3 shrink-0 text-brand-500" aria-label="Pinned" /> : null}
                     </div>
                     <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-muted">
                       <span>{meta.label}</span>
@@ -139,17 +139,17 @@ export function ResourceList({ resources, courses, fixedCourseId, activeType, on
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon-sm" aria-label="Resource actions" className="-mr-1 -mt-1">
-                        <MoreHorizontal />
+                        <DotsThreeIcon />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem onSelect={() => togglePin(r)}>
-                        {r.isPinned ? <PinOff /> : <Pin />}
+                        {r.isPinned ? <PushPinSlashIcon /> : <PushPinIcon />}
                         {r.isPinned ? "Unpin" : "Pin"}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem destructive onSelect={() => remove(r)}>
-                        <Trash2 /> Delete
+                        <TrashIcon /> Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

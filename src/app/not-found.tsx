@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { Compass } from "lucide-react";
+import { CompassIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
     <main className="flex flex-1 flex-col items-center justify-center px-6 py-24 text-center">
       <div className="mb-6 flex size-16 items-center justify-center rounded-2xl bg-primary-soft text-brand-600 dark:text-brand-300">
-        <Compass className="size-8" aria-hidden />
+        <CompassIcon className="size-8" aria-hidden />
       </div>
       <p className="text-xs font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-300">404</p>
       <h1 className="mt-2 text-3xl font-semibold tracking-tight">This page wandered off</h1>

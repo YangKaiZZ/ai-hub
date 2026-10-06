@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Settings2, Target, Trash2 } from "lucide-react";
+import { PlusIcon, SlidersHorizontalIcon, TargetIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -52,7 +52,7 @@ export function CourseGradesPanel({ report }: { report: CourseGradeReport }) {
             </div>
             {report.course.targetGrade != null ? (
               <Badge variant={tone === "success" ? "success" : tone === "warning" ? "warning" : "default"}>
-                <Target /> Target {report.course.targetGrade}%
+                <TargetIcon /> Target {report.course.targetGrade}%
               </Badge>
             ) : null}
           </div>
@@ -79,7 +79,7 @@ export function CourseGradesPanel({ report }: { report: CourseGradeReport }) {
           <div className="mb-3 flex items-center justify-between">
             <h3 className="text-sm font-semibold">Category breakdown</h3>
             <Button variant="ghost" size="sm" onClick={() => setCatOpen(true)}>
-              <Settings2 /> Edit weights
+              <SlidersHorizontalIcon /> Edit weights
             </Button>
           </div>
           {summary.categories.length === 0 ? (
@@ -115,11 +115,11 @@ export function CourseGradesPanel({ report }: { report: CourseGradeReport }) {
         <div className="mb-3 flex items-center justify-between">
           <h3 className="text-sm font-semibold">Score history</h3>
           <Button size="sm" onClick={() => setAddOpen(true)}>
-            <Plus /> Add grade
+            <PlusIcon /> Add grade
           </Button>
         </div>
         {report.grades.length === 0 ? (
-          <EmptyState compact title="No grades yet" description="Enter scores as you get them back to track your standing." action={<Button size="sm" onClick={() => setAddOpen(true)}><Plus /> Add grade</Button>} />
+          <EmptyState compact title="No grades yet" description="Enter scores as you get them back to track your standing." action={<Button size="sm" onClick={() => setAddOpen(true)}><PlusIcon /> Add grade</Button>} />
         ) : (
           <div className="overflow-x-auto rounded-2xl border border-border bg-surface shadow-sm">
             <table className="w-full min-w-[36rem] text-sm">
@@ -145,7 +145,7 @@ export function CourseGradesPanel({ report }: { report: CourseGradeReport }) {
                     <td className="px-4 py-2.5 text-muted">{formatDate(g.gradedAt)}</td>
                     <td className="px-2 py-2.5 text-right">
                       <Button variant="ghost" size="icon-sm" aria-label="Delete grade" onClick={() => remove(g.id, g.title)}>
-                        <Trash2 />
+                        <TrashIcon />
                       </Button>
                     </td>
                   </tr>
@@ -297,7 +297,7 @@ function CategoriesForm({ courseId, categories, onOpenChange }: { courseId: stri
             <Input aria-label="Weight %" type="number" min={0} max={100} value={r.weight} onChange={(e) => setRows((rs) => rs.map((x, j) => (j === i ? { ...x, weight: e.target.value } : x)))} />
             <Input aria-label="Drop lowest" type="number" min={0} max={10} value={r.dropLowest} onChange={(e) => setRows((rs) => rs.map((x, j) => (j === i ? { ...x, dropLowest: e.target.value } : x)))} title="Drop lowest N" />
             <Button variant="ghost" size="icon-sm" aria-label="Remove category" onClick={() => setRows((rs) => rs.filter((_, j) => j !== i))}>
-              <Trash2 />
+              <TrashIcon />
             </Button>
           </div>
         ))}
@@ -308,7 +308,7 @@ function CategoriesForm({ courseId, categories, onOpenChange }: { courseId: stri
           <span />
         </div>
         <Button variant="outline" size="sm" onClick={() => setRows((rs) => [...rs, { id: undefined, name: "", weight: "0", dropLowest: "0" }])} disabled={rows.length >= 20}>
-          <Plus /> Add category
+          <PlusIcon /> Add category
         </Button>
         <p className={`text-sm ${Math.abs(total - 100) < 0.01 ? "text-success" : "text-warning"}`}>Total weight: {total}%</p>
       </div>

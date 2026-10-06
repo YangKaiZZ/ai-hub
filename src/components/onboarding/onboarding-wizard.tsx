@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check, GraduationCap, Plus, Search, Sparkles, Trash2 } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, GraduationCapIcon, MagnifyingGlassIcon, PlusIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -103,7 +103,7 @@ export function OnboardingWizard({ initial }: { initial: InitialState }) {
                 )}
                 aria-current={current ? "step" : undefined}
               >
-                {done ? <Check className="size-3.5" /> : i + 1}
+                {done ? <CheckIcon className="size-3.5" /> : i + 1}
               </span>
               <span className={cn("whitespace-nowrap text-xs font-medium", current ? "text-foreground" : "text-subtle")}>{s.label}</span>
               {i < steps.length - 1 ? <span className="mx-1 h-px w-6 bg-border" aria-hidden /> : null}
@@ -160,7 +160,7 @@ export function OnboardingWizard({ initial }: { initial: InitialState }) {
                   )}
                 >
                   <span className={cn("mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full border", platform === value ? "border-primary bg-primary text-white" : "border-border-strong")}>
-                    {platform === value ? <Check className="size-3" /> : null}
+                    {platform === value ? <CheckIcon className="size-3" /> : null}
                   </span>
                   <span>
                     <span className="block text-sm font-semibold">{label}</span>
@@ -188,12 +188,12 @@ export function OnboardingWizard({ initial }: { initial: InitialState }) {
                     <Input value={c.instructor} placeholder="Prof. Santos" onChange={(e) => setCourses((cs) => cs.map((x, j) => (j === i ? { ...x, instructor: e.target.value } : x)))} />
                   </Field>
                   <Button type="button" variant="ghost" size="icon" aria-label="Remove course" onClick={() => setCourses((cs) => cs.filter((_, j) => j !== i))} disabled={courses.length === 1}>
-                    <Trash2 />
+                    <TrashIcon />
                   </Button>
                 </div>
               ))}
               <Button type="button" variant="outline" size="sm" onClick={() => setCourses((cs) => [...cs, { name: "", code: "", instructor: "" }])} disabled={courses.length >= 12}>
-                <Plus /> Add another course
+                <PlusIcon /> Add another course
               </Button>
             </div>
             <Nav
@@ -280,7 +280,7 @@ export function OnboardingWizard({ initial }: { initial: InitialState }) {
         {step === "done" ? (
           <div className="text-center">
             <div className="mx-auto mb-5 flex size-16 items-center justify-center rounded-2xl brand-gradient text-white shadow-md">
-              <Sparkles className="size-8" />
+              <GraduationCapIcon className="size-8" />
             </div>
             <h2 className="text-2xl font-semibold tracking-tight">Your hub is ready, {firstName || "there"}</h2>
             <p className="mx-auto mt-2 max-w-md text-muted">
@@ -288,10 +288,10 @@ export function OnboardingWizard({ initial }: { initial: InitialState }) {
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Button variant="outline" onClick={back} disabled={saving}>
-                <ArrowLeft /> Back
+                <ArrowLeftIcon /> Back
               </Button>
               <Button size="lg" variant="gradient" onClick={finish} loading={saving}>
-                Go to dashboard <ArrowRight />
+                Go to dashboard <ArrowRightIcon />
               </Button>
             </div>
           </div>
@@ -316,13 +316,13 @@ function Nav({ onBack, onNext, nextLabel = "Continue", saving }: { onBack?: () =
     <div className="mt-8 flex items-center justify-between gap-3">
       {onBack ? (
         <Button type="button" variant="ghost" onClick={onBack} disabled={saving}>
-          <ArrowLeft /> Back
+          <ArrowLeftIcon /> Back
         </Button>
       ) : (
         <span />
       )}
       <Button type="button" onClick={onNext} loading={saving}>
-        {nextLabel} <ArrowRight />
+        {nextLabel} <ArrowRightIcon />
       </Button>
     </div>
   );
@@ -375,7 +375,7 @@ function InstitutionPicker({
       <div className="flex items-center justify-between gap-3 rounded-2xl border border-brand-300 bg-primary-soft p-4">
         <div className="flex items-center gap-3">
           <span className="inline-flex size-10 items-center justify-center rounded-xl bg-surface text-brand-600 dark:text-brand-300">
-            <GraduationCap className="size-5" />
+            <GraduationCapIcon className="size-5" />
           </span>
           <div>
             <p className="font-semibold">{value.name}</p>
@@ -391,7 +391,7 @@ function InstitutionPicker({
 
   return (
     <div className="space-y-4">
-      <Input leftIcon={<Search />} placeholder="Search your school or university" value={query} onChange={(e) => setQuery(e.target.value)} autoFocus />
+      <Input leftIcon={<MagnifyingGlassIcon />} placeholder="Search your school or university" value={query} onChange={(e) => setQuery(e.target.value)} autoFocus />
       <ul className="max-h-64 divide-y divide-border overflow-y-auto rounded-2xl border border-border scrollbar-thin" role="listbox" aria-label="Institutions">
         {options.length === 0 ? <li className="px-4 py-6 text-center text-sm text-muted">No matches yet.</li> : null}
         {options.map((o) => (
