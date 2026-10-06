@@ -211,8 +211,9 @@ export class DeepSeekProvider implements AIProvider {
         try {
           mapError(err);
         } catch (mapped) {
-          const e = mapped as Error & { code?: string };
-          yield { type: "error", message: e.message, code: e.code ?? "AI_UNAVAILABLE" };
+          const e = mapped as Error & { code?: string; userMessage?: string };
+          // userMessage is the text written for students; message is for logs.
+          yield { type: "error", message: e.userMessage ?? e.message, code: e.code ?? "AI_UNAVAILABLE" };
           return;
         }
         return;

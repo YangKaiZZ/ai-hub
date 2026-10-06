@@ -220,5 +220,7 @@ describe("DeepSeekProvider", () => {
     const events: StreamEvent[] = [];
     for await (const e of makeProvider().stream({ feature: "tutor", system: "", messages: [{ role: "user", content: "hi" }] })) events.push(e);
     expect(events.at(-1)?.type).toBe("error");
+    // The student sees the friendly text, not the internal "AI provider unavailable".
+    expect((events.at(-1) as { message: string }).message).toMatch(/temporarily unavailable/i);
   });
 });
