@@ -1,0 +1,87 @@
+<template>
+<link rel="stylesheet" href="assets/kit.css">
+<style>
+@font-face { font-family: 'Geist'; font-weight: 500; src: url('assets/fonts/geist-500.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 700; src: url('assets/fonts/geist-700.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 800; src: url('assets/fonts/geist-800.woff2') format('woff2'); }
+#root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Geist', sans-serif; }
+.s03-reveal-layer { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.s03-reveal-w { position: absolute; left: 50%; top: 50%; will-change: transform; }
+.s03-reveal-dots { width: 3400px; height: 2200px; }
+.s03-reveal-logo { position: absolute; inset: 0; }
+.s03-reveal-mark { position: absolute; left: 558px; top: 300px; width: 200px; height: 200px; display: block; filter: drop-shadow(0 18px 30px rgba(76,29,149,.32)); }
+.s03-reveal-word { position: absolute; left: 802px; top: 302px; font: 800 184px/1 'Geist', sans-serif; letter-spacing: -0.05em; color: var(--ink); white-space: nowrap; }
+.s03-reveal-word b { background: linear-gradient(90deg, #7c3aed, #a78bfa); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800; padding-right: 8px; }
+.s03-reveal-tag { position: absolute; left: 562px; font: 700 66px/1.1 'Geist', sans-serif; letter-spacing: -0.035em; color: var(--ink); white-space: nowrap; }
+.s03-reveal-tag.em { color: var(--accent); font-weight: 800; }
+.s03-reveal-iris { position: absolute; inset: 0; background: #7c3aed; will-change: transform; }
+.s03-reveal-card { position: absolute; left: 240px; top: 135px; width: 1440px; height: 810px; border-radius: 28px; background: #fff; box-shadow: var(--float); will-change: transform; }
+</style>
+<div id="root" data-composition-id="s03-reveal" data-width="1920" data-height="1080">
+  <div id="s03-reveal-ground" class="clip kit-ground" data-start="0" data-duration="5" data-track-index="0"></div>
+  <div id="s03-reveal-stage" class="clip" data-start="0" data-duration="5" data-track-index="1" style="position:absolute; inset:0; perspective:1866px; perspective-origin:50% 50%;">
+    <div id="s03-reveal-drift" class="s03-reveal-layer">
+      <div id="s03-reveal-cam" class="s03-reveal-layer">
+        <div id="s03-reveal-dots" class="s03-reveal-w s03-reveal-dots kit-dots"></div>
+        <img id="s03-reveal-hero" class="s03-reveal-w kit-sticker" src="assets/stickers/hero.webp" width="888" height="1700" alt="">
+      </div>
+    </div>
+  </div>
+  <div id="s03-reveal-logo" class="clip s03-reveal-logo" data-start="0" data-duration="5" data-track-index="4">
+    <img id="s03-reveal-mark" class="s03-reveal-mark" src="assets/brand/mark.svg" alt="">
+    <div id="s03-reveal-word" class="s03-reveal-word"><span>AI </span><b>Hub</b></div>
+    <div id="s03-reveal-t0" class="s03-reveal-tag" style="top:570px">Your entire student life.</div>
+    <div id="s03-reveal-t1" class="s03-reveal-tag em" style="top:650px">One intelligent hub.</div>
+  </div>
+  <div id="s03-reveal-plate" class="clip" data-start="0" data-duration="5" data-track-index="5" style="position:absolute; inset:0;">
+    <div id="s03-reveal-iris" class="s03-reveal-iris"></div>
+    <div id="s03-reveal-card" class="s03-reveal-card"></div>
+  </div>
+  <div id="s03-reveal-grain" class="clip kit-grain" data-start="0" data-duration="5" data-track-index="9"></div>
+</div>
+<script>
+(function () {
+  var P = 's03-reveal-';
+  var $ = function (id) { return '#' + P + id; };
+  var D = 5, B = 0.625;
+  var tl = gsap.timeline({ paused: true });
+
+  // hero sticker world pose; its laptop screen centre sits at (+262, -198) px of the image centre (native)
+  var HX = 560, HY = 80, HS = 0.6;
+  gsap.set($('dots'), { xPercent: -50, yPercent: -50, z: -700, force3D: true });
+  gsap.set($('hero'), { xPercent: -50, yPercent: -50, x: HX, y: HY, z: 0, scale: HS, force3D: true });
+  gsap.set($('card'), { transformOrigin: '50% 50%' });
+
+  tl.fromTo($('drift'), { scale: 1, rotationY: -1 }, { scale: 1.02, rotationY: 1, duration: D, ease: 'sine.inOut', force3D: true }, 0);
+
+  // frame 0 is solid violet; on the drop it irises down into the mark
+  tl.fromTo($('iris'), { clipPath: 'inset(0px 0px 0px 0px round 0px)' }, { clipPath: 'inset(300px 1162px 580px 558px round 56px)', duration: 0.5, ease: 'expo.out' }, 0.08);
+  tl.fromTo($('mark'), { opacity: 0, scale: 1 }, { opacity: 1, scale: 1, duration: 0.14, ease: 'power1.inOut' }, 0.5);
+  tl.fromTo($('iris'), { opacity: 1 }, { opacity: 0, duration: 0.14, ease: 'power1.inOut', immediateRender: false }, 0.56);
+  tl.fromTo($('mark'), { scale: 1, rotationZ: 0 }, { keyframes: [{ scale: 1.1, rotationZ: -6, duration: 0.14 }, { scale: 1, rotationZ: 0, duration: 0.5, ease: 'back.out(2.2)' }], immediateRender: false }, 0.56);
+
+  // wordmark slides out of the mark on b1, the tagline follows on b3
+  tl.fromTo($('word'), { clipPath: 'inset(0px 100% 0px 0px)', x: -90 }, { clipPath: 'inset(0px 0% 0px 0px)', x: 0, duration: 0.7, ease: 'expo.out' }, B - 0.04);
+  tl.fromTo($('t0'), { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 3 * B - 0.05);
+  tl.fromTo($('t1'), { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 3.5 * B - 0.05);
+
+  // b4: the lockup steps left and the student pops up holding AI Hub
+  tl.fromTo($('logo'), { x: 0 }, { x: -340, duration: 0.75, ease: 'power3.inOut' }, 4 * B - 0.2);
+  tl.fromTo($('hero'), { y: HY + 1400, rotationZ: 8 }, { y: HY, rotationZ: 0, duration: 0.75, ease: 'back.out(1.25)', force3D: true }, 4 * B - 0.06);
+  tl.fromTo($('hero'), { rotationZ: 0 }, { rotationZ: -1.5, duration: 0.9, ease: 'sine.inOut', yoyo: true, repeat: 1, immediateRender: false }, 4 * B + 0.7);
+
+  // from b6 the app lifts off his laptop screen and becomes the card plate
+  var sx = HX + 262 * HS, sy = HY - 198 * HS;          // screen centre, frame-centre relative
+  tl.fromTo($('logo'), { opacity: 1 }, { opacity: 0, duration: 0.35, ease: 'power2.in', immediateRender: false }, 6 * B - 0.2);
+  tl.fromTo($('cam'), { x: 0, z: 0 }, { x: -120, z: 220, duration: 1.2, ease: 'power2.inOut', force3D: true }, 6 * B - 0.1);
+  tl.fromTo($('card'), { opacity: 0 }, { opacity: 1, duration: 0.12, ease: 'power1.inOut' }, 6 * B + 0.08);
+  tl.fromTo($('card'), { x: sx * 1.03, y: sy * 1.03, scaleX: 252 * HS / 1440, scaleY: 180 * HS / 810, rotationZ: -2 },
+    { x: 0, y: 0, scaleX: 1, scaleY: 1, rotationZ: 0, duration: 0.92, ease: 'expo.inOut', force3D: true }, 6 * B + 0.08);
+  tl.fromTo($('hero'), { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power2.in', immediateRender: false }, 7 * B - 0.05);
+  tl.fromTo($('dots'), { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power2.in', immediateRender: false }, 7 * B - 0.05);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines['s03-reveal'] = tl;
+})();
+</script>
+</template>

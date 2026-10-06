@@ -48,3 +48,6 @@ Dockerfile
 npm-debug.log*
 .DS_Store
 Thumbs.db
+
+# The HyperFrames film project; the site only ships its rendered MP4 from public/.
+campaign

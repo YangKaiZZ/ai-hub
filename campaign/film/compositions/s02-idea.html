@@ -1,0 +1,88 @@
+<template>
+<link rel="stylesheet" href="assets/kit.css">
+<style>
+@font-face { font-family: 'Geist'; font-weight: 500; src: url('assets/fonts/geist-500.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 700; src: url('assets/fonts/geist-700.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 800; src: url('assets/fonts/geist-800.woff2') format('woff2'); }
+#root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Geist', sans-serif; }
+.s02-idea-layer { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.s02-idea-w { position: absolute; left: 50%; top: 50%; will-change: transform; }
+.s02-idea-dots { width: 3400px; height: 2200px; }
+.s02-idea-halo { width: 560px; height: 560px; border-radius: 50%; background: radial-gradient(circle, rgba(254,243,199,1) 0%, rgba(254,243,199,.85) 28%, rgba(237,233,254,.55) 55%, rgba(237,233,254,0) 72%); }
+.s02-idea-rays { width: 360px; height: 360px; }
+.s02-idea-type { position: absolute; left: 900px; top: 280px; }
+.s02-idea-line { display: block; }
+.s02-idea-disc { position: absolute; left: 0; top: 0; width: 2600px; height: 2600px; margin-left: -1300px; margin-top: -1300px; border-radius: 50%; background: #7c3aed; will-change: transform; }
+</style>
+<div id="root" data-composition-id="s02-idea" data-width="1920" data-height="1080">
+  <div id="s02-idea-ground" class="clip kit-ground" data-start="0" data-duration="5" data-track-index="0"></div>
+  <div id="s02-idea-stage" class="clip" data-start="0" data-duration="5" data-track-index="1" style="position:absolute; inset:0; perspective:1866px; perspective-origin:50% 50%;">
+    <div id="s02-idea-drift" class="s02-idea-layer">
+      <div id="s02-idea-cam" class="s02-idea-layer">
+        <div id="s02-idea-dots" class="s02-idea-w s02-idea-dots kit-dots"></div>
+        <div id="s02-idea-halo" class="s02-idea-w s02-idea-halo"></div>
+        <svg id="s02-idea-rays" class="s02-idea-w s02-idea-rays" viewBox="-180 -180 360 360" fill="none" stroke="#7c3aed" stroke-width="9" stroke-linecap="round">
+          <path d="M0 -120 V -160"/><path d="M85 -85 L113 -113"/><path d="M120 0 H160"/><path d="M85 85 L113 113"/>
+          <path d="M-85 -85 L-113 -113"/><path d="M-120 0 H-160"/><path d="M-85 85 L-113 113"/><path d="M0 120 V160"/>
+        </svg>
+        <img id="s02-idea-kid" class="s02-idea-w kit-sticker" src="assets/stickers/idea.webp" width="366" height="632" alt="">
+      </div>
+    </div>
+  </div>
+  <div id="s02-idea-type" class="clip s02-idea-type" data-start="0" data-duration="5" data-track-index="4">
+    <span id="s02-idea-l0" class="kit-type s02-idea-line">What if it all</span>
+    <span id="s02-idea-l1" class="kit-type s02-idea-line">lived in</span>
+    <span id="s02-idea-l2" class="kit-type s02-idea-line"><em>one place?</em></span>
+  </div>
+  <div id="s02-idea-plate" class="clip" data-start="0" data-duration="5" data-track-index="5" style="position:absolute; inset:0; overflow:hidden;">
+    <div id="s02-idea-disc" class="s02-idea-disc"></div>
+  </div>
+  <div id="s02-idea-grain" class="clip kit-grain" data-start="0" data-duration="5" data-track-index="9"></div>
+</div>
+<script>
+(function () {
+  var P = 's02-idea-';
+  var $ = function (id) { return '#' + P + id; };
+  var D = 5, B = 0.625;
+  var tl = gsap.timeline({ paused: true });
+
+  // the bulb sits 199px above the sticker centre: sticker (-400, 70) -> bulb (-400, -129), all near z 300
+  var KX = -400, KY = 70, BX = -400, BY = -129;
+  gsap.set($('dots'), { xPercent: -50, yPercent: -50, z: -700, force3D: true });
+  gsap.set($('kid'), { xPercent: -50, yPercent: -50, x: KX, y: KY, z: 300, force3D: true });
+  gsap.set($('halo'), { xPercent: -50, yPercent: -50, x: BX, y: BY, z: 280, force3D: true });
+  gsap.set($('rays'), { xPercent: -50, yPercent: -50, x: BX, y: BY, z: 290, force3D: true });
+
+  tl.fromTo($('drift'), { scale: 1, rotationY: 1.5 }, { scale: 1.03, rotationY: -1.5, duration: D, ease: 'sine.inOut', force3D: true }, 0);
+
+  // whip in from the right (first frames: ground only)
+  tl.fromTo($('cam'), { x: 3000 }, { x: 0, duration: 0.62, ease: 'expo.out', force3D: true }, 0.07);
+  // a little slap on b1
+  tl.fromTo($('kid'), { scale: 1, rotationZ: 6 }, { keyframes: [{ scale: 1.08, rotationZ: -3, duration: 0.14 }, { scale: 1, rotationZ: 0, duration: 0.4, ease: 'back.out(2)' }], immediateRender: false }, B - 0.1);
+
+  // the bulb lights on b2
+  tl.fromTo($('halo'), { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.55, ease: 'back.out(1.6)', force3D: true }, 2 * B - 0.03);
+  tl.fromTo($('halo'), { scale: 1 }, { scale: 1.08, duration: B, ease: 'sine.inOut', yoyo: true, repeat: 2, immediateRender: false }, 2 * B + 0.55);
+  tl.fromTo($('rays'), { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1.05, duration: 0.35, ease: 'expo.out', force3D: true }, 2 * B);
+  tl.fromTo($('rays'), { opacity: 1 }, { opacity: 0, duration: 0.5, ease: 'power2.in', immediateRender: false }, 2 * B + 0.45);
+
+  // the question builds on b3, b4, b5
+  [0, 1, 2].forEach(function (k) {
+    tl.fromTo($('l' + k), { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.42, ease: 'power3.out' }, (3 + k) * B - 0.04);
+  });
+  tl.fromTo($('l2'), { scale: 1 }, { scale: 1.05, duration: 0.16, ease: 'power2.out', yoyo: true, repeat: 1, immediateRender: false, transformOrigin: '0% 50%' }, 5 * B + 0.28);
+  // type clears before the dive
+  tl.fromTo($('type'), { opacity: 1, x: 0 }, { opacity: 0, x: 80, duration: 0.35, ease: 'power2.in', immediateRender: false }, 6 * B - 0.1);
+
+  // dive into the bulb from b6: the camera centres the bulb and pushes through it
+  tl.fromTo($('cam'), { x: 0, y: 0, z: 0 }, { x: -BX, y: -BY, z: 1250, duration: 1.15, ease: 'power3.in', force3D: true, immediateRender: false }, 6 * B - 0.05);
+  // the violet disc grows from the bulb and owns the last frames
+  tl.fromTo($('disc'), { x: 960 + BX, y: 540 + BY }, { x: 960, y: 540, duration: 1.15, ease: 'power3.in', force3D: true }, 6 * B - 0.05);
+  tl.fromTo($('disc'), { scale: 0 }, { scale: 1, duration: 0.95, ease: 'expo.in', force3D: true }, 6 * B + 0.12);
+  tl.fromTo($('stage'), { opacity: 1 }, { opacity: 0, duration: 0.05, ease: 'power1.inOut', immediateRender: false }, D - 0.13);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines['s02-idea'] = tl;
+})();
+</script>
+</template>

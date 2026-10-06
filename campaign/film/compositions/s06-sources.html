@@ -1,0 +1,131 @@
+<template>
+<link rel="stylesheet" href="assets/kit.css">
+<style>
+@font-face { font-family: 'Geist'; font-weight: 500; src: url('assets/fonts/geist-500.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 700; src: url('assets/fonts/geist-700.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 800; src: url('assets/fonts/geist-800.woff2') format('woff2'); }
+#root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Geist', sans-serif; }
+.s06-sources-layer { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.s06-sources-w { position: absolute; left: 50%; top: 50%; will-change: transform; }
+.s06-sources-dots { width: 3400px; height: 2200px; }
+.s06-sources-card { width: 1300px; height: 728px; border-radius: 28px; background: #fff; box-shadow: var(--float); overflow: hidden; }
+.s06-sources-in { position: relative; width: 812px; height: 455px; }
+.s06-sources-a { position: absolute; }
+.s06-sources-t { font: 700 18px/1 'Geist', sans-serif; letter-spacing: -0.015em; }
+.s06-sources-st { font: 500 12.5px/1 'Geist', sans-serif; color: var(--ink-soft); margin-top: 7px; }
+.s06-sources-drop { left: 24px; top: 70px; width: 764px; height: 98px; border: 2px dashed var(--line-strong); border-radius: 16px; background: #fbfaff; }
+.s06-sources-drop svg { position: absolute; left: 24px; top: 31px; width: 32px; height: 32px; fill: var(--accent); }
+.s06-sources-dt { position: absolute; left: 72px; top: 30px; font: 600 14px/1 'Geist', sans-serif; }
+.s06-sources-ds { position: absolute; left: 72px; top: 52px; font: 500 12px/1 'Geist', sans-serif; color: var(--subtle); }
+.s06-sources-file { left: 24px; top: 186px; width: 764px; height: 54px; border: 1px solid var(--line); border-radius: 14px; background: #fff; box-shadow: 0 1px 3px rgba(23,22,42,.06); overflow: hidden; }
+.s06-sources-file > svg { position: absolute; left: 14px; top: 13px; width: 28px; height: 28px; fill: #dc2626; }
+.s06-sources-fn { position: absolute; left: 54px; top: 12px; font: 600 14px/1 'Geist', sans-serif; }
+.s06-sources-fs { position: absolute; left: 54px; top: 32px; font: 500 12px/1 'Geist', sans-serif; color: var(--ink-soft); }
+.s06-sources-qb { right: 24px; top: 262px; background: var(--accent); color: #fff; border-radius: 16px; padding: 10px 14px; font: 500 13.5px/1.4 'Geist', sans-serif; white-space: nowrap; }
+.s06-sources-ans { left: 24px; top: 318px; display: flex; gap: 10px; }
+.s06-sources-ans .kit-mark { width: 28px; height: 28px; border-radius: 9px; flex: none; margin-top: 2px; }
+.s06-sources-ab { width: 600px; border: 1px solid var(--line); border-radius: 16px; padding: 12px 15px; font: 500 13.5px/1.55 'Geist', sans-serif; }
+.s06-sources-ab b { font-weight: 700; color: var(--accent-lo); }
+.s06-sources-cite { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; border: 1px solid var(--line); background: var(--well); border-radius: 999px; padding: 4px 11px; font: 600 12px/1 'Geist', sans-serif; color: var(--ink-soft); }
+.s06-sources-cite svg { width: 14px; height: 14px; fill: #dc2626; }
+.s06-sources-chip { position: absolute; left: 110px; top: 44px; }
+</style>
+<div id="root" data-composition-id="s06-sources" data-width="1920" data-height="1080">
+  <div id="s06-sources-ground" class="clip kit-ground" data-start="0" data-duration="5" data-track-index="0"></div>
+  <div id="s06-sources-stage" class="clip" data-start="0" data-duration="5" data-track-index="1" style="position:absolute; inset:0; perspective:1866px; perspective-origin:50% 50%;">
+    <div id="s06-sources-drift" class="s06-sources-layer">
+      <div id="s06-sources-cam" class="s06-sources-layer">
+        <div id="s06-sources-dots" class="s06-sources-w s06-sources-dots kit-dots"></div>
+        <div id="s06-sources-card" class="s06-sources-w s06-sources-card kit-app">
+          <div class="kit-zoom" style="--z:1.6"><div class="s06-sources-in">
+            <div class="s06-sources-a" style="left:24px; top:22px"><p class="s06-sources-t">Resources · Database Systems</p><p class="s06-sources-st">Ask questions about your own materials. Answers cite their source.</p></div>
+            <div class="s06-sources-a s06-sources-drop">
+              <svg viewBox="0 0 256 256"><path d="M228,144v64a12,12,0,0,1-12,12H40a12,12,0,0,1-12-12V144a12,12,0,0,1,24,0v52H204V144a12,12,0,0,1,24,0ZM96.49,80.49,116,61v83a12,12,0,0,0,24,0V61l19.51,19.52a12,12,0,1,0,17-17l-40-40a12,12,0,0,0-17,0l-40,40a12,12,0,1,0,17,17Z"/></svg>
+              <p class="s06-sources-dt">Drop lecture slides, PDFs or notes</p>
+              <p class="s06-sources-ds">PDF, DOCX, PPTX or text · up to 25 MB</p>
+            </div>
+            <div id="s06-sources-file" data-layout-allow-overlap class="s06-sources-a s06-sources-file">
+              <svg viewBox="0 0 256 256"><path d="M200,164v8h12a12,12,0,0,1,0,24H200v12a12,12,0,0,1-24,0V152a12,12,0,0,1,12-12h32a12,12,0,0,1,0,24ZM92,172a32,32,0,0,1-32,32H56v4a12,12,0,0,1-24,0V152a12,12,0,0,1,12-12H60A32,32,0,0,1,92,172Zm-24,0a8,8,0,0,0-8-8H56v16h4A8,8,0,0,0,68,172Zm100,8a40,40,0,0,1-40,40H112a12,12,0,0,1-12-12V152a12,12,0,0,1,12-12h16A40,40,0,0,1,168,180Zm-24,0a16,16,0,0,0-16-16h-4v32h4A16,16,0,0,0,144,180ZM36,108V40A20,20,0,0,1,56,20h96a12,12,0,0,1,8.490,3.520l56,56A12,12,0,0,1,220,88v20a12,12,0,0,1-24,0v-4H148a12,12,0,0,1-12-12V44H60v64a12,12,0,0,1-24,0ZM160,57V80h23Z"/></svg>
+              <p class="s06-sources-fn">Week 4 – Normalization.pdf</p>
+              <p class="s06-sources-fs">PDF · 2.4 MB · 18 pages</p>
+              <span id="s06-sources-proc" class="kit-badge warn s06-sources-a" style="right:14px; top:17px">Processing</span>
+              <span id="s06-sources-ready" class="kit-badge ok s06-sources-a" style="right:14px; top:17px">Ready</span>
+              <div class="kit-shimmer"><i id="s06-sources-band"></i></div>
+            </div>
+            <div id="s06-sources-qb" class="s06-sources-a s06-sources-qb">What does 3NF actually remove?</div>
+            <div id="s06-sources-ans" class="s06-sources-a s06-sources-ans">
+              <span class="kit-mark"><svg viewBox="0 0 256 256"><path d="M249.8,85.49l-116-64a12,12,0,0,0-11.6,0l-116,64a12,12,0,0,0,0,21l21.8,12v47.76a19.89,19.89,0,0,0,5.09,13.32C46.63,194.7,77,220,128,220a136.88,136.88,0,0,0,40-5.75V240a12,12,0,0,0,24,0V204.12a119.53,119.53,0,0,0,30.91-24.51A19.89,19.89,0,0,0,228,166.29V118.53l21.8-12a12,12,0,0,0,0-21ZM128,45.71,219.16,96,186,114.3a1.88,1.88,0,0,1-.18-.12l-52-28.69a12,12,0,0,0-11.6,21l39,21.49L128,146.3,36.84,96ZM128,196c-40.42,0-64.65-19.07-76-31.27v-33l70.2,38.74a12,12,0,0,0,11.6,0L168,151.64v37.23A110.46,110.46,0,0,1,128,196Zm76-31.27a93.21,93.21,0,0,1-12,10.81V138.39l12-6.62Z"/></svg></span>
+              <div class="s06-sources-ab">Third normal form removes <b>transitive dependencies</b>: every non-key column depends on the key, the whole key, and nothing but the key.
+                <div><span id="s06-sources-cite" class="s06-sources-cite"><svg viewBox="0 0 256 256"><path d="M200,164v8h12a12,12,0,0,1,0,24H200v12a12,12,0,0,1-24,0V152a12,12,0,0,1,12-12h32a12,12,0,0,1,0,24ZM92,172a32,32,0,0,1-32,32H56v4a12,12,0,0,1-24,0V152a12,12,0,0,1,12-12H60A32,32,0,0,1,92,172Zm-24,0a8,8,0,0,0-8-8H56v16h4A8,8,0,0,0,68,172Zm100,8a40,40,0,0,1-40,40H112a12,12,0,0,1-12-12V152a12,12,0,0,1,12-12h16A40,40,0,0,1,168,180Zm-24,0a16,16,0,0,0-16-16h-4v32h4A16,16,0,0,0,144,180ZM36,108V40A20,20,0,0,1,56,20h96a12,12,0,0,1,8.490,3.520l56,56A12,12,0,0,1,220,88v20a12,12,0,0,1-24,0v-4H148a12,12,0,0,1-12-12V44H60v64a12,12,0,0,1-24,0ZM160,57V80h23Z"/></svg>Week 4 lecture notes, p. 3</span></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+        <div id="s06-sources-cursor" class="s06-sources-w kit-cursor"><svg viewBox="0 0 34 48"><path d="M3 2 L3 38 L12 30 L18 45 L25 42 L19 28 L31 28 Z" fill="#17162a" stroke="#ffffff" stroke-width="2.6" stroke-linejoin="round"/></svg></div>
+        <div id="s06-sources-ring" class="s06-sources-w kit-ring" style="width:110px; height:110px;"></div>
+        <img id="s06-sources-kid" class="s06-sources-w kit-sticker" src="assets/stickers/trackpad.webp" width="516" height="370" alt="">
+      </div>
+    </div>
+  </div>
+  <div id="s06-sources-label" class="clip" data-start="0" data-duration="5" data-track-index="4" style="position:absolute; inset:0;">
+    <div id="s06-sources-chip" class="kit-chip s06-sources-chip"><svg viewBox="0 0 24 24" style="color:#7c3aed"><path d="m4.5 12.5 5 5 10-11"/></svg>Answers with sources</div>
+  </div>
+  <div id="s06-sources-grain" class="clip kit-grain" data-start="0" data-duration="5" data-track-index="9"></div>
+</div>
+<script>
+(function () {
+  var P = 's06-sources-';
+  var $ = function (id) { return '#' + P + id; };
+  var D = 5, B = 0.625;
+  var tl = gsap.timeline({ paused: true });
+  // intentional layering: the layout audit reads this waiver per text element, so mark every descendant
+  document.querySelectorAll('[data-layout-allow-overlap] *').forEach(function (e) { e.setAttribute('data-layout-allow-overlap', ''); });
+
+  var CX = 200, CY = -10, Z = 1.6;
+  var W = function (ax, ay) { return { x: CX - 650 + ax * Z, y: CY - 364 + ay * Z }; };
+  gsap.set($('dots'), { xPercent: -50, yPercent: -50, z: -700, force3D: true });
+  gsap.set($('card'), { xPercent: -50, yPercent: -50, x: CX, y: CY, z: 0, force3D: true });
+  gsap.set($('kid'), { xPercent: -50, yPercent: -50, x: -660, y: 330, z: 190, force3D: true });
+  gsap.set($('ring'), { xPercent: -50, yPercent: -50, z: 2, opacity: 0 });
+  gsap.set($('cursor'), { z: 3, opacity: 0 });
+
+  tl.fromTo($('drift'), { scale: 1, rotationY: 1 }, { scale: 1.025, rotationY: -1, duration: D, ease: 'sine.inOut', force3D: true }, 0);
+  tl.fromTo($('cam'), { x: 3000, rotationY: -8 }, { x: 0, rotationY: -2, duration: 0.65, ease: 'expo.out', force3D: true }, 0.07);
+  tl.fromTo($('cam'), { rotationY: -2, rotationX: 0, z: 0 }, { rotationY: 3, rotationX: 2, z: 60, duration: 4.2, ease: 'sine.inOut', force3D: true, immediateRender: false }, 0.72);
+
+  // b1: the PDF drops into the zone, then settles into the list
+  tl.fromTo($('file'), { y: -250, rotationZ: -6, opacity: 0 }, { y: -96, rotationZ: 0, opacity: 1, duration: 0.45, ease: 'back.out(1.4)' }, B - 0.3);
+  tl.fromTo($('file'), { y: -96 }, { y: 0, duration: 0.45, ease: 'power3.inOut', immediateRender: false }, B + 0.25);
+  // b2-b3: reading (shimmer, never a spinner), Ready by b3.6
+  tl.fromTo($('band'), { xPercent: -100 }, { xPercent: 260, duration: 0.8, ease: 'power2.inOut', repeat: 1 }, 2 * B - 0.1);
+  tl.fromTo($('proc'), { opacity: 1 }, { opacity: 0, duration: 0.15, ease: 'power1.inOut' }, 3.6 * B);
+  tl.fromTo($('ready'), { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2)' }, 3.6 * B + 0.05);
+
+  // ask + answer
+  tl.fromTo($('qb'), { opacity: 0, y: 24, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: 'back.out(1.6)', transformOrigin: '100% 100%' }, 3.4 * B);
+  tl.fromTo($('ans'), { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power3.out' }, 4 * B - 0.05);
+  tl.fromTo($('cite'), { opacity: 0, scale: 1.6 }, { opacity: 1, scale: 1, duration: 0.36, ease: 'back.out(2)' }, 5 * B - 0.25);
+
+  // b5: click the citation
+  var c = W(24 + 38 + 15 + 70, 318 + 12 + 66 + 8);
+  tl.fromTo($('cursor'), { x: c.x + 300, y: c.y + 180, opacity: 0 }, { x: c.x, y: c.y, opacity: 1, duration: 0.6, ease: 'power3.out' }, 5 * B - 0.7);
+  tl.fromTo($('cursor'), { scale: 1 }, { keyframes: [{ scale: 0.85, duration: 0.1, ease: 'power1.in' }, { scale: 1, duration: 0.45, ease: 'back.out(2)' }], immediateRender: false }, 5 * B - 0.1);
+  tl.fromTo($('ring'), { x: c.x, y: c.y, scale: 0.4, opacity: 0.9 }, { scale: 1.6, opacity: 0, duration: 0.5, ease: 'power2.out', immediateRender: false }, 5 * B);
+  tl.fromTo($('cite'), { backgroundColor: '#f3f1fa' }, { backgroundColor: '#ede9fe', duration: 0.2, ease: 'power1.inOut', immediateRender: false }, 5 * B);
+
+  // the hand on the trackpad taps along
+  tl.fromTo($('kid'), { y: 560, rotationZ: 6 }, { y: 330, rotationZ: 0, duration: 0.7, ease: 'back.out(1.3)', force3D: true }, 0.35);
+  tl.fromTo($('kid'), { scale: 1 }, { scale: 0.97, duration: 0.1, ease: 'power1.inOut', yoyo: true, repeat: 1, immediateRender: false }, 5 * B - 0.1);
+
+  // b4: label
+  tl.fromTo($('chip'), { opacity: 0, y: -24, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.8)' }, 4 * B - 0.05);
+
+  // whip out from b7
+  tl.fromTo($('stage'), { x: 0 }, { x: -3000, duration: 0.55, ease: 'expo.in', immediateRender: false }, 7 * B - 0.02);
+  tl.fromTo($('label'), { x: 0 }, { x: -3000, duration: 0.5, ease: 'expo.in', immediateRender: false }, 7 * B + 0.02);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines['s06-sources'] = tl;
+})();
+</script>
+</template>

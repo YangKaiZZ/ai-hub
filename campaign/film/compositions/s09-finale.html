@@ -1,0 +1,127 @@
+<template>
+<link rel="stylesheet" href="assets/kit.css">
+<style>
+@font-face { font-family: 'Geist'; font-weight: 500; src: url('assets/fonts/geist-500.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 700; src: url('assets/fonts/geist-700.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 800; src: url('assets/fonts/geist-800.woff2') format('woff2'); }
+#root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Geist', sans-serif; }
+.s09-finale-layer { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.s09-finale-w { position: absolute; left: 50%; top: 50%; will-change: transform; }
+.s09-finale-dots { width: 6000px; height: 2400px; }
+.s09-finale-big { font: 800 150px/1.1 'Geist', sans-serif; letter-spacing: -0.05em; color: var(--ink); white-space: nowrap; }
+.s09-finale-big em { font-style: normal; color: var(--accent); }
+.s09-finale-mark { width: 176px; height: 176px; display: block; filter: drop-shadow(0 16px 28px rgba(76,29,149,.3)); }
+.s09-finale-word { font: 800 176px/1 'Geist', sans-serif; letter-spacing: -0.05em; color: var(--ink); white-space: nowrap; }
+.s09-finale-word b { background: linear-gradient(90deg, #7c3aed, #a78bfa); -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: 8px; }
+.s09-finale-tag { font: 700 78px/1.06 'Geist', sans-serif; letter-spacing: -0.035em; color: var(--ink); white-space: nowrap; }
+.s09-finale-tag em { font-style: normal; color: var(--accent); font-weight: 800; }
+.s09-finale-cta { display: flex; align-items: center; gap: 28px; white-space: nowrap; }
+.s09-finale-btn { display: inline-flex; align-items: center; gap: 14px; height: 96px; padding: 0 44px; border-radius: 26px; background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 55%, #a78bfa 100%); color: #fff; font: 700 38px/1 'Geist', sans-serif; box-shadow: 0 18px 40px -14px rgba(76,29,149,.55); }
+.s09-finale-btn svg { width: 30px; height: 30px; fill: #fff; }
+.s09-finale-ck { display: inline-flex; align-items: center; gap: 10px; font: 600 32px/1 'Geist', sans-serif; color: var(--ink-soft); }
+.s09-finale-ck svg { width: 32px; height: 32px; fill: var(--good); }
+.s09-finale-conf { position: absolute; inset: 0; pointer-events: none; }
+.s09-finale-bit { position: absolute; left: 0; top: 0; will-change: transform; }
+.s09-finale-iris { position: absolute; inset: 0; background: #7c3aed; --r: 0px;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent var(--r), #000 calc(var(--r) + 1.5px));
+          mask-image: radial-gradient(circle at 50% 50%, transparent var(--r), #000 calc(var(--r) + 1.5px)); }
+</style>
+<div id="root" data-composition-id="s09-finale" data-width="1920" data-height="1080">
+  <div id="s09-finale-ground" class="clip kit-ground" data-start="0" data-duration="7.5" data-track-index="0"></div>
+  <div id="s09-finale-stage" class="clip" data-start="0" data-duration="7.5" data-track-index="1" style="position:absolute; inset:0; perspective:1866px; perspective-origin:50% 50%;">
+    <div id="s09-finale-drift" class="s09-finale-layer">
+      <div id="s09-finale-cam" class="s09-finale-layer">
+        <div id="s09-finale-dots" class="s09-finale-w s09-finale-dots kit-dots"></div>
+        <!-- area A: the celebration -->
+        <img id="s09-finale-kid" class="s09-finale-w kit-sticker" src="assets/stickers/celebrate.webp" width="554" height="656" alt="">
+        <div id="s09-finale-l0" class="s09-finale-w s09-finale-big">Same you.</div>
+        <div id="s09-finale-l1" class="s09-finale-w s09-finale-big"><em>Bigger goals.</em></div>
+        <!-- area B (x + 1900): the lockup -->
+        <img id="s09-finale-mark" class="s09-finale-w s09-finale-mark" src="assets/brand/mark.svg" alt="">
+        <div id="s09-finale-word" class="s09-finale-w s09-finale-word">AI <b>Hub</b></div>
+        <div id="s09-finale-tag" class="s09-finale-w s09-finale-tag">Your entire student life.<br><em>One intelligent hub.</em></div>
+        <div id="s09-finale-cta" class="s09-finale-w s09-finale-cta">
+          <span id="s09-finale-btn" class="s09-finale-btn">Get started<svg viewBox="0 0 256 256"><path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z"/></svg></span>
+          <span id="s09-finale-k0" class="s09-finale-ck"><svg viewBox="0 0 256 256"><path d="M176.49,95.51a12,12,0,0,1,0,17l-56,56a12,12,0,0,1-17,0l-24-24a12,12,0,1,1,17-17L112,143l47.51-47.52A12,12,0,0,1,176.49,95.51ZM236,128A108,108,0,1,1,128,20,108.12,108.12,0,0,1,236,128Zm-24,0a84,84,0,1,0-84,84A84.09,84.09,0,0,0,212,128Z"/></svg>Free to start</span>
+          <span id="s09-finale-k1" class="s09-finale-ck"><svg viewBox="0 0 256 256"><path d="M176.49,95.51a12,12,0,0,1,0,17l-56,56a12,12,0,0,1-17,0l-24-24a12,12,0,1,1,17-17L112,143l47.51-47.52A12,12,0,0,1,176.49,95.51ZM236,128A108,108,0,1,1,128,20,108.12,108.12,0,0,1,236,128Zm-24,0a84,84,0,1,0-84,84A84.09,84.09,0,0,0,212,128Z"/></svg>Works with any LMS</span>
+        </div>
+        <img id="s09-finale-wave" class="s09-finale-w kit-sticker" src="assets/stickers/hero.webp" width="888" height="1700" alt="">
+      </div>
+    </div>
+  </div>
+  <div id="s09-finale-conf" class="clip s09-finale-conf" data-start="0" data-duration="7.5" data-track-index="3"></div>
+  <div id="s09-finale-plate" class="clip" data-start="0" data-duration="7.5" data-track-index="5" style="position:absolute; inset:0;">
+    <div id="s09-finale-iris" class="s09-finale-iris"></div>
+  </div>
+  <div id="s09-finale-grain" class="clip kit-grain" data-start="0" data-duration="7.5" data-track-index="9"></div>
+</div>
+<script>
+(function () {
+  var P = 's09-finale-';
+  var $ = function (id) { return '#' + P + id; };
+  var D = 7.5, B = 0.625, BX = 1900;
+  var tl = gsap.timeline({ paused: true });
+
+  gsap.set($('dots'), { xPercent: -50, yPercent: -50, x: 950, z: -700, force3D: true });
+  gsap.set($('kid'), { xPercent: -50, yPercent: -50, x: -430, y: 50, z: 120, force3D: true });
+  gsap.set($('l0'), { xPercent: 0, yPercent: -50, x: -60, y: -100, z: 0, force3D: true });
+  gsap.set($('l1'), { xPercent: 0, yPercent: -50, x: -60, y: 75, z: 0, force3D: true });
+  // lockup, left-aligned at screen x 170 once the camera has panned to area B
+  var LX = BX - 800;
+  gsap.set($('mark'), { xPercent: 0, yPercent: -50, x: LX, y: -250, z: 0, force3D: true });
+  gsap.set($('word'), { xPercent: 0, yPercent: -50, x: LX + 208, y: -246, z: 0, force3D: true });
+  gsap.set($('tag'), { xPercent: 0, yPercent: -50, x: LX + 6, y: -10, z: 0, force3D: true });
+  gsap.set($('cta'), { xPercent: 0, yPercent: -50, x: LX + 6, y: 210, z: 0, force3D: true });
+  gsap.set($('wave'), { xPercent: -50, yPercent: -50, x: BX + 600, y: 80, z: 0, scale: 0.6, force3D: true });
+
+  tl.fromTo($('drift'), { scale: 1, rotationY: -1 }, { scale: 1.02, rotationY: 1, duration: D, ease: 'sine.inOut', force3D: true }, 0);
+
+  // frame 0 is violet; it irises open on the hit
+  tl.fromTo($('iris'), { '--r': '0px' }, { '--r': '1250px', duration: 0.7, ease: 'expo.out' }, 0.08);
+  tl.fromTo($('cam'), { z: 260 }, { z: 0, duration: 0.9, ease: 'expo.out', force3D: true }, 0.05);
+
+  // b1: the jump + confetti
+  tl.fromTo($('kid'), { y: 50, rotationZ: 0, scale: 1 }, { keyframes: [{ y: 80, scale: 0.97, duration: 0.12, ease: 'power2.out' }, { y: -60, scale: 1.03, rotationZ: -3, duration: 0.3, ease: 'power2.out' }, { y: 50, scale: 1, rotationZ: 0, duration: 0.45, ease: 'back.out(1.6)' }] }, B - 0.25);
+  var conf = document.getElementById(P + 'conf');
+  var cols = ['#7c3aed', '#8b5cf6', '#a78bfa', '#c4b5fd', '#2563eb', '#0d9488', '#ea580c', '#d97706', '#16a34a'];
+  var seed = 7;
+  var rnd = function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  var OX = 960 - 430, OY = 540 - 60;
+  for (var i = 0; i < 46; i++) {
+    var b = document.createElement('i');
+    b.id = P + 'b' + i;
+    b.className = 's09-finale-bit';
+    var w = 10 + rnd() * 10, h = i % 3 === 0 ? w : 6 + rnd() * 5;
+    b.style.width = w + 'px'; b.style.height = h + 'px';
+    b.style.borderRadius = i % 3 === 0 ? '50%' : '3px';
+    b.style.background = cols[i % cols.length];
+    conf.appendChild(b);
+    var ang = -Math.PI / 2 + (rnd() - 0.5) * 3.4, sp = 300 + rnd() * 560;
+    var dx = Math.cos(ang) * sp, up = Math.sin(ang) * sp * 0.9, fall = 420 + rnd() * 380;
+    var t0 = B + 0.02 + rnd() * 0.08, life = 1.6 + rnd() * 0.7;
+    tl.fromTo($('b' + i), { x: OX, y: OY, rotationZ: 0, opacity: 0 }, { x: OX + dx, rotationZ: (rnd() - 0.5) * 900, opacity: 1, duration: life, ease: 'power2.out' }, t0);
+    tl.fromTo($('b' + i), { y: OY }, { keyframes: [{ y: OY + up, duration: life * 0.35, ease: 'power2.out' }, { y: OY + up + fall, duration: life * 0.65, ease: 'power2.in' }], immediateRender: false }, t0);
+    tl.fromTo($('b' + i), { opacity: 1 }, { opacity: 0, duration: 0.35, ease: 'power2.in', immediateRender: false }, t0 + life - 0.35);
+  }
+
+  // b2, b3: the line
+  tl.fromTo($('l0'), { opacity: 0, y: -40 }, { opacity: 1, y: -100, duration: 0.45, ease: 'power3.out' }, 2 * B - 0.04);
+  tl.fromTo($('l1'), { opacity: 0, y: 135 }, { opacity: 1, y: 75, duration: 0.45, ease: 'power3.out' }, 3 * B - 0.04);
+  tl.fromTo($('l1'), { scale: 1 }, { scale: 1.05, duration: 0.16, ease: 'power2.out', yoyo: true, repeat: 1, immediateRender: false, transformOrigin: '0% 50%' }, 3 * B + 0.3);
+
+  // b6: the camera glides across to the lockup
+  tl.fromTo($('cam'), { x: 0 }, { x: -BX, duration: 1.05, ease: 'power3.inOut', force3D: true, immediateRender: false }, 6 * B - 0.2);
+  tl.fromTo([$('mark'), $('word')], { opacity: 0, y: '+=0' }, { opacity: 1, duration: 0.5, ease: 'power2.out', stagger: 0.08 }, 6 * B + 0.35);
+  tl.fromTo($('mark'), { scale: 0.6, rotationZ: -12 }, { scale: 1, rotationZ: 0, duration: 0.6, ease: 'back.out(2)', immediateRender: false }, 7 * B - 0.1);
+  tl.fromTo($('tag'), { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 7 * B + 0.1);
+  tl.fromTo($('cta'), { opacity: 0, y: 250 }, { opacity: 1, y: 210, duration: 0.5, ease: 'power3.out' }, 7.5 * B + 0.1);
+  // b8: the wave
+  tl.fromTo($('wave'), { y: 1300, rotationZ: 10 }, { y: 80, rotationZ: 0, duration: 0.7, ease: 'back.out(1.4)', force3D: true }, 8 * B - 0.12);
+  tl.fromTo($('wave'), { rotationZ: 0 }, { rotationZ: -2, duration: B, ease: 'sine.inOut', yoyo: true, repeat: 3, immediateRender: false, transformOrigin: '50% 90%' }, 8 * B + 0.6);
+  tl.fromTo($('btn'), { scale: 1 }, { scale: 1.04, duration: B, ease: 'sine.inOut', yoyo: true, repeat: 3, immediateRender: false }, 8 * B + 0.4);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines['s09-finale'] = tl;
+})();
+</script>
+</template>

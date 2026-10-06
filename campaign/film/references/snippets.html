@@ -1,0 +1,41 @@
+<!-- Copy-paste markup for the shared kit (assets/kit.css). Workers copy from here; never restyle a kit class.
+     Add the product's own UI blocks (ported from its real HTML) and any capture coordinate maps below. -->
+
+<!-- ===================== CURSOR ===================== -->
+<div class="kit-cursor"><svg viewBox="0 0 34 48"><path d="M3 2 L3 38 L12 30 L18 45 L25 42 L19 28 L31 28 Z" fill="#08102b" stroke="#ffffff" stroke-width="2.6" stroke-linejoin="round"/></svg></div>
+<!-- click = cursor scale s -> s*0.85 (power1.in 0.1s) -> s (back.out(2) 0.45s) on the beat, the pressed control
+     scale 1 -> 0.97 -> 1 the same way, and a .kit-ring at the tip scaling 0.4 -> 1.8 while opacity 0.9 -> 0 -->
+<div class="kit-ring" style="width:120px; height:120px; margin-left:-60px; margin-top:-60px; opacity:0"></div>
+
+<!-- ===================== STATUS CHIP ===================== -->
+<div class="kit-chip ok"><svg viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11"/></svg>captured as one image · 3 tiles</div>
+
+<!-- ===================== CORNER TICKS (a spine motif: viewfinder -> scan frame -> crop handles) ===================== -->
+<div style="position:absolute; width:1280px; height:800px; --s:72px; --w:7px">
+  <i class="kit-ck tl"></i><i class="kit-ck tr"></i><i class="kit-ck bl"></i><i class="kit-ck br"></i>
+</div>
+<!-- fly each tick as its own element when they must travel independently (one id per tick) -->
+
+<!-- ===================== KEYCAP (shortcut beat) ===================== -->
+<div class="kit-key">B</div>
+<!-- pop: scale 0.4 -> 1 back.out(1.8) 0.35s beside the cursor, then z -> -200 + opacity -> 0 over 0.5s -->
+
+<!-- ===================== BROWSER WINDOW + VIEWPORT (wrap in .kit-zoom for the closest shot) ===================== -->
+<div class="kit-zoom" style="--z:1.5">
+  <div class="kit-win" style="width:1280px">
+    <div class="kit-win-bar"><i></i><i></i><i></i><u>app.example.com/workflows</u></div>
+    <div class="kit-win-view" style="height:766px">
+      <img src="assets/captures/SURFACE.png" style="width:1135px; display:block" alt="">
+    </div>
+  </div>
+</div>
+<!-- tiles of a capture = leaf divs with the same PNG as background-image and background-size/position set to the
+     exact crop the viewport showed; a "sheet" = tiles stacked edge to edge. -->
+
+<!-- ===================== BUSY STATE (shimmer, never a spinner) ===================== -->
+<div style="position:relative; padding:18px 30px; border-radius:14px; background:#fff; font:700 26px Poppins; color:var(--ink)">
+  Photographing…<div class="kit-shimmer"><i></i></div>
+</div>
+
+<!-- ===================== CAPTURE MAP (fill per film: 1x coordinates of annotation targets) ===================== -->
+<!-- e.g. ghl-sheet.png at 1x 1135x2022: trigger card x 453 y 40 w 228 h 96; "Send SMS" x 453 y 610 w 228 h 66 -->

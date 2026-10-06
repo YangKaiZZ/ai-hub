@@ -1,0 +1,130 @@
+<template>
+<link rel="stylesheet" href="assets/kit.css">
+<style>
+@font-face { font-family: 'Geist'; font-weight: 500; src: url('assets/fonts/geist-500.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 700; src: url('assets/fonts/geist-700.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 800; src: url('assets/fonts/geist-800.woff2') format('woff2'); }
+#root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Geist', sans-serif; }
+.s08-grades-layer { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.s08-grades-w { position: absolute; left: 50%; top: 50%; will-change: transform; }
+.s08-grades-dots { width: 3400px; height: 2200px; }
+.s08-grades-card { width: 960px; height: 736px; border-radius: 28px; background: #fff; box-shadow: var(--float); overflow: hidden; }
+.s08-grades-in { position: relative; width: 600px; height: 460px; }
+.s08-grades-a { position: absolute; }
+.s08-grades-t { font: 700 18px/1 'Geist', sans-serif; letter-spacing: -0.015em; }
+.s08-grades-st { font: 500 12.5px/1 'Geist', sans-serif; color: var(--ink-soft); margin-top: 7px; }
+.s08-grades-big { font: 800 54px/1 'Geist', sans-serif; letter-spacing: -0.04em; }
+.s08-grades-cap { font: 500 12px/1 'Geist', sans-serif; color: var(--ink-soft); }
+.s08-grades-cat { left: 24px; width: 552px; }
+.s08-grades-cat p { display: flex; justify-content: space-between; font: 600 13px/1 'Geist', sans-serif; }
+.s08-grades-cat p span { color: var(--ink-soft); font-weight: 500; }
+.s08-grades-cat .kit-progress { margin-top: 8px; height: 8px; }
+.s08-grades-note { left: 24px; top: 370px; width: 552px; border-radius: 14px; background: var(--accent-soft); padding: 13px 15px; font: 600 13.5px/1.45 'Geist', sans-serif; color: var(--accent-ink); display: flex; gap: 10px; }
+.s08-grades-note svg { width: 18px; height: 18px; fill: var(--accent); flex: none; margin-top: 1px; }
+.s08-grades-mark { width: 200px; height: 200px; display: block; }
+.s08-grades-lms { white-space: nowrap; }
+.s08-grades-lines { width: 1000px; height: 800px; overflow: visible; }
+.s08-grades-chip { position: absolute; left: 110px; top: 44px; }
+.s08-grades-disc { position: absolute; left: 0; top: 0; width: 2600px; height: 2600px; margin-left: -1300px; margin-top: -1300px; border-radius: 50%; background: #7c3aed; will-change: transform; }
+</style>
+<div id="root" data-composition-id="s08-grades" data-width="1920" data-height="1080">
+  <div id="s08-grades-ground" class="clip kit-ground" data-start="0" data-duration="5" data-track-index="0"></div>
+  <div id="s08-grades-stage" class="clip" data-start="0" data-duration="5" data-track-index="1" style="position:absolute; inset:0; perspective:1866px; perspective-origin:50% 50%;">
+    <div id="s08-grades-drift" class="s08-grades-layer">
+      <div id="s08-grades-cam" class="s08-grades-layer">
+        <div id="s08-grades-dots" class="s08-grades-w s08-grades-dots kit-dots"></div>
+        <div id="s08-grades-card" class="s08-grades-w s08-grades-card kit-app">
+          <div class="kit-zoom" style="--z:1.6"><div class="s08-grades-in">
+            <div class="s08-grades-a" style="left:24px; top:22px"><p class="s08-grades-t">Database Systems</p><p class="s08-grades-st">Spring term · weighted categories</p></div>
+            <span class="kit-badge brand s08-grades-a" style="left:478px; top:22px; font-size:12.5px; padding:4px 11px"><svg viewBox="0 0 256 256"><path d="M229.26,90.4a108,108,0,0,1-177.630,114A108,108,0,0,1,195.410,43.630l20.100-20.110a12,12,0,0,1,17,17l-96,96a12,12,0,1,1-17-17l24-24a36,36,0,1,0,19.760,39.650,12,12,0,0,1,23.530,4.740,60,60,0,1,1-25.730-62L178.300,60.740a84,84,0,1,0,28.460,38,12,12,0,1,1,22.500-8.350Z"/></svg>Target 90%</span>
+            <p id="s08-grades-num" class="s08-grades-a s08-grades-big" style="left:24px; top:74px">0.0%</p>
+            <p class="s08-grades-a s08-grades-cap" style="left:24px; top:136px">Current grade · projected A-</p>
+            <div class="s08-grades-a kit-progress" style="left:24px; top:160px; width:552px; height:10px"><i id="s08-grades-p0"></i></div>
+            <div class="s08-grades-a s08-grades-cat" style="top:204px"><p>Quizzes <span>20% · 92%</span></p><div class="kit-progress"><i id="s08-grades-p1"></i></div></div>
+            <div class="s08-grades-a s08-grades-cat" style="top:254px"><p>Projects <span>40% · 86%</span></p><div class="kit-progress"><i id="s08-grades-p2"></i></div></div>
+            <div class="s08-grades-a s08-grades-cat" style="top:304px"><p>Exams <span>40% · 89%</span></p><div class="kit-progress"><i id="s08-grades-p3"></i></div></div>
+            <div id="s08-grades-note" class="s08-grades-a s08-grades-note"><svg viewBox="0 0 256 256"><path d="M229.26,90.4a108,108,0,0,1-177.630,114A108,108,0,0,1,195.410,43.630l20.100-20.110a12,12,0,0,1,17,17l-96,96a12,12,0,1,1-17-17l24-24a36,36,0,1,0,19.760,39.650,12,12,0,0,1,23.530,4.740,60,60,0,1,1-25.730-62L178.300,60.740a84,84,0,1,0,28.460,38,12,12,0,1,1,22.500-8.350Z"/></svg><span>You need to average 92% on the remaining work to reach your 90% target.</span></div>
+          </div></div>
+        </div>
+        <svg id="s08-grades-lines" class="s08-grades-w s08-grades-lines" viewBox="-500 -400 1000 800" fill="none" stroke="#a78bfa" stroke-width="5" stroke-linecap="round" stroke-dasharray="10 14">
+          <path id="s08-grades-ln0" d="M -170 -270 C -60 -240 -40 -120 0 -40"/>
+          <path id="s08-grades-ln1" d="M 200 -215 C 140 -190 80 -120 40 -40"/>
+          <path id="s08-grades-ln2" d="M 190 235 C 130 200 80 120 40 40"/>
+        </svg>
+        <img id="s08-grades-mark" class="s08-grades-w s08-grades-mark" src="assets/brand/mark.svg" alt="">
+        <div id="s08-grades-c0" class="s08-grades-w kit-chip s08-grades-lms"><svg viewBox="0 0 24 24" style="color:#7c3aed"><path d="M20 7v4h-4M4 17v-4h4M5.5 9a7 7 0 0 1 12-1.5L20 11M18.5 15a7 7 0 0 1-12 1.5L4 13"/></svg>Canvas</div>
+        <div id="s08-grades-c1" class="s08-grades-w kit-chip s08-grades-lms"><svg viewBox="0 0 24 24" style="color:#7c3aed"><path d="M20 7v4h-4M4 17v-4h4M5.5 9a7 7 0 0 1 12-1.5L20 11M18.5 15a7 7 0 0 1-12 1.5L4 13"/></svg>Moodle</div>
+        <div id="s08-grades-c2" class="s08-grades-w kit-chip s08-grades-lms"><svg viewBox="0 0 24 24" style="color:#7c3aed"><path d="M20 7v4h-4M4 17v-4h4M5.5 9a7 7 0 0 1 12-1.5L20 11M18.5 15a7 7 0 0 1-12 1.5L4 13"/></svg>Blackboard</div>
+        <div id="s08-grades-ok" class="s08-grades-w kit-chip ok s08-grades-lms"><svg viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11"/></svg>Synced</div>
+        <img id="s08-grades-kid" class="s08-grades-w kit-sticker" src="assets/stickers/pose-fist.webp" width="360" height="472" alt="">
+      </div>
+    </div>
+  </div>
+  <div id="s08-grades-label" class="clip" data-start="0" data-duration="5" data-track-index="4" style="position:absolute; inset:0;">
+    <div id="s08-grades-chip" class="kit-chip s08-grades-chip"><svg viewBox="0 0 24 24" style="color:#7c3aed"><path d="m4.5 12.5 5 5 10-11"/></svg>Grades you can plan around</div>
+  </div>
+  <div id="s08-grades-plate" class="clip" data-start="0" data-duration="5" data-track-index="5" style="position:absolute; inset:0; overflow:hidden;">
+    <div id="s08-grades-disc" class="s08-grades-disc"></div>
+  </div>
+  <div id="s08-grades-grain" class="clip kit-grain" data-start="0" data-duration="5" data-track-index="9"></div>
+</div>
+<script>
+(function () {
+  var P = 's08-grades-';
+  var $ = function (id) { return '#' + P + id; };
+  var D = 5, B = 0.625;
+  var tl = gsap.timeline({ paused: true });
+
+  var MX = 440, MY = -20;   // the hub mark (world); lines/chips are laid out around it
+  gsap.set($('dots'), { xPercent: -50, yPercent: -50, z: -700, force3D: true });
+  gsap.set($('card'), { xPercent: -50, yPercent: -50, x: -430, y: 10, z: 0, rotationY: 6, force3D: true });
+  gsap.set($('lines'), { xPercent: -50, yPercent: -50, x: MX, y: MY, z: 20, force3D: true });
+  gsap.set($('mark'), { xPercent: -50, yPercent: -50, x: MX, y: MY, z: 40, force3D: true });
+  gsap.set($('c0'), { xPercent: -50, yPercent: -50, x: MX - 230, y: MY - 290, z: 60, force3D: true });
+  gsap.set($('c1'), { xPercent: -50, yPercent: -50, x: MX + 250, y: MY - 230, z: 30, force3D: true });
+  gsap.set($('c2'), { xPercent: -50, yPercent: -50, x: MX + 240, y: MY + 250, z: 50, force3D: true });
+  gsap.set($('ok'), { xPercent: -50, yPercent: -50, x: MX, y: MY + 175, z: 70, force3D: true });
+  gsap.set($('kid'), { xPercent: -50, yPercent: -50, x: MX - 250, y: MY + 310, z: 160, force3D: true });
+  gsap.set([$('p0'), $('p1'), $('p2'), $('p3')], { scaleX: 0 });
+  gsap.set([$('ln0'), $('ln1'), $('ln2')], { strokeDashoffset: 0 });
+
+  tl.fromTo($('drift'), { scale: 1, rotationY: 1 }, { scale: 1.025, rotationY: -1, duration: D, ease: 'sine.inOut', force3D: true }, 0);
+  tl.fromTo($('cam'), { x: 3000, rotationY: -8 }, { x: 0, rotationY: -2, duration: 0.65, ease: 'expo.out', force3D: true }, 0.07);
+
+  // b1-b2: the grade counts up and the bars fill
+  var n = { v: 0 }, num = document.getElementById(P + 'num');
+  tl.fromTo(n, { v: 0 }, { v: 88.4, duration: 1.1, ease: 'power3.out', onUpdate: function () { num.textContent = n.v.toFixed(1) + '%'; } }, B - 0.05);
+  tl.fromTo($('p0'), { scaleX: 0 }, { scaleX: 0.884, duration: 1.1, ease: 'power3.out' }, B - 0.05);
+  [[1, 0.92], [2, 0.86], [3, 0.89]].forEach(function (p, i) {
+    tl.fromTo($('p' + p[0]), { scaleX: 0 }, { scaleX: p[1], duration: 0.8, ease: 'power3.out' }, B + 0.15 + i * 0.1);
+  });
+  // b3: what it takes to hit the target
+  tl.fromTo($('note'), { opacity: 0, scale: 1.08, y: 10 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: 'back.out(1.8)' }, 3 * B - 0.06);
+
+  // the hub: mark lands early, LMS chips connect on b4, b4.5, b5, then "Synced"
+  tl.fromTo($('mark'), { opacity: 0, scale: 0.5, rotationZ: -10 }, { opacity: 1, scale: 1, rotationZ: 0, duration: 0.55, ease: 'back.out(1.8)', force3D: true }, 0.55);
+  [0, 1, 2].forEach(function (i) {
+    var t = (4 + i * 0.5) * B - 0.06;
+    tl.fromTo($('c' + i), { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(2)', force3D: true }, t);
+    tl.fromTo($('ln' + i), { opacity: 0, strokeDashoffset: 120 }, { opacity: 1, strokeDashoffset: 0, duration: 0.5, ease: 'power2.out' }, t);
+    tl.fromTo($('ln' + i), { strokeDashoffset: 0 }, { strokeDashoffset: -96, duration: 1.4, ease: 'sine.inOut', immediateRender: false }, t + 0.5);
+  });
+  tl.fromTo($('mark'), { scale: 1 }, { keyframes: [{ scale: 1.08, duration: 0.12 }, { scale: 1, duration: 0.4, ease: 'back.out(2)' }], immediateRender: false }, 5 * B);
+  tl.fromTo($('ok'), { opacity: 0, y: MY + 205 }, { opacity: 1, y: MY + 175, duration: 0.4, ease: 'back.out(1.8)' }, 5 * B + 0.08);
+  tl.fromTo($('kid'), { y: MY + 1000, rotationZ: 8 }, { y: MY + 310, rotationZ: -2, duration: 0.7, ease: 'back.out(1.4)', force3D: true }, 1.2);
+
+  // b2: label
+  tl.fromTo($('chip'), { opacity: 0, y: -24, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.8)' }, 2 * B - 0.05);
+
+  // from b6: dive into the mark; a violet disc grows out of it and owns the last frames
+  tl.fromTo($('label'), { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power2.in', immediateRender: false }, 6 * B - 0.25);
+  tl.fromTo($('cam'), { x: 0, y: 0, z: 0, rotationY: -2 }, { x: -MX, y: -MY, z: 1300, rotationY: 0, duration: 1.15, ease: 'power3.in', force3D: true, immediateRender: false }, 6 * B - 0.05);
+  tl.fromTo($('disc'), { x: 960 + MX, y: 540 + MY }, { x: 960, y: 540, duration: 1.15, ease: 'power3.in', force3D: true }, 6 * B - 0.05);
+  tl.fromTo($('disc'), { scale: 0 }, { scale: 1, duration: 0.95, ease: 'expo.in', force3D: true }, 6 * B + 0.12);
+  tl.fromTo($('stage'), { opacity: 1 }, { opacity: 0, duration: 0.05, ease: 'power1.inOut', immediateRender: false }, D - 0.13);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines['s08-grades'] = tl;
+})();
+</script>
+</template>

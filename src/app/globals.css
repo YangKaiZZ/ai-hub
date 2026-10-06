@@ -363,3 +363,60 @@
     font-weight: 600;
   }
 }
+
+/* ──────────────────────────────────────────────────────────────
+   Campaign stickers (landing page + /film): die-cut cut-outs of the
+   AI Hub student. They float gently and wiggle when clicked.
+   ────────────────────────────────────────────────────────────── */
+@layer utilities {
+  .sticker-img {
+    filter: drop-shadow(0 8px 12px rgba(76, 29, 149, 0.18)) drop-shadow(0 22px 30px rgba(23, 22, 42, 0.12));
+  }
+
+  .dark .sticker-img {
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.45)) drop-shadow(0 22px 30px rgba(0, 0, 0, 0.35));
+  }
+
+  .sticker-btn {
+    display: block;
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .sticker-btn:hover {
+    transform: translateY(-4px) rotate(-1.5deg);
+  }
+
+  .sticker-pop {
+    animation: sticker-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .sticker-float {
+    animation: sticker-float 6s ease-in-out infinite;
+  }
+
+  @keyframes sticker-pop {
+    0% {
+      transform: scale(1) rotate(0deg);
+    }
+    25% {
+      transform: scale(1.08) rotate(-5deg);
+    }
+    55% {
+      transform: scale(0.97) rotate(3deg);
+    }
+    100% {
+      transform: scale(1) rotate(0deg);
+    }
+  }
+
+  @keyframes sticker-float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(1.2deg);
+    }
+  }
+}

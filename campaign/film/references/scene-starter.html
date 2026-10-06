@@ -1,0 +1,55 @@
+<!-- Scene starter. Copy to compositions/<scene_id>.html, replace every SCENE with the scene id and every DUR
+     with its duration (film.json -> printed by make-harness.py). Keeps: kit link, fonts, ground, the 3-layer
+     camera rig, a seam plate outside the rig, grain on top, one paused timeline registered last. -->
+<template>
+<link rel="stylesheet" href="assets/kit.css">
+<style>
+@font-face { font-family: 'Geist'; font-weight: 500; src: url('assets/fonts/geist-500.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 700; src: url('assets/fonts/geist-700.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 800; src: url('assets/fonts/geist-800.woff2') format('woff2'); }
+#root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Geist', sans-serif; }
+.SCENE-layer { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.SCENE-world { position: absolute; left: 50%; top: 50%; will-change: transform; }
+.SCENE-card { width: 960px; height: 540px; margin-left: -480px; margin-top: -270px; border-radius: 24px; background: var(--card); box-shadow: var(--float); }
+</style>
+<div id="root" data-composition-id="SCENE" data-width="1920" data-height="1080">
+  <div id="SCENE-ground" class="clip kit-ground" data-start="0" data-duration="DUR" data-track-index="0"></div>
+  <div id="SCENE-stage" class="clip" data-start="0" data-duration="DUR" data-track-index="1" style="position:absolute; inset:0; perspective:1866px; perspective-origin:50% 50%;">
+    <div id="SCENE-drift" class="SCENE-layer">
+      <div id="SCENE-cam" class="SCENE-layer">
+        <div id="SCENE-card" class="SCENE-world SCENE-card"></div>
+      </div>
+    </div>
+  </div>
+  <!-- seam lock: a 2D plate outside the rig (solid color here; an exact image pose works the same way).
+       Starts visible = this scene opens on the shared seam frame; use separate in/out plates when they differ. -->
+  <div id="SCENE-plate" class="clip" data-start="0" data-duration="DUR" data-track-index="5" style="position:absolute; inset:0; background:var(--card); opacity:1;"></div>
+  <div id="SCENE-grain" class="clip kit-grain" data-start="0" data-duration="DUR" data-track-index="9"></div>
+</div>
+<script>
+(function () {
+  var P = 'SCENE-';
+  var $ = function (id) { return '#' + P + id; };
+  var D = DUR;
+  var tl = gsap.timeline({ paused: true });
+
+  // static poses first (gsap.set), then the timeline
+  gsap.set($('card'), { z: -400, rotationY: -18, force3D: true });
+
+  // constant drift for the whole scene (breath + slight orbit), under the authored camera legs
+  tl.fromTo($('drift'), { scale: 1, rotationY: -1 }, { scale: 1.025, rotationY: 1, duration: D, ease: 'sine.inOut', force3D: true }, 0);
+
+  // authored camera leg + an arrival that lands with a spring
+  tl.fromTo($('cam'), { z: -200 }, { z: 0, duration: 1.4, ease: 'power2.inOut', force3D: true }, 0);
+  tl.fromTo($('card'), { z: -400, rotationY: -18 }, { z: 0, rotationY: 0, duration: 0.9, ease: 'back.out(1.6)', force3D: true }, 0.3);
+
+  // seam in: hold the shared frame ~0.1s, then reveal the world (already moving underneath)
+  tl.fromTo($('plate'), { opacity: 1 }, { opacity: 0, duration: 0.2, ease: 'power2.inOut' }, 0.1);
+  // seam out: plate fades in and holds the last ~0.1s (immediateRender:false on every later fromTo of a property)
+  tl.fromTo($('plate'), { opacity: 0 }, { opacity: 1, duration: 0.12, ease: 'power2.inOut', immediateRender: false }, D - 0.24);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines['SCENE'] = tl;
+})();
+</script>
+</template>

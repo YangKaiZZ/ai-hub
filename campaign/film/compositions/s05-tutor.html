@@ -1,0 +1,174 @@
+<template>
+<link rel="stylesheet" href="assets/kit.css">
+<style>
+@font-face { font-family: 'Geist'; font-weight: 500; src: url('assets/fonts/geist-500.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 700; src: url('assets/fonts/geist-700.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 800; src: url('assets/fonts/geist-800.woff2') format('woff2'); }
+#root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Geist', sans-serif; }
+.s05-tutor-layer { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.s05-tutor-w { position: absolute; left: 50%; top: 50%; will-change: transform; }
+.s05-tutor-dots { width: 3400px; height: 2200px; }
+.s05-tutor-card { width: 1365px; height: 858px; border-radius: 28px; background: #fff; box-shadow: var(--float); overflow: hidden; }
+.s05-tutor-in { position: relative; width: 827px; height: 520px; }
+.s05-tutor-a { position: absolute; }
+.s05-tutor-side { left: 0; top: 0; width: 220px; height: 520px; background: #fbfaff; border-right: 1px solid var(--line); }
+.s05-tutor-seg { width: 184px; height: 32px; border-radius: 12px; background: var(--well); padding: 3px; display: flex; gap: 3px; }
+.s05-tutor-seg span { flex: 1; border-radius: 9px; font: 500 12px/26px 'Geist', sans-serif; text-align: center; color: var(--ink-soft); }
+.s05-tutor-seg span.on { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgba(23,22,42,.08); }
+.s05-tutor-sel { width: 184px; height: 34px; border-radius: 10px; border: 1px solid var(--line-strong); background: #fff; padding: 0 10px; display: flex; align-items: center; justify-content: space-between; font: 500 12px/1 'Geist', sans-serif; }
+.s05-tutor-sel svg { width: 12px; height: 12px; fill: var(--subtle); }
+.s05-tutor-menu { width: 196px; border-radius: 12px; border: 1px solid var(--line); background: #fff; box-shadow: 0 12px 30px -10px rgba(76,29,149,.3); padding: 4px; transform-origin: 50% 0%; }
+.s05-tutor-menu p { font: 500 12px/30px 'Geist', sans-serif; padding: 0 9px; border-radius: 8px; white-space: nowrap; }
+.s05-tutor-hl { position: absolute; left: 4px; top: 4px; width: 186px; height: 30px; border-radius: 8px; background: var(--accent-soft); }
+.s05-tutor-chat { left: 220px; top: 0; width: 607px; height: 520px; }
+.s05-tutor-hd { position: absolute; left: 18px; top: 16px; display: flex; align-items: center; gap: 9px; font: 700 15px/1 'Geist', sans-serif; }
+.s05-tutor-hd .kit-mark { width: 28px; height: 28px; border-radius: 9px; }
+.s05-tutor-ub { position: absolute; right: 18px; top: 70px; max-width: 360px; background: var(--accent); color: #fff; border-radius: 16px; padding: 11px 15px; font: 500 13.5px/1.45 'Geist', sans-serif; }
+.s05-tutor-ar { position: absolute; left: 18px; top: 136px; display: flex; gap: 10px; }
+.s05-tutor-ar .kit-mark { width: 28px; height: 28px; border-radius: 9px; margin-top: 2px; flex: none; }
+.s05-tutor-ab { width: 470px; border: 1px solid var(--line); background: #fff; border-radius: 16px; padding: 12px 15px; font: 500 13.5px/1.55 'Geist', sans-serif; color: var(--ink); }
+.s05-tutor-ab b { font-weight: 700; color: var(--accent-lo); }
+.s05-tutor-comp { position: absolute; left: 16px; top: 456px; width: 575px; height: 46px; border-radius: 16px; border: 1px solid var(--line); background: #fff; box-shadow: 0 1px 2px rgba(23,22,42,.04); }
+.s05-tutor-ph { position: absolute; left: 14px; top: 0; font: 500 13.5px/46px 'Geist', sans-serif; color: var(--subtle); }
+.s05-tutor-q { position: absolute; left: 14px; top: 0; font: 500 13.5px/46px 'Geist', sans-serif; color: var(--ink); white-space: nowrap; }
+.s05-tutor-caret { display: inline-block; width: 1.5px; height: 17px; background: var(--accent); vertical-align: -3px; margin-left: 1px; }
+.s05-tutor-send { position: absolute; right: 7px; top: 6px; width: 34px; height: 34px; border-radius: 11px; background: var(--accent); display: grid; place-items: center; }
+.s05-tutor-send svg { width: 16px; height: 16px; fill: #fff; }
+.s05-tutor-chip { position: absolute; left: 110px; top: 44px; }
+</style>
+<div id="root" data-composition-id="s05-tutor" data-width="1920" data-height="1080">
+  <div id="s05-tutor-ground" class="clip kit-ground" data-start="0" data-duration="7.5" data-track-index="0"></div>
+  <div id="s05-tutor-stage" class="clip" data-start="0" data-duration="7.5" data-track-index="1" style="position:absolute; inset:0; perspective:1866px; perspective-origin:50% 50%;">
+    <div id="s05-tutor-drift" class="s05-tutor-layer">
+      <div id="s05-tutor-cam" class="s05-tutor-layer">
+        <div id="s05-tutor-dots" class="s05-tutor-w s05-tutor-dots kit-dots"></div>
+        <div id="s05-tutor-card" class="s05-tutor-w s05-tutor-card kit-app">
+          <div class="kit-zoom" style="--z:1.65"><div class="s05-tutor-in">
+            <div class="s05-tutor-a s05-tutor-side">
+              <p class="kit-eyebrow s05-tutor-a" style="left:18px; top:20px">Mode</p>
+              <div class="s05-tutor-seg s05-tutor-a" style="left:18px; top:38px"><span class="on">Tutor</span><span>Study agent</span></div>
+              <p class="kit-eyebrow s05-tutor-a" style="left:18px; top:90px">Assistance level</p>
+              <div class="s05-tutor-sel s05-tutor-a" style="left:18px; top:108px"><span id="s05-tutor-v0" class="s05-tutor-a" style="left:10px; top:11px">Guided — step by step</span><span id="s05-tutor-v1" class="s05-tutor-a" style="left:10px; top:11px">Learning — hints first</span><svg viewBox="0 0 256 256" class="s05-tutor-a" style="right:10px; top:11px"><path d="M216.49,104.49l-80,80a12,12,0,0,1-17,0l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.52a12,12,0,0,1,17,17Z"/></svg></div>
+              <p class="kit-eyebrow s05-tutor-a" style="left:18px; top:166px">Course</p>
+              <div class="s05-tutor-sel s05-tutor-a" style="left:18px; top:184px"><span>Database Systems</span><svg viewBox="0 0 256 256"><path d="M216.49,104.49l-80,80a12,12,0,0,1-17,0l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.52a12,12,0,0,1,17,17Z"/></svg></div>
+              <p class="kit-eyebrow s05-tutor-a" style="left:18px; top:242px">Assignment</p>
+              <div class="s05-tutor-sel s05-tutor-a" style="left:18px; top:260px"><span>ERD Design Project</span><svg viewBox="0 0 256 256"><path d="M216.49,104.49l-80,80a12,12,0,0,1-17,0l-80-80a12,12,0,0,1,17-17L128,159l71.51-71.52a12,12,0,0,1,17,17Z"/></svg></div>
+              <div id="s05-tutor-menu" data-layout-allow-overlap class="s05-tutor-menu s05-tutor-a" style="left:12px; top:146px">
+                <i id="s05-tutor-hl" class="s05-tutor-hl"></i>
+                <p style="position:relative">Learning — hints first</p>
+                <p style="position:relative">Guided — step by step</p>
+                <p style="position:relative">Review — feedback on my work</p>
+              </div>
+            </div>
+            <div class="s05-tutor-a s05-tutor-chat">
+              <div class="s05-tutor-hd"><span class="kit-mark"><svg viewBox="0 0 256 256"><path d="M249.8,85.49l-116-64a12,12,0,0,0-11.6,0l-116,64a12,12,0,0,0,0,21l21.8,12v47.76a19.89,19.89,0,0,0,5.09,13.32C46.63,194.7,77,220,128,220a136.88,136.88,0,0,0,40-5.75V240a12,12,0,0,0,24,0V204.12a119.53,119.53,0,0,0,30.91-24.51A19.89,19.89,0,0,0,228,166.29V118.53l21.8-12a12,12,0,0,0,0-21ZM128,45.71,219.16,96,186,114.3a1.88,1.88,0,0,1-.18-.12l-52-28.69a12,12,0,0,0-11.6,21l39,21.49L128,146.3,36.84,96ZM128,196c-40.42,0-64.65-19.07-76-31.27v-33l70.2,38.74a12,12,0,0,0,11.6,0L168,151.64v37.23A110.46,110.46,0,0,1,128,196Zm76-31.27a93.21,93.21,0,0,1-12,10.81V138.39l12-6.62Z"/></svg></span>AI Tutor<span id="s05-tutor-mb" class="kit-badge brand">Learning</span></div>
+              <div id="s05-tutor-ub" class="s05-tutor-ub">How do I turn this many-to-many into tables?</div>
+              <div id="s05-tutor-ar" class="s05-tutor-ar">
+                <span class="kit-mark"><svg viewBox="0 0 256 256"><path d="M249.8,85.49l-116-64a12,12,0,0,0-11.6,0l-116,64a12,12,0,0,0,0,21l21.8,12v47.76a19.89,19.89,0,0,0,5.09,13.32C46.63,194.7,77,220,128,220a136.88,136.88,0,0,0,40-5.75V240a12,12,0,0,0,24,0V204.12a119.53,119.53,0,0,0,30.91-24.51A19.89,19.89,0,0,0,228,166.29V118.53l21.8-12a12,12,0,0,0,0-21ZM128,45.71,219.16,96,186,114.3a1.88,1.88,0,0,1-.18-.12l-52-28.69a12,12,0,0,0-11.6,21l39,21.49L128,146.3,36.84,96ZM128,196c-40.42,0-64.65-19.07-76-31.27v-33l70.2,38.74a12,12,0,0,0,11.6,0L168,151.64v37.23A110.46,110.46,0,0,1,128,196Zm76-31.27a93.21,93.21,0,0,1-12,10.81V138.39l12-6.62Z"/></svg></span>
+                <div id="s05-tutor-ab" class="s05-tutor-ab"></div>
+              </div>
+              <div class="s05-tutor-comp">
+                <span id="s05-tutor-ph" class="s05-tutor-ph">Ask anything about your courses…</span>
+                <span id="s05-tutor-q" class="s05-tutor-q"></span>
+                <span id="s05-tutor-send" class="s05-tutor-send"><svg viewBox="0 0 256 256"><path d="M233.86,110.48,65.8,14.58A20,20,0,0,0,37.15,38.64L67.33,128,37.15,217.36A20,20,0,0,0,56,244a20.1,20.1,0,0,0,9.81-2.58l.09-.06,168-96.07a20,20,0,0,0,0-34.81ZM63.19,215.26,88.61,140H144a12,12,0,0,0,0-24H88.61L63.18,40.72l152.76,87.17Z"/></svg></span>
+              </div>
+            </div>
+          </div></div>
+        </div>
+        <div id="s05-tutor-cursor" class="s05-tutor-w kit-cursor"><svg viewBox="0 0 34 48"><path d="M3 2 L3 38 L12 30 L18 45 L25 42 L19 28 L31 28 Z" fill="#17162a" stroke="#ffffff" stroke-width="2.6" stroke-linejoin="round"/></svg></div>
+        <div id="s05-tutor-ring" class="s05-tutor-w kit-ring" style="width:110px; height:110px;"></div>
+        <img id="s05-tutor-kid" class="s05-tutor-w kit-sticker" src="assets/stickers/sit-phone.webp" width="410" height="626" alt="">
+      </div>
+    </div>
+  </div>
+  <div id="s05-tutor-label" class="clip" data-start="0" data-duration="7.5" data-track-index="4" style="position:absolute; inset:0;">
+    <div id="s05-tutor-chip" class="kit-chip s05-tutor-chip"><svg viewBox="0 0 24 24" style="color:#7c3aed"><path d="m4.5 12.5 5 5 10-11"/></svg>A tutor, not a shortcut.</div>
+  </div>
+  <div id="s05-tutor-grain" class="clip kit-grain" data-start="0" data-duration="7.5" data-track-index="9"></div>
+</div>
+<script>
+(function () {
+  var P = 's05-tutor-';
+  var $ = function (id) { return '#' + P + id; };
+  var q = function (id) { return document.getElementById(P + id); };
+  var D = 7.5, B = 0.625;
+  var tl = gsap.timeline({ paused: true });
+  // intentional layering: the layout audit reads this waiver per text element, so mark every descendant
+  document.querySelectorAll('[data-layout-allow-overlap] *').forEach(function (e) { e.setAttribute('data-layout-allow-overlap', ''); });
+
+  // card centre in world px; app px (ax, ay) -> world (CX - 682.5 + ax*1.65, CY - 429 + ay*1.65)
+  var CX = 250, CY = 10, Z = 1.65;
+  var W = function (ax, ay) { return { x: CX - 682.5 + ax * Z, y: CY - 429 + ay * Z }; };
+  gsap.set($('dots'), { xPercent: -50, yPercent: -50, z: -700, force3D: true });
+  gsap.set($('card'), { xPercent: -50, yPercent: -50, x: CX, y: CY, z: 0, force3D: true });
+  gsap.set($('kid'), { xPercent: -50, yPercent: -50, x: -720, y: 170, z: 150, force3D: true });
+  gsap.set($('ring'), { xPercent: -50, yPercent: -50, z: 2, opacity: 0 });
+  gsap.set($('cursor'), { z: 3 });
+
+  // the question types itself, one span per character
+  var Q = 'How do I turn this many-to-many into tables?';
+  var qel = q('q');
+  for (var i = 0; i < Q.length; i++) { var s = document.createElement('span'); s.id = P + 'k' + i; s.textContent = Q[i]; qel.appendChild(s); }
+  var caret = document.createElement('i'); caret.id = P + 'caret'; caret.className = 's05-tutor-caret'; qel.appendChild(caret);
+  // the reply streams one word at a time
+  var A = ['Good question — let\'s work it out together. ', 'What would you need to store about each <b>enrollment</b> itself, like a grade or a date? ', '<b>Hint:</b> try a table that sits <b>between</b> Student and Course.'];
+  var ab = q('ab'), nw = 0;
+  A.join('').split(/(\s+)/).forEach(function (tok) {
+    if (!tok.trim()) { ab.appendChild(document.createTextNode(tok)); return; }
+    var w = document.createElement('span'); w.id = P + 'w' + nw++; w.innerHTML = tok; ab.appendChild(w);
+  });
+  // tokens that split a <b> tag in half are re-joined by the parser; keep the words readable either way
+
+  tl.fromTo($('drift'), { scale: 1, rotationY: -1 }, { scale: 1.025, rotationY: 1, duration: D, ease: 'sine.inOut', force3D: true }, 0);
+  // whip in from the right, then a slow settle
+  tl.fromTo($('cam'), { x: 3000, rotationY: -8 }, { x: 0, rotationY: -3, duration: 0.65, ease: 'expo.out', force3D: true }, 0.07);
+  tl.fromTo($('cam'), { rotationY: -3, z: 0 }, { rotationY: 2, z: 50, duration: 6.0, ease: 'sine.inOut', force3D: true, immediateRender: false }, 0.72);
+
+  // b1: pick "Learning - hints first"
+  var opt = W(12 + 98, 146 + 4 + 15);
+  tl.fromTo($('cursor'), { x: opt.x + 260, y: opt.y + 160, opacity: 0 }, { x: opt.x, y: opt.y, opacity: 1, duration: 0.5, ease: 'power3.out' }, 0.3);
+  tl.fromTo($('cursor'), { scale: 1 }, { keyframes: [{ scale: 0.85, duration: 0.1, ease: 'power1.in' }, { scale: 1, duration: 0.45, ease: 'back.out(2)' }], immediateRender: false }, B - 0.1);
+  tl.fromTo($('ring'), { x: opt.x, y: opt.y, scale: 0.4, opacity: 0.9 }, { scale: 1.6, opacity: 0, duration: 0.5, ease: 'power2.out', immediateRender: false }, B);
+  tl.fromTo($('menu'), { opacity: 1, scaleY: 1 }, { opacity: 0, scaleY: 0.9, duration: 0.25, ease: 'power2.in' }, B + 0.12);
+  tl.fromTo($('v0'), { opacity: 1 }, { opacity: 0, duration: 0.12, ease: 'power1.inOut' }, B + 0.1);
+  tl.fromTo($('v1'), { opacity: 0 }, { opacity: 1, duration: 0.16, ease: 'power1.inOut' }, B + 0.14);
+  tl.fromTo($('mb'), { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(2)' }, B + 0.2);
+
+  // b2-b4.6: typing
+  tl.fromTo($('ph'), { opacity: 1 }, { opacity: 0, duration: 0.08, ease: 'power1.inOut' }, 2 * B - 0.02);
+  var t0 = 2 * B, dt = (4.6 * B - t0) / Q.length;
+  gsap.set(qel.children, { opacity: 0 });
+  gsap.set($('caret'), { opacity: 1 });
+  for (var k = 0; k < Q.length; k++) tl.set($('k' + k), { opacity: 1 }, t0 + k * dt);
+  tl.fromTo($('caret'), { opacity: 0 }, { opacity: 1, duration: 0.05, ease: 'power1.inOut' }, t0 - 0.05);
+  tl.fromTo($('kid'), { y: 170, rotationZ: 0 }, { y: 158, rotationZ: -1.5, duration: B / 2, ease: 'sine.inOut', yoyo: true, repeat: 5, immediateRender: false }, t0);
+
+  // b5: send
+  var snd = W(220 + 16 + 575 - 7 - 17, 456 + 6 + 17);
+  tl.fromTo($('cursor'), { x: opt.x, y: opt.y }, { x: snd.x, y: snd.y, duration: 0.85, ease: 'power3.inOut', immediateRender: false }, 5 * B - 1.0);
+  tl.fromTo($('cursor'), { scale: 1 }, { keyframes: [{ scale: 0.85, duration: 0.1, ease: 'power1.in' }, { scale: 1, duration: 0.45, ease: 'back.out(2)' }], immediateRender: false }, 5 * B - 0.1);
+  tl.fromTo($('ring'), { x: snd.x, y: snd.y, scale: 0.4, opacity: 0.9 }, { scale: 1.6, opacity: 0, duration: 0.5, ease: 'power2.out', immediateRender: false }, 5 * B);
+  tl.fromTo($('send'), { scale: 1 }, { keyframes: [{ scale: 0.9, duration: 0.1 }, { scale: 1, duration: 0.35, ease: 'back.out(2)' }] }, 5 * B - 0.05);
+  tl.fromTo($('q'), { opacity: 1 }, { opacity: 0, duration: 0.1, ease: 'power1.inOut' }, 5 * B + 0.02);
+  tl.fromTo($('ph'), { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power1.inOut', immediateRender: false }, 5 * B + 0.15);
+  tl.fromTo($('ub'), { opacity: 0, y: 40, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'back.out(1.6)', transformOrigin: '100% 100%' }, 5 * B + 0.02);
+  tl.fromTo($('cursor'), { opacity: 1 }, { opacity: 0, duration: 0.3, ease: 'power2.in', immediateRender: false }, 5 * B + 0.5);
+
+  // b6: the tutor answers with a hint, word by word
+  tl.fromTo($('ar'), { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 6 * B - 0.05);
+  for (var j = 0; j < nw; j++) {
+    tl.fromTo($('w' + j), { opacity: 0 }, { opacity: 1, duration: 0.14, ease: 'power1.out' }, 6 * B + 0.12 + j * 0.065);
+  }
+
+  // b8: label
+  tl.fromTo($('chip'), { opacity: 0, y: -24, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.8)' }, 8 * B - 0.05);
+
+  // whip out from b11
+  tl.fromTo($('stage'), { x: 0 }, { x: -3000, duration: 0.55, ease: 'expo.in', immediateRender: false }, 11 * B - 0.02);
+  tl.fromTo($('label'), { x: 0 }, { x: -3000, duration: 0.5, ease: 'expo.in', immediateRender: false }, 11 * B + 0.02);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines['s05-tutor'] = tl;
+})();
+</script>
+</template>

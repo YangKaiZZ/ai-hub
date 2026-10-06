@@ -1,0 +1,10 @@
+# Renders, harness, caches and re-downloadable sources stay local.
+renders/
+.hyperframes/
+.media/
+snapshots/
+assets/audio/source-*.mp3
+src/captures/.tmp-*
+.thumbnails/
+# Synthesized by tools/make_audio.py (deterministic): run it before preview/render.
+assets/audio/

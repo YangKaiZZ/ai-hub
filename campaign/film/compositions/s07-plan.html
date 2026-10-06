@@ -1,0 +1,143 @@
+<template>
+<link rel="stylesheet" href="assets/kit.css">
+<style>
+@font-face { font-family: 'Geist'; font-weight: 500; src: url('assets/fonts/geist-500.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 700; src: url('assets/fonts/geist-700.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 800; src: url('assets/fonts/geist-800.woff2') format('woff2'); }
+#root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Geist', sans-serif; }
+.s07-plan-layer { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.s07-plan-w { position: absolute; left: 50%; top: 50%; will-change: transform; }
+.s07-plan-dots { width: 3400px; height: 2200px; }
+.s07-plan-card { width: 1360px; height: 800px; border-radius: 28px; background: #fff; box-shadow: var(--float); overflow: hidden; }
+.s07-plan-in { position: relative; width: 850px; height: 500px; }
+.s07-plan-a { position: absolute; }
+.s07-plan-t { font: 700 18px/1 'Geist', sans-serif; letter-spacing: -0.015em; }
+.s07-plan-st { font: 500 12.5px/1 'Geist', sans-serif; color: var(--ink-soft); margin-top: 7px; }
+.s07-plan-col { top: 76px; width: 110px; height: 344px; }
+.s07-plan-ch { font: 600 12px/24px 'Geist', sans-serif; color: var(--ink-soft); }
+.s07-plan-ch b { color: var(--ink); font-weight: 700; }
+.s07-plan-cb { position: absolute; top: 28px; left: 0; width: 110px; height: 316px; border-radius: 12px; background: var(--well); }
+.s07-plan-hr { position: absolute; left: 0; width: 110px; height: 1px; background: #e9e6f5; }
+.s07-plan-blk { position: absolute; width: 104px; border-radius: 10px; padding: 6px 8px; overflow: hidden; }
+.s07-plan-blk p { font: 600 11.5px/1.2 'Geist', sans-serif; white-space: nowrap; }
+.s07-plan-blk span { display: block; font: 500 10.5px/1.2 'Geist', sans-serif; opacity: .8; margin-top: 2px; }
+.s07-plan-ok { background: var(--good) !important; }
+.s07-plan-chip { position: absolute; left: 110px; top: 44px; }
+</style>
+<div id="root" data-composition-id="s07-plan" data-width="1920" data-height="1080">
+  <div id="s07-plan-ground" class="clip kit-ground" data-start="0" data-duration="5" data-track-index="0"></div>
+  <div id="s07-plan-stage" class="clip" data-start="0" data-duration="5" data-track-index="1" style="position:absolute; inset:0; perspective:1866px; perspective-origin:50% 50%;">
+    <div id="s07-plan-drift" class="s07-plan-layer">
+      <div id="s07-plan-cam" class="s07-plan-layer">
+        <div id="s07-plan-dots" class="s07-plan-w s07-plan-dots kit-dots"></div>
+        <div id="s07-plan-card" class="s07-plan-w s07-plan-card kit-app">
+          <div class="kit-zoom" style="--z:1.6"><div class="s07-plan-in">
+            <div class="s07-plan-a" style="left:24px; top:22px"><p class="s07-plan-t">Study planner</p><p class="s07-plan-st">Week of Mar 2 · evenings, 5–10 PM</p></div>
+            <span id="s07-plan-gen" class="kit-btn gradient s07-plan-a" style="left:634px; top:18px"><svg viewBox="0 0 256 256"><path d="M208,28H188V24a12,12,0,0,0-24,0v4H92V24a12,12,0,0,0-24,0v4H48A20,20,0,0,0,28,48V208a20,20,0,0,0,20,20H208a20,20,0,0,0,20-20V48A20,20,0,0,0,208,28ZM68,52a12,12,0,0,0,24,0h72a12,12,0,0,0,24,0h16V76H52V52ZM52,204V100H204V204Zm112-52a12,12,0,0,1-12,12H140v12a12,12,0,0,1-24,0V164H104a12,12,0,0,1,0-24h12V128a12,12,0,0,1,24,0v12h12A12,12,0,0,1,164,152Z"/></svg>AI Plan My Week</span>
+            <div id="s07-plan-grid"></div>
+            <span id="s07-plan-dis" class="kit-btn outline s07-plan-a" style="left:456px; top:440px">Discard</span>
+            <span id="s07-plan-cf" class="kit-btn primary s07-plan-a" style="left:552px; top:440px; width:274px"><svg viewBox="0 0 256 256"><path d="M208,28H188V24a12,12,0,0,0-24,0v4H92V24a12,12,0,0,0-24,0v4H48A20,20,0,0,0,28,48V208a20,20,0,0,0,20,20H208a20,20,0,0,0,20-20V48A20,20,0,0,0,208,28ZM68,52a12,12,0,0,0,24,0h72a12,12,0,0,0,24,0h16V76H52V52ZM52,204V100H204V204Zm120.49-84.49a12,12,0,0,1,0,17l-48,48a12,12,0,0,1-17,0l-24-24a12,12,0,0,1,17-17L116,159l39.51-39.52A12,12,0,0,1,172.49,119.51Z"/></svg>Confirm &amp; add to calendar</span>
+            <span id="s07-plan-done" class="kit-btn primary s07-plan-ok s07-plan-a" style="left:552px; top:440px; width:274px"><svg viewBox="0 0 256 256"><path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"/></svg>Added to calendar</span>
+          </div></div>
+        </div>
+        <div id="s07-plan-cursor" class="s07-plan-w kit-cursor"><svg viewBox="0 0 34 48"><path d="M3 2 L3 38 L12 30 L18 45 L25 42 L19 28 L31 28 Z" fill="#17162a" stroke="#ffffff" stroke-width="2.6" stroke-linejoin="round"/></svg></div>
+        <div id="s07-plan-ring" class="s07-plan-w kit-ring" style="width:110px; height:110px;"></div>
+        <img id="s07-plan-kid" class="s07-plan-w kit-sticker" src="assets/stickers/walk-phone.webp" width="388" height="648" alt="">
+      </div>
+    </div>
+  </div>
+  <div id="s07-plan-label" class="clip" data-start="0" data-duration="5" data-track-index="4" style="position:absolute; inset:0;">
+    <div id="s07-plan-chip" class="kit-chip s07-plan-chip"><svg viewBox="0 0 24 24" style="color:#7c3aed"><path d="m4.5 12.5 5 5 10-11"/></svg>Plans your week. You confirm.</div>
+  </div>
+  <div id="s07-plan-grain" class="clip kit-grain" data-start="0" data-duration="5" data-track-index="9"></div>
+</div>
+<script>
+(function () {
+  var P = 's07-plan-';
+  var $ = function (id) { return '#' + P + id; };
+  var D = 5, B = 0.625;
+  var tl = gsap.timeline({ paused: true });
+
+  // build the week grid (Mon 2 .. Sun 8), 5-10 PM, 63px per hour
+  var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  var grid = document.getElementById(P + 'grid');
+  var CW = 114.6, X0 = 24, Y0 = 104, HR = 63;
+  days.forEach(function (d, i) {
+    var col = document.createElement('div');
+    col.className = 's07-plan-a s07-plan-col';
+    col.style.left = (X0 + i * CW) + 'px';
+    var hrs = '';
+    for (var h = 1; h < 5; h++) hrs += '<i class="s07-plan-hr" style="top:' + (h * HR) + 'px"></i>';
+    col.innerHTML = '<p class="s07-plan-ch"><b>' + d + '</b> ' + (2 + i) + '</p><div class="s07-plan-cb">' + hrs + '</div>';
+    grid.appendChild(col);
+  });
+  // [day, start hour, end hour, title, time, bg, ink]
+  var blocks = [
+    [0, 18, 18.75, 'Calculus review', '6:00–6:45', '#dbeafe', '#1d4ed8'],
+    [0, 19, 20.25, 'ERD project', '7:00–8:15', '#ede9fe', '#5b21b6'],
+    [1, 18.5, 19.25, 'Physics reading', '6:30–7:15', '#ccfbf1', '#0f766e'],
+    [2, 18, 19, 'Quiz 4 prep', '6:00–7:00', '#dbeafe', '#1d4ed8'],
+    [3, 19, 20, 'Essay outline', '7:00–8:00', '#ffedd5', '#c2410c'],
+    [5, 17.5, 18.5, 'Weekly review', '5:30–6:30', '#ede9fe', '#5b21b6']
+  ];
+  blocks.forEach(function (b, i) {
+    var el = document.createElement('div');
+    el.id = P + 'k' + i;
+    el.className = 's07-plan-blk';
+    el.style.left = (X0 + b[0] * CW + 3) + 'px';
+    el.style.top = (Y0 + (b[1] - 17) * HR + 2) + 'px';
+    el.style.height = ((b[2] - b[1]) * HR - 4) + 'px';
+    el.style.background = b[5]; el.style.color = b[6];
+    el.innerHTML = '<p>' + b[3] + '</p><span>' + b[4] + '</span>';
+    grid.appendChild(el);
+  });
+
+  var CX = 190, CY = 0, Z = 1.6;
+  var W = function (ax, ay) { return { x: CX - 680 + ax * Z, y: CY - 400 + ay * Z }; };
+  gsap.set($('dots'), { xPercent: -50, yPercent: -50, z: -700, force3D: true });
+  gsap.set($('card'), { xPercent: -50, yPercent: -50, x: CX, y: CY, z: 0, force3D: true });
+  gsap.set($('kid'), { xPercent: -50, yPercent: -50, x: -720, y: 170, z: 180, force3D: true });
+  gsap.set($('ring'), { xPercent: -50, yPercent: -50, z: 2, opacity: 0 });
+  gsap.set($('cursor'), { z: 3, opacity: 0 });
+
+  tl.fromTo($('drift'), { scale: 1, rotationY: -1 }, { scale: 1.025, rotationY: 1, duration: D, ease: 'sine.inOut', force3D: true }, 0);
+  tl.fromTo($('cam'), { x: 3000, rotationY: -8 }, { x: 0, rotationY: -2, duration: 0.65, ease: 'expo.out', force3D: true }, 0.07);
+  tl.fromTo($('cam'), { rotationY: -2, rotationX: 0, z: 0 }, { rotationY: 3, rotationX: 3, z: 50, duration: 4.2, ease: 'sine.inOut', force3D: true, immediateRender: false }, 0.72);
+
+  // b1: "AI Plan My Week"
+  var g = W(634 + 93, 18 + 19);
+  tl.fromTo($('cursor'), { x: g.x + 220, y: g.y + 260, opacity: 0 }, { x: g.x, y: g.y, opacity: 1, duration: 0.5, ease: 'power3.out' }, 0.25);
+  tl.fromTo($('cursor'), { scale: 1 }, { keyframes: [{ scale: 0.85, duration: 0.1, ease: 'power1.in' }, { scale: 1, duration: 0.45, ease: 'back.out(2)' }], immediateRender: false }, B - 0.1);
+  tl.fromTo($('ring'), { x: g.x, y: g.y, scale: 0.4, opacity: 0.9 }, { scale: 1.6, opacity: 0, duration: 0.5, ease: 'power2.out', immediateRender: false }, B);
+  tl.fromTo($('gen'), { scale: 1 }, { keyframes: [{ scale: 0.95, duration: 0.1 }, { scale: 1, duration: 0.35, ease: 'back.out(2)' }] }, B - 0.05);
+
+  // blocks snap in on half beats b2..b4.5
+  blocks.forEach(function (b, i) {
+    tl.fromTo($('k' + i), { opacity: 0, scale: 0.4, y: -26 }, { opacity: 1, scale: 1, y: 0, duration: 0.42, ease: 'back.out(2)', transformOrigin: '50% 50%' }, (2 + i * 0.5) * B - 0.06);
+  });
+
+  // b5: confirm row; b6: click confirm -> added
+  tl.fromTo([$('dis'), $('cf')], { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out', stagger: 0.06 }, 5 * B - 0.1);
+  var c = W(552 + 137, 440 + 19);
+  tl.fromTo($('cursor'), { x: g.x, y: g.y }, { x: c.x, y: c.y, duration: 0.8, ease: 'power3.inOut', immediateRender: false }, 6 * B - 0.9);
+  tl.fromTo($('cursor'), { scale: 1 }, { keyframes: [{ scale: 0.85, duration: 0.1, ease: 'power1.in' }, { scale: 1, duration: 0.45, ease: 'back.out(2)' }], immediateRender: false }, 6 * B - 0.1);
+  tl.fromTo($('ring'), { x: c.x, y: c.y, scale: 0.4, opacity: 0.9 }, { scale: 1.6, opacity: 0, duration: 0.5, ease: 'power2.out', immediateRender: false }, 6 * B);
+  tl.fromTo($('done'), { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.35, ease: 'back.out(2)' }, 6 * B + 0.04);
+  tl.fromTo($('cf'), { opacity: 1 }, { opacity: 0, duration: 0.1, ease: 'power1.inOut', immediateRender: false }, 6 * B + 0.06);
+
+  // the student strolls in, checking his phone
+  tl.fromTo($('kid'), { x: -1250 }, { x: -720, duration: 1.6, ease: 'power2.out', force3D: true }, 0.2);
+  tl.fromTo($('kid'), { y: 170, rotationZ: -2 }, { y: 154, rotationZ: 2, duration: B / 2, ease: 'sine.inOut', yoyo: true, repeat: 6, immediateRender: false }, 0.2);
+
+  // b3: label
+  tl.fromTo($('chip'), { opacity: 0, y: -24, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: 'back.out(1.8)' }, 3 * B - 0.05);
+
+  // whip out from b7
+  tl.fromTo($('stage'), { x: 0 }, { x: -3000, duration: 0.55, ease: 'expo.in', immediateRender: false }, 7 * B - 0.02);
+  tl.fromTo($('label'), { x: 0 }, { x: -3000, duration: 0.5, ease: 'expo.in', immediateRender: false }, 7 * B + 0.02);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines['s07-plan'] = tl;
+})();
+</script>
+</template>

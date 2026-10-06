@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { getCurrentUser } from "@/lib/auth/guards";
+import { FilmPlayer } from "@/components/campaign/film-player";
+import { Sticker } from "@/components/campaign/sticker";
 
 export const metadata: Metadata = {
   title: "AI Hub — Your entire student life. One intelligent hub.",
@@ -46,6 +48,45 @@ const features = [
     icon: PlugIcon,
     title: "LMS integrations",
     body: "Canvas, Moodle and Blackboard ready. Connect with secure tokens — AI Hub never stores your school password.",
+  },
+];
+
+// The film's five proof scenes, in the same order and with the same lines.
+const story = [
+  {
+    sticker: { src: "/campaign/arms-crossed.webp", width: 398, height: 680, alt: "The student, arms crossed and confident" },
+    eyebrow: "Smart priorities",
+    title: "Knows what's due first.",
+    body: "Every assignment lands in one list, ranked by deadline × workload × importance. AI Hub tells you what to start tonight and why.",
+    points: ["Explainable priority score", "AI task analysis: type, effort, urgency", "Daily recommendation"],
+  },
+  {
+    sticker: { src: "/campaign/sit-phone.webp", width: 410, height: 626, alt: "The student sitting on a crate, asking the tutor on his phone" },
+    eyebrow: "AI Tutor",
+    title: "A tutor, not a shortcut.",
+    body: "Pick how much help you want. Learning mode gives hints first, Guided walks you through, Review gives feedback on your own work.",
+    points: ["Learning, Guided and Review modes", "Knows your course and assignment", "Never completes graded work"],
+  },
+  {
+    sticker: { src: "/campaign/trackpad.webp", width: 516, height: 370, alt: "A hand on a laptop trackpad" },
+    eyebrow: "Document intelligence",
+    title: "Answers with sources.",
+    body: "Drop in lecture slides, PDFs and notes. Ask a question and the answer points to the exact page it came from.",
+    points: ["PDF, DOCX, PPTX and text", "Summaries and cited answers", "Click a citation to open the page"],
+  },
+  {
+    sticker: { src: "/campaign/walk-phone.webp", width: 388, height: 648, alt: "The student walking and checking his phone" },
+    eyebrow: "AI Plan My Week",
+    title: "Plans your week. You confirm.",
+    body: "Tell AI Hub when you're free. It balances deadlines, workload and difficulty into study blocks, and nothing is saved until you say so.",
+    points: ["Fits around your free evenings", "Confirm before anything changes", "Lands on your calendar"],
+  },
+  {
+    sticker: { src: "/campaign/pose-fist.webp", width: 360, height: 472, alt: "The student pumping his fist" },
+    eyebrow: "Grades + LMS sync",
+    title: "Grades you can plan around.",
+    body: "Weighted categories, projections and a target calculator that tells you exactly what you need on the remaining work. Canvas, Moodle and Blackboard keep it all in sync.",
+    points: ["Target grade calculator", "Canvas · Moodle · Blackboard", "Secure tokens, never your password"],
   },
 ];
 
@@ -122,6 +163,14 @@ export default async function LandingPage() {
                   <Link href="/login?demo=1">Explore demo</Link>
                 </Button>
               </div>
+              <a href="#film" className="mt-5 inline-flex items-center gap-2.5 rounded-full text-sm font-semibold text-brand-700 hover:text-brand-800 dark:text-brand-300 dark:hover:text-brand-200">
+                <span className="inline-flex size-8 items-center justify-center rounded-full brand-gradient text-white shadow-md" aria-hidden>
+                  <svg viewBox="0 0 24 24" className="ml-0.5 size-3.5 fill-current">
+                    <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
+                  </svg>
+                </span>
+                Watch the 55-second film
+              </a>
               <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
                 {["Free to start", "No school verification", "Works with any LMS"].map((t) => (
                   <li key={t} className="inline-flex items-center gap-1.5">
@@ -132,6 +181,52 @@ export default async function LandingPage() {
             </div>
 
             <HeroPreview />
+          </div>
+        </section>
+
+        {/* Film */}
+        <section id="film" className="mx-auto max-w-6xl scroll-mt-20 px-5 pt-6 pb-20 sm:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-300">The film</p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">7 deadlines. 4 courses. 1 tired brain.</h2>
+            <p className="mt-4 text-muted">55 seconds from overload to a planned week. Turn the sound on: the beat, the pings and the pops were all made for it.</p>
+          </div>
+          <FilmPlayer className="mx-auto mt-10 max-w-5xl" />
+        </section>
+
+        {/* Story: the film's five proof scenes */}
+        <section id="story" className="border-y border-border bg-surface/60 py-20">
+          <div className="mx-auto max-w-6xl px-5 sm:px-8">
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-xs font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-300">One week with AI Hub</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Every weight, one hub.</h2>
+              <p className="mt-4 text-muted">Click a sticker. He likes it.</p>
+            </div>
+            <div className="mt-16 space-y-16 lg:space-y-20">
+              {story.map((s, i) => (
+                <article key={s.title} className="grid items-center gap-8 md:grid-cols-[0.8fr_1.2fr] md:gap-14">
+                  <div className={`flex justify-center ${i % 2 ? "md:order-2" : ""}`}>
+                    <div className="sticker-float w-44 sm:w-52" style={{ animationDelay: `${i * -1.2}s` }}>
+                      <Sticker src={s.sticker.src} alt={s.sticker.alt} width={s.sticker.width} height={s.sticker.height} pitch={1 + i * 0.12} />
+                    </div>
+                  </div>
+                  <div className={i % 2 ? "md:order-1" : ""}>
+                    <Badge variant="brand" className="px-3 py-1 text-xs">
+                      {String(i + 1).padStart(2, "0")} · {s.eyebrow}
+                    </Badge>
+                    <h3 className="mt-4 text-2xl font-semibold tracking-tight sm:text-3xl">{s.title}</h3>
+                    <p className="mt-3 max-w-xl leading-relaxed text-muted">{s.body}</p>
+                    <ul className="mt-5 flex flex-wrap gap-2">
+                      {s.points.map((pt) => (
+                        <li key={pt} className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-sm">
+                          <CheckCircleIcon className="size-4 text-success" /> {pt}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -236,6 +331,34 @@ export default async function LandingPage() {
             ))}
           </div>
         </section>
+        {/* Closing */}
+        <section className="mx-auto max-w-6xl px-5 pb-24 sm:px-8">
+          <div className="relative overflow-hidden rounded-3xl brand-gradient px-8 py-12 text-white shadow-lg sm:px-12 lg:py-14">
+            <div className="grid items-center gap-8 md:grid-cols-[1.3fr_0.7fr]">
+              <div>
+                <h2 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+                  Same you.
+                  <br />
+                  Bigger goals.
+                </h2>
+                <p className="mt-4 max-w-md text-white/85">Your entire student life. One intelligent hub. Free to start, works with any LMS.</p>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <Button asChild size="lg" className="bg-white text-brand-700 hover:bg-white/90">
+                    <Link href={user ? "/dashboard" : "/signup"}>
+                      Get started <ArrowRightIcon />
+                    </Link>
+                  </Button>
+                  <Button asChild size="lg" variant="ghost" className="text-white hover:bg-white/15 hover:text-white">
+                    <Link href="/film">Watch the film</Link>
+                  </Button>
+                </div>
+              </div>
+              <div className="mx-auto w-48 sm:w-56">
+                <Sticker src="/campaign/celebrate.webp" alt="The student jumping with his phone and laptop" width={554} height={656} pitch={1.3} />
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="border-t border-border py-10">
@@ -258,8 +381,14 @@ export default async function LandingPage() {
 
 function HeroPreview() {
   return (
-    <div className="relative mx-auto w-full max-w-lg lg:max-w-none" aria-hidden>
-      <div className="rounded-3xl border border-border bg-surface p-5 shadow-lg">
+    <div className="relative mx-auto w-full max-w-lg lg:max-w-none">
+      <div className="absolute -top-32 -left-2 z-10 hidden w-20 rotate-[-6deg] sm:block">
+        <Sticker src="/campaign/idea.webp" alt="The student thinking, a lightbulb over his head" width={366} height={632} pitch={1.5} />
+      </div>
+      <div className="absolute -right-4 -bottom-24 z-10 w-28 sm:-right-8 sm:w-40 lg:-right-14 lg:w-48">
+        <Sticker src="/campaign/hero.webp" alt="The AI Hub student holding his phone and a laptop open on AI Hub" width={888} height={1700} eager pitch={0.9} />
+      </div>
+      <div className="mr-10 rounded-3xl border border-border bg-surface p-5 shadow-lg sm:mr-16 lg:mr-24" aria-hidden>
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs text-subtle">Tuesday, Mar 3</p>
@@ -300,7 +429,7 @@ function HeroPreview() {
           </p>
         </div>
       </div>
-      <div className="absolute -bottom-6 -left-6 hidden w-56 rounded-2xl border border-border bg-surface p-4 shadow-md sm:block">
+      <div className="absolute -bottom-20 -left-6 hidden w-56 rounded-2xl border border-border bg-surface p-4 shadow-md sm:block" aria-hidden>
         <p className="text-xs font-medium text-subtle">Tonight&apos;s plan</p>
         <ul className="mt-2 space-y-1.5 text-xs">
           <li className="flex justify-between">

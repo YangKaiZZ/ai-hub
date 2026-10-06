@@ -1,0 +1,109 @@
+<template>
+<link rel="stylesheet" href="assets/kit.css">
+<style>
+@font-face { font-family: 'Geist'; font-weight: 500; src: url('assets/fonts/geist-500.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 700; src: url('assets/fonts/geist-700.woff2') format('woff2'); }
+@font-face { font-family: 'Geist'; font-weight: 800; src: url('assets/fonts/geist-800.woff2') format('woff2'); }
+#root { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; font-family: 'Geist', sans-serif; }
+.s01-chaos-layer { position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform; }
+.s01-chaos-w { position: absolute; left: 50%; top: 50%; will-change: transform; }
+.s01-chaos-dots { width: 3400px; height: 2200px; }
+.s01-chaos-card { width: 540px; padding: 0; border-radius: 22px; background: #fff; box-shadow: var(--float); }
+.s01-chaos-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; width: 270px; }
+.s01-chaos-ic { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; flex: none; }
+.s01-chaos-ic i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+.s01-chaos-txt { flex: 1; min-width: 0; }
+.s01-chaos-t { font: 700 14px/1.25 'Geist', sans-serif; color: var(--ink); letter-spacing: -0.01em; }
+.s01-chaos-s { font: 500 12px/1.3 'Geist', sans-serif; color: var(--ink-soft); }
+.s01-chaos-face { width: 458px; height: 454px; }
+.s01-chaos-type { position: absolute; left: 960px; top: 270px; }
+.s01-chaos-line { display: block; }
+</style>
+<div id="root" data-composition-id="s01-chaos" data-width="1920" data-height="1080">
+  <div id="s01-chaos-ground" class="clip kit-ground" data-start="0" data-duration="7.5" data-track-index="0"></div>
+  <div id="s01-chaos-stage" class="clip" data-start="0" data-duration="7.5" data-track-index="1" style="position:absolute; inset:0; perspective:1866px; perspective-origin:50% 50%;">
+    <div id="s01-chaos-drift" class="s01-chaos-layer">
+      <div id="s01-chaos-shake" class="s01-chaos-layer">
+        <div id="s01-chaos-cam" class="s01-chaos-layer">
+          <div id="s01-chaos-dots" class="s01-chaos-w s01-chaos-dots kit-dots"></div>
+
+          <div id="s01-chaos-c0" class="s01-chaos-w s01-chaos-card" data-layout-allow-overlap><div class="kit-zoom" style="--z:2"><div class="s01-chaos-row"><span class="s01-chaos-ic" style="background:#ede9fe"><i style="background:#7c3aed"></i></span><div class="s01-chaos-txt"><p class="s01-chaos-t">ERD Design Project</p><p class="s01-chaos-s">Database Systems</p></div><span class="kit-badge bad">Tomorrow</span></div></div></div>
+          <div id="s01-chaos-c1" class="s01-chaos-w s01-chaos-card" data-layout-allow-overlap><div class="kit-zoom" style="--z:2"><div class="s01-chaos-row"><span class="s01-chaos-ic" style="background:#dbeafe"><i style="background:#2563eb"></i></span><div class="s01-chaos-txt"><p class="s01-chaos-t">Problem Set 3</p><p class="s01-chaos-s">Calculus II</p></div><span class="kit-badge warn">Thu</span></div></div></div>
+          <div id="s01-chaos-c2" class="s01-chaos-w s01-chaos-card" data-layout-allow-overlap><div class="kit-zoom" style="--z:2"><div class="s01-chaos-row"><span class="s01-chaos-ic" style="background:#ccfbf1"><i style="background:#0d9488"></i></span><div class="s01-chaos-txt"><p class="s01-chaos-t">Lab Report 2</p><p class="s01-chaos-s">Physics</p></div><span class="kit-badge bad">Tonight</span></div></div></div>
+          <div id="s01-chaos-c3" class="s01-chaos-w s01-chaos-card" data-layout-allow-overlap><div class="kit-zoom" style="--z:2"><div class="s01-chaos-row"><span class="s01-chaos-ic" style="background:#dbeafe"><i style="background:#2563eb"></i></span><div class="s01-chaos-txt"><p class="s01-chaos-t">Quiz 4</p><p class="s01-chaos-s">Calculus II</p></div><span class="kit-badge warn">Fri 9:00</span></div></div></div>
+          <div id="s01-chaos-c4" class="s01-chaos-w s01-chaos-card" data-layout-allow-overlap><div class="kit-zoom" style="--z:2"><div class="s01-chaos-row"><span class="s01-chaos-ic" style="background:#ffedd5"><i style="background:#ea580c"></i></span><div class="s01-chaos-txt"><p class="s01-chaos-t">Essay outline</p><p class="s01-chaos-s">World History</p></div><span class="kit-badge warn">Wed</span></div></div></div>
+          <div id="s01-chaos-c5" class="s01-chaos-w s01-chaos-card" data-layout-allow-overlap><div class="kit-zoom" style="--z:2"><div class="s01-chaos-row"><span class="s01-chaos-ic" style="background:#ede9fe"><i style="background:#7c3aed"></i></span><div class="s01-chaos-txt"><p class="s01-chaos-t">Group meeting</p><p class="s01-chaos-s">Database Systems</p></div><span class="kit-badge brand">4:00 PM</span></div></div></div>
+          <div id="s01-chaos-c6" class="s01-chaos-w s01-chaos-card" data-layout-allow-overlap><div class="kit-zoom" style="--z:2"><div class="s01-chaos-row"><span class="s01-chaos-ic" style="background:#ccfbf1"><i style="background:#0d9488"></i></span><div class="s01-chaos-txt"><p class="s01-chaos-t">Read Chapter 7</p><p class="s01-chaos-s">Physics</p></div><span class="kit-badge">Mon</span></div></div></div>
+          <div id="s01-chaos-c7" class="s01-chaos-w s01-chaos-card" data-layout-allow-overlap><div class="kit-zoom" style="--z:2"><div class="s01-chaos-row"><span class="s01-chaos-ic" style="background:#ffedd5"><i style="background:#ea580c"></i></span><div class="s01-chaos-txt"><p class="s01-chaos-t">Reading response</p><p class="s01-chaos-s">World History</p></div><span class="kit-badge bad">Overdue</span></div></div></div>
+
+          <img id="s01-chaos-face" class="s01-chaos-w s01-chaos-face kit-sticker" src="assets/stickers/facepalm.webp" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="s01-chaos-type" class="clip s01-chaos-type" data-start="0" data-duration="7.5" data-track-index="4">
+    <span id="s01-chaos-l0" class="kit-type s01-chaos-line"><em>7</em> deadlines.</span>
+    <span id="s01-chaos-l1" class="kit-type s01-chaos-line"><em>4</em> courses.</span>
+    <span id="s01-chaos-l2" class="kit-type s01-chaos-line"><em>1</em> tired brain.</span>
+  </div>
+  <div id="s01-chaos-grain" class="clip kit-grain" data-start="0" data-duration="7.5" data-track-index="9"></div>
+</div>
+<script>
+(function () {
+  var P = 's01-chaos-';
+  var $ = function (id) { return '#' + P + id; };
+  var D = 7.5, B = 0.625;
+  var tl = gsap.timeline({ paused: true });
+  // intentional layering: the layout audit reads this waiver per text element, so mark every descendant
+  document.querySelectorAll('[data-layout-allow-overlap] *').forEach(function (e) { e.setAttribute('data-layout-allow-overlap', ''); });
+
+  // world poses: [x, y, z, rotationZ] - cards orbit the student at different depths
+  var cards = [
+    [-560, -300, 40, -4], [540, -320, -160, 3], [-640, 30, 110, 2], [620, 10, -240, -3],
+    [-500, 330, -90, 3], [-70, -430, -380, 1], [560, 330, 70, -2], [60, 430, -220, -2]
+  ];
+  gsap.set($('dots'), { xPercent: -50, yPercent: -50, z: -700, force3D: true });
+  gsap.set($('face'), { xPercent: -50, yPercent: -50, x: 0, y: 10, z: 160, force3D: true });
+  cards.forEach(function (c, i) {
+    gsap.set($('c' + i), { xPercent: -50, yPercent: -50, x: c[0], y: c[1], z: c[2], rotationZ: c[3], force3D: true });
+  });
+
+  // constant drift + a slow, pressing dolly-in for the whole overload
+  tl.fromTo($('drift'), { scale: 1, rotationY: -1.5, rotationX: 0.5 }, { scale: 1.03, rotationY: 1.5, rotationX: -0.5, duration: D, ease: 'sine.inOut', force3D: true }, 0);
+  tl.fromTo($('cam'), { z: -260, rotationZ: 0 }, { z: 60, rotationZ: -1.2, duration: 6.6, ease: 'power1.inOut', force3D: true }, 0);
+
+  // one notification per beat, b0..b7
+  cards.forEach(function (c, i) {
+    var t = i * B;
+    tl.fromTo($('c' + i), { opacity: 0, scale: 0.55, y: c[1] + 70 }, { opacity: 1, scale: 1, y: c[1], duration: 0.5, ease: 'back.out(1.8)', force3D: true }, t);
+    // restless wobble once landed
+    tl.fromTo($('c' + i), { rotationZ: c[3] }, { rotationZ: c[3] + (i % 2 ? -2.2 : 2.2), duration: B, ease: 'sine.inOut', yoyo: true, repeat: Math.floor((4.6 - t) / B), immediateRender: false }, t + 0.45);
+  });
+
+  // the facepalm slams in on b4, with a short camera shake
+  tl.fromTo($('face'), { opacity: 0, scale: 1.6, rotationZ: -8 }, { opacity: 1, scale: 1, rotationZ: 0, duration: 0.42, ease: 'back.out(1.5)', force3D: true }, 4 * B - 0.12);
+  tl.fromTo($('shake'), { x: 0, y: 0 }, { keyframes: [{ x: -14, y: 8, duration: 0.05 }, { x: 11, y: -6, duration: 0.06 }, { x: -6, y: 4, duration: 0.07 }, { x: 0, y: 0, duration: 0.12 }], ease: 'sine.inOut' }, 4 * B + 0.02);
+
+  // cards fall back and soften so the type reads (b7.5)
+  cards.forEach(function (c, i) {
+    tl.fromTo($('c' + i), { z: c[2], filter: 'blur(0px)' }, { z: c[2] - 520, filter: 'blur(5px)', duration: 0.7, ease: 'power3.inOut', immediateRender: false }, 7.5 * B - 0.1);
+  });
+  tl.fromTo($('face'), { x: 0, z: 160 }, { x: -470, z: 220, duration: 0.8, ease: 'power3.inOut', immediateRender: false }, 7.5 * B - 0.15);
+
+  // kinetic type on b8, b9, b10
+  [0, 1, 2].forEach(function (k) {
+    tl.fromTo($('l' + k), { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.42, ease: 'power3.out' }, (8 + k) * B - 0.04);
+  });
+  tl.fromTo($('l2'), { scale: 1 }, { scale: 1.06, duration: 0.18, ease: 'power2.out', yoyo: true, repeat: 1, immediateRender: false, transformOrigin: '0% 50%' }, 10 * B + 0.3);
+
+  // whip pan out to the left from b11; the last frames are ground only
+  tl.fromTo($('cam'), { x: 0 }, { x: -3000, duration: 0.55, ease: 'expo.in', force3D: true, immediateRender: false }, 11 * B - 0.02);
+  tl.fromTo($('type'), { x: 0 }, { x: -2600, duration: 0.5, ease: 'expo.in', immediateRender: false }, 11 * B + 0.02);
+  tl.fromTo($('dots'), { opacity: 1 }, { opacity: 1, duration: 0.01 }, 0);
+
+  window.__timelines = window.__timelines || {};
+  window.__timelines['s01-chaos'] = tl;
+})();
+</script>
+</template>
