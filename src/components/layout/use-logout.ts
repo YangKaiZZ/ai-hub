@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { apiPost } from "@/lib/client/api";
 import { toast } from "@/components/ui/toaster";
 
-export function useLogout() {
+export function useLogout(redirectTo = "/login") {
   const router = useRouter();
   const [pending, setPending] = React.useState(false);
 
@@ -13,13 +13,13 @@ export function useLogout() {
     setPending(true);
     try {
       await apiPost("/api/auth/logout");
-      router.push("/login");
+      router.push(redirectTo);
       router.refresh();
     } catch {
       toast.error("Could not sign out. Please try again.");
       setPending(false);
     }
-  }, [router]);
+  }, [router, redirectTo]);
 
   return { logout, pending };
 }

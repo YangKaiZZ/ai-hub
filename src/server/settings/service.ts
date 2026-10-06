@@ -1,3 +1,4 @@
+import { isDemoEmail } from "@/lib/demo";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { NotFoundError } from "@/lib/errors";
@@ -62,9 +63,13 @@ export async function getSettings(userId: string) {
     },
   });
   if (!user) throw new NotFoundError("User");
+  // Every visitor signs in to the demo as the same user, so its session list is
+  // other visitors' IP addresses and browsers. Never send it.
+  const isDemo = isDemoEmail(user.email);
+  const sessions = isDemo ? [] : user.sessions;
   const pref = user.preference;
   return {
-    profile: { email: user.email, firstName: user.firstName, lastName: user.lastName ?? "", avatarUrl: user.avatarUrl ?? "", timezone: user.timezone, institution: user.institution, memberSince: user.createdAt, role: user.role },
+    profile: { email: user.email, firstName: user.firstName, lastName: user.lastName ?? "", avatarUrl: user.avatarUrl ?? "", timezone: user.timezone, institution: user.institution, memberSince: user.createdAt, role: user.role, isDemo },
     preferences: {
       theme: pref?.theme ?? "system",
       weekStartsOn: pref?.weekStartsOn ?? 1,
@@ -74,7 +79,7 @@ export async function getSettings(userId: string) {
       priorityRules: { ...DEFAULT_PRIORITY_RULES, ...((pref?.priorityRules as object | null) ?? {}) },
     },
     integrations: user.integrations,
-    sessions: user.sessions,
+    sessions,
   };
 }
 

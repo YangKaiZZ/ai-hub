@@ -56,7 +56,7 @@ export function SettingsView({ settings, providers, integrations, initialTab = "
         <IntegrationsTab providers={providers} integrations={integrations} />
       </TabsContent>
       <TabsContent value="security">
-        <SecurityTab sessions={settings.sessions} email={settings.profile.email} />
+        <SecurityTab sessions={settings.sessions} email={settings.profile.email} isDemo={settings.profile.isDemo} />
       </TabsContent>
     </Tabs>
   );
@@ -70,6 +70,11 @@ function Section({ title, description, children }: { title: string; description?
       <div className="mt-5">{children}</div>
     </section>
   );
+}
+
+/** Shown wherever the shared demo login cannot make changes. */
+function DemoNotice({ children }: { children: React.ReactNode }) {
+  return <p className="rounded-xl border border-border bg-surface-muted px-4 py-3 text-sm text-muted">{children}</p>;
 }
 
 function ProfileTab({ profile }: { profile: SettingsData["profile"] }) {
@@ -105,7 +110,11 @@ function ProfileTab({ profile }: { profile: SettingsData["profile"] }) {
   return (
     <div className="space-y-6">
       <Section title="Profile" description="How you appear across AI Hub.">
+        {profile.isDemo ? (
+          <DemoNotice>Everyone exploring the demo shares this account, so its profile stays as it is. Your own account can be edited freely.</DemoNotice>
+        ) : null}
         <form onSubmit={submit} className="space-y-4" noValidate>
+          <fieldset disabled={profile.isDemo} className="space-y-4 disabled:opacity-70">
           <div className="grid gap-4 sm:grid-cols-2">
             <Field id="firstName" label="First name" required error={errors.firstName}>
               <Input name="firstName" defaultValue={profile.firstName} />
@@ -142,6 +151,7 @@ function ProfileTab({ profile }: { profile: SettingsData["profile"] }) {
               Save changes
             </Button>
           </div>
+          </fieldset>
         </form>
       </Section>
     </div>
@@ -508,7 +518,7 @@ function CsvImportSection() {
   );
 }
 
-function SecurityTab({ sessions, email }: { sessions: SettingsData["sessions"]; email: string }) {
+function SecurityTab({ sessions, email, isDemo }: { sessions: SettingsData["sessions"]; email: string; isDemo: boolean }) {
   const router = useRouter();
   const [saving, setSaving] = React.useState(false);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
@@ -554,6 +564,17 @@ function SecurityTab({ sessions, email }: { sessions: SettingsData["sessions"]; 
       toast.error(err instanceof Error ? err.message : "Could not delete account");
       setDeleting(false);
     }
+  }
+
+  if (isDemo) {
+    return (
+      <Section title="Security">
+        <DemoNotice>
+          Password, sign-in sessions and account deletion are switched off on the shared demo account, and its
+          session list is hidden because it would show other visitors. The whole demo resets once a day.
+        </DemoNotice>
+      </Section>
+    );
   }
 
   return (

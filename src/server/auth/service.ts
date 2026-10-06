@@ -1,3 +1,4 @@
+import { isDemoEmail } from "@/lib/demo";
 import { db } from "@/lib/db";
 import { env } from "@/lib/env";
 import { hashPassword, verifyPassword } from "@/lib/auth/password";
@@ -11,6 +12,10 @@ import { sendEmail } from "@/server/email";
 const RESET_TTL_MS = 1000 * 60 * 60; // 1 hour
 
 export async function signup(input: SignupInput) {
+  // The demo domain marks the shared public login as read-only; nobody else may claim it.
+  if (isDemoEmail(input.email)) {
+    throw new ValidationError("Reserved email domain", { email: "That email domain is reserved for the demo. Use your own email." });
+  }
   const existing = await db.user.findUnique({ where: { email: input.email }, select: { id: true } });
   if (existing) throw new ConflictError("Email already registered", "An account with this email already exists.");
 

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/ui/page-header";
 import { InstitutionVerifyToggle } from "@/components/admin/institution-verify-toggle";
 import { requirePageUser } from "@/lib/auth/guards";
+import { isDemoEmail } from "@/lib/demo";
 import { formatRelative } from "@/lib/utils";
 import { getAdminOverview, listAdminInstitutions } from "@/server/admin/service";
 
@@ -14,7 +15,7 @@ export const metadata: Metadata = { title: "Admin" };
 export default async function AdminPage() {
   const user = await requirePageUser();
   if (user.role !== "ADMIN") redirect("/dashboard");
-  const [overview, institutions] = await Promise.all([getAdminOverview(), listAdminInstitutions()]);
+  const [overview, institutions] = await Promise.all([getAdminOverview({ redactPeople: isDemoEmail(user.email) }), listAdminInstitutions()]);
 
   const stat = (label: string, value: string | number, hint?: string, icon?: React.ReactNode) => (
     <div key={label} className="rounded-2xl border border-border bg-surface p-4 shadow-sm">

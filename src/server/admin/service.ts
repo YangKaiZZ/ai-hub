@@ -1,14 +1,26 @@
 import { subDays } from "date-fns";
 import { db } from "@/lib/db";
+import { isDemoEmail } from "@/lib/demo";
 import { env } from "@/lib/env";
 import { getAIProvider } from "@/server/ai/provider";
 import { listLmsProviders } from "@/server/integrations/registry";
 
+/** "jane.doe@gmail.com" -> "j•••@gmail.com". Keeps the domain, which is useful and not identifying. */
+export function maskEmail(email: string): string {
+  const at = email.lastIndexOf("@");
+  if (at <= 0) return "•••";
+  return `${email[0]}•••${email.slice(at)}`;
+}
+
 /**
  * Admin read models. Deliberately aggregate-first: user rows expose only
  * identity/activity fields, never content (tasks, files, conversations).
+ *
+ * `redactPeople` is for the public demo admin, whose password is in the README:
+ * it still sees the dashboard working, but not who signed up. Demo accounts
+ * themselves stay readable since there is nobody behind them.
  */
-export async function getAdminOverview() {
+export async function getAdminOverview(options: { redactPeople?: boolean } = {}) {
   const now = new Date();
   const since7 = subDays(now, 7);
   const since30 = subDays(now, 30);
@@ -62,7 +74,11 @@ export async function getAdminOverview() {
     },
     health: { database: dbOk, storage: env.STORAGE_PROVIDER, environment: env.NODE_ENV, errors24h },
     recentEvents,
-    recentUsers,
+    recentUsers: options.redactPeople
+      ? recentUsers.map((u) =>
+          isDemoEmail(u.email) ? u : { ...u, email: maskEmail(u.email), firstName: `${u.firstName.slice(0, 1)}.`, lastName: null },
+        )
+      : recentUsers,
   };
 }
 

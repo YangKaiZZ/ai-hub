@@ -37,9 +37,11 @@ services:
     build:
       context: ..
       dockerfile: Dockerfile
+    # Named so the demo-reset service below can reuse this build.
+    image: ai-hub-app:latest
     container_name: aihub-app
     restart: unless-stopped
-    environment:
+    environment: &app-env
       NODE_ENV: production
       PORT: 3000
       DATABASE_URL: postgresql://aihub:${POSTGRES_PASSWORD}@db:5432/aihub?schema=public
@@ -54,12 +56,17 @@ services:
       DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       AI_MODEL: ${AI_MODEL:-claude-opus-5}
+      # Daily AI allowance in successful calls per UTC day; 0 means no limit.
+      AI_DAILY_LIMIT_PER_USER: ${AI_DAILY_LIMIT_PER_USER:-50}
+      AI_DAILY_LIMIT_DEMO: ${AI_DAILY_LIMIT_DEMO:-150}
+      AI_DAILY_LIMIT_TOTAL: ${AI_DAILY_LIMIT_TOTAL:-500}
 
       STORAGE_PROVIDER: local
       STORAGE_LOCAL_DIR: /data/storage
       MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-25}
       LMS_MOCK_MODE: ${LMS_MOCK_MODE:-true}
-      # Seeds the demo student on first boot only; the seed is idempotent.
+      # true: reset the demo accounts to fresh sample data on every start.
+      # The seed only ever touches the two @demo.aihub.local accounts.
       SEED_DEMO: ${SEED_DEMO:-false}
     volumes:
       - aihub-storage:/data/storage
@@ -69,6 +76,44 @@ services:
     networks:
       - default
       - edge
+    logging: *logging
+
+  # Resets the shared demo once a day. Visitors all use one login, so anything
+  # they add, rename or delete would otherwise pile up for the next visitor,
+  # and the demo's deadlines (seeded relative to the day it ran) would drift
+  # into "overdue" within a week. Off unless DEMO_NIGHTLY_RESET=true.
+  demo-reset:
+    image: ai-hub-app:latest
+    pull_policy: never
+    container_name: aihub-demo-reset
+    restart: unless-stopped
+    environment:
+      <<: *app-env
+      DEMO_NIGHTLY_RESET: ${DEMO_NIGHTLY_RESET:-false}
+      DEMO_RESET_HOUR_UTC: ${DEMO_RESET_HOUR_UTC:-4}
+    command:
+      - sh
+      - -c
+      - |
+        if [ "$$DEMO_NIGHTLY_RESET" != "true" ]; then
+          echo "[demo-reset] DEMO_NIGHTLY_RESET is not true; idling."
+          exec sleep infinity
+        fi
+        hour=$$(printf '%02d' "$$DEMO_RESET_HOUR_UTC")
+        echo "[demo-reset] will reset the demo daily at $$hour:00 UTC"
+        while true; do
+          if [ "$$(date -u +%H)" = "$$hour" ]; then
+            echo "[demo-reset] $$(date -u) resetting demo accounts"
+            npx tsx prisma/seed.ts || echo "[demo-reset] seed failed; will retry tomorrow"
+            sleep 3700
+          fi
+          sleep 300
+        done
+    depends_on:
+      db:
+        condition: service_healthy
+      app:
+        condition: service_started
     logging: *logging
 
 volumes:

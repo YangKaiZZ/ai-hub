@@ -24,6 +24,16 @@ const schema = z.object({
   DEEPSEEK_API_KEY: z.string().optional(),
   DEEPSEEK_MODEL: z.string().default("deepseek-chat"),
   DEEPSEEK_BASE_URL: z.string().url().default("https://api.deepseek.com"),
+
+  /**
+   * Daily AI allowance in successful calls per UTC day; 0 disables a limit.
+   * See src/server/ai/quota.ts. Mock calls are never counted against these.
+   */
+  AI_DAILY_LIMIT_PER_USER: z.coerce.number().int().min(0).default(50),
+  /** Shared by every visitor using the public demo login. */
+  AI_DAILY_LIMIT_DEMO: z.coerce.number().int().min(0).default(150),
+  /** All users combined: the ceiling on daily spend on the API key. */
+  AI_DAILY_LIMIT_TOTAL: z.coerce.number().int().min(0).default(500),
   AI_FAST_MODEL: z.string().default("claude-haiku-4-5"),
   EMBEDDING_PROVIDER: z.enum(["local"]).default("local"),
 

@@ -16,6 +16,17 @@ Security is a first-class requirement. This document lists the controls in place
 - Admin routes use `requireAdmin()`; admin read models are aggregates and identity fields only — never student content.
 - AI agent tools are constructed per request with the caller's `userId` bound; the model cannot pass a user id.
 
+## Shared demo accounts
+The seeded `@demo.aihub.local` accounts have public passwords so visitors can try a deployment. Because everyone shares them:
+- `assertNotDemo()` refuses changes to the account itself (password, profile, sessions, onboarding, deletion) with a `DEMO_READ_ONLY` error the UI explains.
+- `getSettings()` never returns the demo account's session list, which would be other visitors' IPs and browsers.
+- The demo admin's admin overview masks real users' names and emails (`maskEmail`), and it cannot change institutions.
+- Signup rejects the demo domain, so nobody can create an account that inherits these rules or impersonates the demo.
+- Coursework stays editable; `DEMO_NIGHTLY_RESET` restores it daily.
+
+## AI spend
+Real AI providers sit behind `QuotaGuardedProvider`, which checks `assertAIQuota()` before every call: a per-user daily allowance, a separate one for the shared demo login, and a deployment-wide ceiling that bounds the API bill. Counts come from `AIUsageLog`, so they survive restarts. This sits on top of the per-minute rate limit on the chat route.
+
 ## Input validation
 - All route bodies/queries are validated with Zod (`parseBody`, `parseQuery`); IDs must be UUIDs.
 - Prisma parameterises every query; raw SQL in the retriever uses `Prisma.sql` tagged templates (parameterised).

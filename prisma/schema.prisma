@@ -748,6 +748,8 @@ model AIUsageLog {
 
   @@index([userId, createdAt])
   @@index([feature, createdAt])
+  // Daily AI quota counts every billable call since midnight UTC (src/server/ai/quota.ts).
+  @@index([createdAt])
 }
 
 // ─────────────────────────────────────────────────────────────

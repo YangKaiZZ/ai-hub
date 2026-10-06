@@ -124,18 +124,44 @@ the AI Ops site still answers:
 curl -s -o /dev/null -w "%{http_code}\n" https://aiops-cocenter.site/
 ```
 
-## 7. Load the demo data (optional, once)
+## 7. Demo data and AI spend
 
-The landing page's demo link expects the seeded student to exist.
+The landing page's "Explore demo" button signs visitors in as a seeded student.
+Two settings in `deploy/.env` keep that demo usable:
 
-```bash
-cd ~/ai-hub/deploy && docker compose exec app npx tsx prisma/seed.ts
-```
+- `SEED_DEMO=true` resets both demo accounts to fresh sample data whenever the
+  app starts.
+- `DEMO_NIGHTLY_RESET=true` also resets them once a day at
+  `DEMO_RESET_HOUR_UTC` (default 4). Everyone shares the demo login, so this
+  clears whatever visitors added, and it keeps the sample deadlines current
+  rather than drifting into "overdue". It runs in the `aihub-demo-reset`
+  container; `docker compose logs demo-reset` shows each run.
 
-That creates `andrew@demo.aihub.local` and `admin@demo.aihub.local`, both with
-password `Password123`. The seed is idempotent, so re-running it is safe.
-**Change the admin password after the first login**, since these credentials
-are public in the repository.
+The demo logins, `andrew@demo.aihub.local` and `admin@demo.aihub.local` with
+password `Password123`, are public on purpose, so they are locked down:
+
+- They cannot change their password, profile or sessions, redo onboarding, or
+  delete themselves. Settings explains this instead of failing.
+- Their session list is never sent to the browser: it would be other visitors'
+  IP addresses.
+- The demo admin sees the admin dashboard, but real users' names and emails
+  are masked, and it cannot change institutions.
+- Nobody can sign up with a `@demo.aihub.local` address.
+- A banner tells visitors the demo is shared and offers a real account.
+
+AI calls are capped per UTC day, counted from the usage log, so restarts do not
+reset them. `0` means no limit:
+
+| Setting | Default | Applies to |
+|---|---|---|
+| `AI_DAILY_LIMIT_PER_USER` | 50 | each normal account |
+| `AI_DAILY_LIMIT_DEMO` | 150 | everyone using the demo login, combined |
+| `AI_DAILY_LIMIT_TOTAL` | 500 | all users combined: the ceiling on the API bill |
+
+When a limit is reached, the tutor and the "Analyze" button say so and when it
+resets. The study planner falls back to its built-in scheduler, document
+summaries are skipped, and imported tasks arrive without an AI analysis. None
+of them fail outright.
 
 ---
 

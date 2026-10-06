@@ -12,6 +12,8 @@ export type ErrorCode =
   | "PAYLOAD_TOO_LARGE"
   | "UNSUPPORTED_FILE"
   | "AI_UNAVAILABLE"
+  | "AI_QUOTA_EXCEEDED"
+  | "DEMO_READ_ONLY"
   | "INTEGRATION_ERROR"
   | "PROCESSING_FAILED"
   | "INTERNAL_ERROR";
@@ -47,6 +49,8 @@ const defaultStatus: Record<ErrorCode, number> = {
   PAYLOAD_TOO_LARGE: 413,
   UNSUPPORTED_FILE: 415,
   AI_UNAVAILABLE: 503,
+  AI_QUOTA_EXCEEDED: 429,
+  DEMO_READ_ONLY: 403,
   INTEGRATION_ERROR: 502,
   PROCESSING_FAILED: 500,
   INTERNAL_ERROR: 500,
@@ -62,6 +66,8 @@ const defaultUserMessage: Record<ErrorCode, string> = {
   PAYLOAD_TOO_LARGE: "That file is too large.",
   UNSUPPORTED_FILE: "That file type is not supported.",
   AI_UNAVAILABLE: "The AI assistant is temporarily unavailable. Please try again shortly.",
+  AI_QUOTA_EXCEEDED: "You have used today's AI allowance. It resets at midnight UTC.",
+  DEMO_READ_ONLY: "This is the shared demo account, so it can't change its password, profile or sign-ins, or be deleted. Create a free account of your own to try those.",
   INTEGRATION_ERROR: "We could not reach your learning platform. Please try again later.",
   PROCESSING_FAILED: "We could not process that file.",
   INTERNAL_ERROR: "Something went wrong on our side. Please try again.",
@@ -113,6 +119,31 @@ export class AIUnavailableError extends AppError {
   constructor(cause?: unknown) {
     super("AI_UNAVAILABLE", "AI provider unavailable", { cause });
     this.name = "AIUnavailableError";
+  }
+}
+
+/**
+ * The daily AI allowance is spent. `scope` says whose: this user's own budget,
+ * or the deployment-wide ceiling that caps total spend on the API key.
+ */
+export class AIQuotaExceededError extends AppError {
+  constructor(scope: "user" | "total", resetsAt: Date) {
+    super("AI_QUOTA_EXCEEDED", `Daily AI quota exceeded (${scope})`, {
+      details: { scope, resetsAt: resetsAt.toISOString() },
+      userMessage:
+        scope === "total"
+          ? "The AI assistant has reached its limit for today across all users. It resets at midnight UTC."
+          : undefined,
+    });
+    this.name = "AIQuotaExceededError";
+  }
+}
+
+/** Refused because the account is the shared, public demo login. */
+export class DemoReadOnlyError extends AppError {
+  constructor(action: string) {
+    super("DEMO_READ_ONLY", `Demo account cannot ${action}`);
+    this.name = "DemoReadOnlyError";
   }
 }
 
