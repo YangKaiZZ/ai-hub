@@ -5,10 +5,7 @@ the Caddy that already fronts the server, which reaches the app over a shared
 Docker network called `edge`.
 
 ```
-internet ──▶ Cloudflare (DNS, proxy, Full strict TLS)
-                │
-                ▼
-             Caddy (:80/:443, existing, Let's Encrypt)
+internet ──▶ Caddy (:80/:443, existing, Let's Encrypt)
                 │  edge network
                 ▼
             aihub-app:3000 ──▶ aihub-db:5432 (private)
@@ -16,31 +13,26 @@ internet ──▶ Cloudflare (DNS, proxy, Full strict TLS)
                 └─ aihub-storage volume (uploaded documents)
 ```
 
+DNS for `aiops-cocenter.site` is served by Namecheap. Cloudflare is an optional
+extra layer, covered at the end; nothing here depends on it.
+
 Everything below runs on the server as root, except step 1.
 
 ---
 
-## 1. Point the domain at the server, through Cloudflare
+## 1. Point the hostname at the server
 
-Add the domain to Cloudflare (Add a site, free plan) and move its nameservers
-there at your registrar. Then, in the Cloudflare dashboard:
+**Already done for `aihub.aiops-cocenter.site`.** In Namecheap → Domain List →
+Manage → Advanced DNS there is an `A` record, host `aihub`, value
+`173.212.241.218`. For a different hostname, add the same kind of record.
 
-1. **DNS → Records.** Add an `A` record, name `@` (or the subdomain you want),
-   content `173.212.241.218`. Leave the proxy **off** (grey cloud) for now, so
-   Caddy can get its certificate directly from Let's Encrypt.
-2. **SSL/TLS → Overview.** Set the mode to **Full (strict)**. Any other mode
-   either breaks or silently strips the encryption between Cloudflare and the
-   server.
-3. **SSL/TLS → Edge Certificates.** Turn **Always Use HTTPS** on.
-
-Check that it resolves before going on:
+Check it resolves before going on:
 
 ```bash
 dig +short aihub.aiops-cocenter.site
 ```
 
-It should print the server's IP. You will switch the proxy on in step 6, once
-the origin is actually answering.
+It should print `173.212.241.218`.
 
 ## 2. Create the shared network (once per server)
 
@@ -110,42 +102,27 @@ docker compose logs -f app
 
 Look for `applying database migrations`, then `starting server on port 3000`.
 
-## 6. Turn on HTTPS, then the Cloudflare proxy
+## 6. Turn on HTTPS
 
 ```bash
 cd ~/ai-ops-command-center/deploy && docker compose up -d caddy
 ```
 
-Caddy requests the certificate on the first request to the new hostname:
+That restarts Caddy, which also serves the AI Ops site; expect a second or two
+of downtime there. Caddy requests the certificate on the first request to the
+new hostname:
 
 ```bash
 curl -s https://aihub.aiops-cocenter.site/api/health
 ```
 
 Expect `{"ok":true,"status":"healthy",...}`. If the certificate fails, check
-that port 80 is open and that the DNS record from step 1 resolves.
-
-Now go back to **Cloudflare → DNS** and switch that record's proxy **on**
-(orange cloud). Re-run the health check. With the mode on Full (strict) from
-step 1, Cloudflare validates the Let's Encrypt certificate Caddy just issued,
-and Caddy keeps renewing it through the proxy.
-
-Finally, close the back door. While the origin IP accepts traffic from anywhere,
-anyone who finds it can bypass Cloudflare and forge the client-IP headers the
-rate limiter trusts:
+that port 80 is open and that the DNS record from step 1 resolves. Then check
+the AI Ops site still answers:
 
 ```bash
-# Allow only Cloudflare to reach 80/443; keep SSH as it is.
-for ip in $(curl -s https://www.cloudflare.com/ips-v4); do
-  ufw allow from "$ip" to any port 80,443 proto tcp
-done
-for ip in $(curl -s https://www.cloudflare.com/ips-v6); do
-  ufw allow from "$ip" to any port 80,443 proto tcp
-done
+curl -s -o /dev/null -w "%{http_code}\n" https://aiops-cocenter.site/
 ```
-
-Only do this once the proxy is on and working, and remember the other site on
-this server shares those ports.
 
 ## 7. Load the demo data (optional, once)
 
@@ -209,9 +186,35 @@ gunzip -c backups/ai_hub-YYYYMMDD-HHMMSS.sql.gz | \
 | App exits on boot | Usually a missing secret. The error names the variable. |
 | AI replies look canned | `AI_PROVIDER` is `mock`, or `DEEPSEEK_API_KEY` is empty so the app fell back |
 | Uploads vanish after redeploy | The `aihub-storage` volume was removed. `docker compose down` keeps it; `down -v` does not. |
-| Cloudflare 521 or 522 | The origin is not answering. Check the app container, then that the firewall rules from step 6 did not lock Cloudflare out. |
+| Cloudflare 521 or 522 | The origin is not answering. Check the app container, then that the firewall rules from the Cloudflare section did not lock Cloudflare out. |
 | Cloudflare 526 | SSL mode is Full (strict) but the origin certificate is missing or expired. Grey-cloud the record, let Caddy issue, then re-proxy. |
 | Tutor replies arrive in one lump | Something is buffering the event stream. The app already sends `no-transform` and `X-Accel-Buffering: no`; check for a Cloudflare rule that rewrites `/api/*`. |
+
+## Optional: put Cloudflare in front
+
+Not needed: Caddy already provides HTTPS. Cloudflare adds caching and DDoS
+absorption, at the cost of moving the whole domain. That means changing the
+nameservers at Namecheap to Cloudflare's, which moves **every** record for
+`aiops-cocenter.site`, including the AI Ops site and the Resend email records.
+Check Cloudflare imported all of them before switching, or email stops.
+
+Once the domain is on Cloudflare:
+
+1. Set **SSL/TLS** to **Full (strict)**. Other modes either fail or quietly drop
+   encryption between Cloudflare and this server.
+2. Switch the `aihub` record's proxy on (orange cloud) and re-run the health check.
+3. Only then, and only once every site on this server is proxied, restrict ports
+   80 and 443 to Cloudflare's ranges. Doing it earlier locks out every visitor
+   to both sites:
+
+```bash
+for ip in $(curl -s https://www.cloudflare.com/ips-v4) $(curl -s https://www.cloudflare.com/ips-v6); do
+  ufw allow from "$ip" to any port 80,443 proto tcp
+done
+```
+
+The app already prefers Cloudflare's `CF-Connecting-IP` header for rate
+limiting when it is present, and falls back to `X-Forwarded-For` when it is not.
 
 ## What is deliberately not here
 

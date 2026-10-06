@@ -169,7 +169,7 @@ docker compose --profile prod up --build
 The `app` image runs migrations on start (`scripts/docker-start.sh`), serves on port 3000, stores uploads in a named volume, and exposes `GET /api/health` for probes. Set `SEED_DEMO=true` to seed demo data on first boot.
 
 ### A real server, behind HTTPS
-[`deploy/`](deploy/README.md) is the production stack: the app plus its own Postgres, no database port exposed, TLS from a Caddy that already fronts the host, and Cloudflare in front of that. The runbook there covers DNS, secrets, the first deploy, updates, backups and restores.
+[`deploy/`](deploy/README.md) is the production stack: the app plus its own Postgres, no database port exposed, and TLS from a Caddy that already fronts the host. Cloudflare can sit in front as an optional extra. The runbook there covers DNS, secrets, the first deploy, updates, backups and restores.
 
 ### Any Node host
 ```bash
